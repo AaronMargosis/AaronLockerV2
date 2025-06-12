@@ -1,0 +1,25 @@
+#pragma once
+
+#include "CaseInsensitiveStringLookup.h"
+#include "FileSystemUtils.h"
+#include "HEX.h"
+#include "SidStrings.h"
+#include "StringUtils.h"
+#include "Utf8FileUtility.h"
+
+
+#include "AppxInfo.h"
+#include "CoInit.h"
+#include "CSid.h"
+#include "DirWalker.h"
+#include "FileSystemUtils-Windows.h"
+#include "StringUtils-Windows.h"
+#include "GetFilesAndSubdirectories.h"
+#include "IsDomainController.h"
+#include "PlatformInfo.h"
+#include "ShellLinkInfo.h"
+#include "SysErrorMessage.h"
+#include "VersionInfo.h"
+#include "WindowsDirectories.h"
+#include "Wow64FsRedirection.h"
+#include "LocalGPO.h"

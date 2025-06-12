@@ -1,0 +1,5 @@
+#pragma once
+
+#define AARONLOCKER_VERSION_COMMA 2,0,0,0
+#define AARONLOCKER_VERSION_STRIPPED "2.0"
+
