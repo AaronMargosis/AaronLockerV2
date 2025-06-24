@@ -39,6 +39,7 @@ void RuleAnalyzer::AddToBaseRules(const PublisherRuleCollection_t& publisherRule
 bool RuleAnalyzer::ProcessScans(
     const std::vector<AaronLockerDeserializer>& scans,
     const CaseInsensitiveStringLookup& windowsExesNotToExclude,
+    bool bIncludeWindowsTempFiles,
     std::wstring& sErrorInfo)
 {
     // Verify that at least one scan is a full scan.
@@ -92,7 +93,7 @@ bool RuleAnalyzer::ProcessScans(
         ++iterScans
         )
     {
-        ProposeRulesFromFileDetails(iterScans->m_FileDetails, iterScans->m_sComputerName);
+        ProposeRulesFromFileDetails(*iterScans, bIncludeWindowsTempFiles, iterScans->m_sComputerName);
     }
 
     return true;
@@ -332,9 +333,12 @@ void RuleAnalyzer::IncorporatePlatformSafePathRulesToBaseRules(const SafePathInf
 
 // Review data about files for which custom per-app rules might be needed and build proposed rules.
 bool RuleAnalyzer::ProposeRulesFromFileDetails(
-    const FileDetailsCollection_t& vFileDetails, const std::wstring& sComputerName)
+    const AaronLockerDeserializer& scan, bool bIncludeWindowsTempFiles, const std::wstring& sComputerName)
 {
     bool retval = true;
+
+    const FileDetailsCollection_t& vFileDetails = scan.m_FileDetails;
+    const std::wstring sWinTempDir = scan.m_sWindowsDir + L"\\TEMP\\";
 
     // Create proposed path and hash rules as we see each file, dropping redundant rules as we see them.
     // Microsoft-signed files get one rule per product/binaryname combination.
@@ -364,6 +368,10 @@ bool RuleAnalyzer::ProposeRulesFromFileDetails(
         if (BuiltInRules::IgnoreFile(*iterFD))
         {
             // Do nothing
+        }
+        else if (!bIncludeWindowsTempFiles && StartsWith(iterFD->m_sFilePath, sWinTempDir, false))
+        {
+            // Do nothing if not including files found under the Windows Temp dir and this is one.
         }
         else if (iterFD->m_bIsSafeDir)
         {

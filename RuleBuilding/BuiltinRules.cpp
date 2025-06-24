@@ -367,7 +367,7 @@ void BuiltInRules_SingletonImpl::Initialize()
 		)
 	};
 
-	// Enable per-user install of Google Chrome (NOT A GOOD IDEA - requires allowing anything by Google)
+	// Enable per-user install of Google Chrome (NOT THE GREATEST IDEA - requires allowing anything by Google)
 	GoogleChromePerUserInstallRules = {
 		PublisherRuleItem(
 			L"Google Chrome per-user install",
@@ -452,6 +452,14 @@ void BuiltInRules_SingletonImpl::Initialize()
 			L"Allows Everyone to run Clipchamp signed by Microsoft.",
 			RuleItem::Collection_t::Appx
 		),
+		//PublisherRuleItem(
+		//	L"Allow Microsoft-signed Skype (Win8.1/Win10)", // Retired in May 2025
+		//	L"CN=Skype Software Sarl, O=Microsoft Corporation, L=Luxembourg, S=Luxembourg, C=LU",
+		//	L"Microsoft.SkypeApp",
+		//	sStar(),
+		//	L"Allows Everyone to run Skype signed by Microsoft.",
+		//	RuleItem::Collection_t::Appx
+		//),
 	};
 
 	// --------------------------------------------------------------------------------

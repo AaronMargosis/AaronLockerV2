@@ -44,9 +44,10 @@ public:
 	/// </summary>
 	/// <param name="scans"></param>
 	/// <param name="windowsExesNotToExclude"></param>
+	/// <param name="bIncludeWindowsTempFiles"></param>
 	/// <param name="sErrorInfo"></param>
 	/// <returns>true if successful, false otherwise (see sErrorInfo for error information)</returns>
-	bool ProcessScans(const std::vector<AaronLockerDeserializer>& scans, const CaseInsensitiveStringLookup& windowsExesNotToExclude, std::wstring& sErrorInfo);
+	bool ProcessScans(const std::vector<AaronLockerDeserializer>& scans, const CaseInsensitiveStringLookup& windowsExesNotToExclude, bool bIncludeWindowsTempFiles, std::wstring& sErrorInfo);
 
 	/// <summary>
 	/// Returns the set of app names of proposed rule sets from the scans' file details.
@@ -118,7 +119,7 @@ private:
 	void ProcessWindirProgFilesPathRuleExceptions(const AaronLockerDeserializer& scan, const CaseInsensitiveStringLookup& windowsExesNotToExclude);
 	void SetWindirProgFilesPathRuleExceptions();
 	void IncorporatePlatformSafePathRulesToBaseRules(const SafePathInfoCollection_t& safePathInfo);
-	bool ProposeRulesFromFileDetails(const FileDetailsCollection_t& vFileDetails, const std::wstring& sComputerName);
+	bool ProposeRulesFromFileDetails(const AaronLockerDeserializer& scan, bool bIncludeWindowsTempFiles, const std::wstring& sComputerName);
 	bool AddRulesForInstalledPackagedApps(const PackagedAppInfoCollection_t& vPackagedApps, const std::wstring& sComputerName);
 
 	// Data

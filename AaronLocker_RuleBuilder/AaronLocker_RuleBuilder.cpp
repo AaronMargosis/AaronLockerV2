@@ -158,6 +158,9 @@ static void Usage(const wchar_t* szError, const wchar_t* argv0)
 	std::wcerr
 		<< L"         You can specify \"+w windowsExeOption\" multiple times on the command line." << std::endl
 		<< std::endl
+		<< L"    +winTemp:  create rules for files found under the \\Windows\\Temp directory." << std::endl
+		<< L"         By default these files are ignored for rule-building." << std::endl
+		<< std::endl
 		<< L"    -r:  remove a proposed rule set by name prior to export." << std::endl
 		<< L"         You can specify \"-r ruleSetToRemove\" multiple times." << std::endl
 		<< std::endl
@@ -260,10 +263,8 @@ static void Helper_WriteProposedRuleSets(
 static void WriteProposedRuleSetInfo(const RuleAnalyzer& ruleAnalyzer)
 {
 
-	//// Output information about proposed rule sets for review to stdout.
-	//// Assumed that AppX rules are always publisher rules, and a rule set that contains an Appx rule contains only that one rule
-	// Assumption: Appx rules are publisher rules only, and each is associated with a rule set that contains only that Appx rule.
-
+	// Output information about proposed rule sets for review to stdout.
+	// Assumed that AppX rules are always publisher rules, and a rule set that contains an Appx rule contains only that one rule
 
 	std::vector<std::wstring> proposedRuleSetNames;
 	size_t nRuleSets = ruleAnalyzer.GetProposedRuleSetNames(proposedRuleSetNames);
@@ -395,6 +396,7 @@ int wmain(int argc, wchar_t** argv)
 	RuleAnalyzer ruleAnalyzer;
 	std::vector<std::wstring> scanfiles, rulesetsToRemove, rulesetNamePrefixesToRemove;
 	CaseInsensitiveStringLookup windowsExesNotToExclude;
+	bool bIncludeWindowsTempFiles = false;
 	std::vector<AaronLockerDeserializer> scans;
 	std::wstring sPolicyFileDirectory;
 	std::wstringstream strCommentDescription;
@@ -471,6 +473,12 @@ int wmain(int argc, wchar_t** argv)
 			rulesetNamePrefixesToRemove.push_back(sArgU);
 			strCommentDescription << L" -rr " << sArgU;
 		}
+		// Whether to include files in the Windows Temp directory (make this check case-insensitive)
+		else if (0 == _wcsicmp(L"+winTemp", argv[ixArg]))
+		{
+			bIncludeWindowsTempFiles = true;
+			strCommentDescription << L" +winTemp ";
+		}
 		else if (0 == wcscmp(L"+x", argv[ixArg]))
 		{
 			if (++ixArg >= argc)
@@ -532,7 +540,7 @@ int wmain(int argc, wchar_t** argv)
 	}
 
 	// Process the scan files
-	if (!ruleAnalyzer.ProcessScans(scans, windowsExesNotToExclude, sErrorInfo))
+	if (!ruleAnalyzer.ProcessScans(scans, windowsExesNotToExclude, bIncludeWindowsTempFiles, sErrorInfo))
 	{
 		std::wcerr
 			<< L"Error processing scans:" << std::endl

@@ -7,7 +7,7 @@
 #include "../AaronLocker_CommonUtils/AaronLocker_CommonUtils.h"
 #include "../AaronLocker_EndpointScanLogic/EndpointScan_Structs.h"
 
-
+//TODO: output machine type for PE files (e.g., x86, x64, ...)
 static bool SerializeFileDetailsTable(const FileDetailsCollection_t& fileDetails, std::wostream& os);
 static bool SerializeFileDetailsList(const FileDetailsCollection_t& fileDetails, std::wostream& os);
 
@@ -16,7 +16,7 @@ static bool SerializeFileDetailsList(const FileDetailsCollection_t& fileDetails,
 /// </summary>
 /// <param name="szError">Caller-supplied error text</param>
 /// <param name="argv0">The program's argv[0] value</param>
-void Usage(const wchar_t* szError, const wchar_t* argv0)
+static void Usage(const wchar_t* szError, const wchar_t* argv0)
 {
 	std::wstring sExe = GetFileNameFromFilePath(argv0);
 	if (szError)
