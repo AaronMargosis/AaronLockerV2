@@ -21,10 +21,36 @@
   <ItemGroup>
     <ClInclude Include="OfficeMacroControl.h" />
     <ClInclude Include="OfficeMacroGpoData.h" />
+    <ClInclude Include="OfficeMacroKeysToClean.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="OfficeMacroControl.cpp" />
     <ClCompile Include="OfficeMacroGpoData.cpp" />
+    <ClCompile Include="OfficeMacroKeysToClean.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CodeGen\ASR-Audit.PolicyRules" />
+    <None Include="CodeGen\ASR-Block.PolicyRules" />
+    <None Include="CodeGen\ASR-Off.PolicyRules" />
+    <None Include="CodeGen\ASR-Warn.PolicyRules" />
+    <None Include="CodeGen\BlockMacrosFromRunningInOfficeFilesFromTheInternet.PolicyRules" />
+    <None Include="CodeGen\DisableAllUnsignedMacros-basic.PolicyRules" />
+    <None Include="CodeGen\DisableAllUnsignedMacros-reqTrustedPub.PolicyRules" />
+    <None Include="CodeGen\DisableAllUnsignedMacros-strict.PolicyRules" />
+    <None Include="CodeGen\DisableUnsignedAddins-ExcelAndPpt.PolicyRules" />
+    <None Include="CodeGen\Mitigations-All-Unedited.xlsx" />
+    <None Include="CodeGen\Mitigations-All.xlsx" />
+    <None Include="CodeGen\MitigationsAllToCpp.ps1" />
+    <None Include="CodeGen\Office-DisableAllTrustedLocations.PolicyRules" />
+    <None Include="CodeGen\Office-DisableAllVBA.PolicyRules" />
+    <None Include="CodeGen\Office-LegacyFileBlock.PolicyRules" />
+    <None Include="CodeGen\Office-ScanEncryptedMacros.PolicyRules" />
+    <None Include="CodeGen\ReadMe - code generation for OfficeMacroControl.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CodeGen\Mitigations-All.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

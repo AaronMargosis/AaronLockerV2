@@ -33,8 +33,8 @@
   <ItemGroup>
     <None Include="FilesToDeploy\SiPolicy-Audit.p7b" />
     <None Include="FilesToDeploy\SiPolicy-Block.p7b" />
-    <None Include="FilesToDeploy\{496a5746-5600-4cdd-b22e-333fd5614d00}-Audit.cip" />
-    <None Include="FilesToDeploy\{496a5746-5600-4cdd-b22e-333fd5614d00}-Block.cip" />
+    <None Include="FilesToDeploy\{0f78c0e5-cb41-47b7-96f7-fedf43fafcb3}-Audit.cip" />
+    <None Include="FilesToDeploy\{0f78c0e5-cb41-47b7-96f7-fedf43fafcb3}-Block.cip" />
     <None Include="PolicyFileCreation\CreateWdacEnhancementsForAppLocker.ps1" />
   </ItemGroup>
   <ItemGroup>

@@ -18,6 +18,11 @@ public:
 	// --------------------------------------------------------------------------------------------------------------
 
 	/// <summary>
+	/// If any settings removed from policy, make sure to remove any now-empty keys that we might have created from the GPO.
+	/// </summary>
+	void CleanUpEmptyKeys();
+
+	/// <summary>
 	/// Commit all policy changes made through the Enforce_ methods.
 	/// </summary>
 	/// <returns>HRESULT from the save/commit operation.</returns>

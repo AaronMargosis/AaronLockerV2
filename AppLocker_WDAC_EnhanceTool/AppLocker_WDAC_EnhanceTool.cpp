@@ -74,7 +74,7 @@ WDAC policy items cannot be deleted through the WMI/CSP bridge.
 /// </summary>
 /// <param name="szError">Caller-supplied error text</param>
 /// <param name="argv0">The program's argv[0] value</param>
-void Usage(const wchar_t* szError, const wchar_t* argv0)
+static void Usage(const wchar_t* szError, const wchar_t* argv0)
 {
 	std::wstring sExe = GetFileNameFromFilePath(argv0);
 	if (szError)
@@ -97,6 +97,9 @@ void Usage(const wchar_t* szError, const wchar_t* argv0)
 		<< L"(*) The following are NOT error conditions:" << std::endl
 		<< L"  Running this program on a system that does not support the WDAC policy enhancements;" << std::endl
 		<< L"  Specifying -remove when the target file to delete doesn't exist;" << std::endl
+		<< std::endl
+		<< L"To test whether policy is in effect, run the following command:" << std::endl
+		<< L"    regsvr32.exe scrobj.dll" << std::endl
 		<< std::endl;
 
 	exit(-1);
@@ -117,9 +120,9 @@ static const std::wstring sTargetPolicyFileLegacy = L"SiPolicy.p7b";
 /// GUID name and goes into the CiPolicies\Active subdirectory of the CodeIntegrity directory.
 /// The GUID file name must match the policy GUID embedded in the policy file.
 /// </summary>
-static const std::wstring sAuditPolicyFile1903Plus  = L"{496a5746-5600-4cdd-b22e-333fd5614d00}-Audit.cip";
-static const std::wstring sBlockPolicyFile1903Plus  = L"{496a5746-5600-4cdd-b22e-333fd5614d00}-Block.cip";
-static const std::wstring sTargetPolicyFile1903Plus = L"{496a5746-5600-4cdd-b22e-333fd5614d00}.cip";
+static const std::wstring sAuditPolicyFile1903Plus  = L"{0f78c0e5-cb41-47b7-96f7-fedf43fafcb3}-Audit.cip";
+static const std::wstring sBlockPolicyFile1903Plus  = L"{0f78c0e5-cb41-47b7-96f7-fedf43fafcb3}-Block.cip";
+static const std::wstring sTargetPolicyFile1903Plus = L"{0f78c0e5-cb41-47b7-96f7-fedf43fafcb3}.cip";
 
 /// <summary>
 /// Return the path to the CodeIntegrity root directory.

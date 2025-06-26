@@ -1,31 +1,263 @@
-﻿<PolicyRules>
-<UserConfig><Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key><Value>dbasefiles</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key><Value>difandsylkfiles</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key><Value>xl2macros</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key><Value>xl2worksheets</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key><Value>xl3macros</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key><Value>xl3worksheets</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key><Value>xl4macros</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key><Value>xl4workbooks</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key><Value>xl4worksheets</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key><Value>xl95workbooks</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key><Value>xl9597workbooksandtemplates</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key><Value>xl97workbooksandtemplates</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key><Value>openinprotectedview</Value><RegType>REG_DWORD</RegType><RegData>0</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key><Value>htmlandxmlssfiles</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\ms project\security</Key><Value>legacyfiles</Value><RegType>REG_DWORD</RegType><RegData>0</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\powerpoint\security\fileblock</Key><Value>binaryfiles</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\powerpoint\security\fileblock</Key><Value>openinprotectedview</Value><RegType>REG_DWORD</RegType><RegData>0</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\visio\security\fileblock</Key><Value>visio2000files</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\visio\security\fileblock</Key><Value>visio2003files</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\visio\security\fileblock</Key><Value>visio50andearlierfiles</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\word\security\fileblock</Key><Value>openinprotectedview</Value><RegType>REG_DWORD</RegType><RegData>0</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\word\security\fileblock</Key><Value>word2files</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\word\security\fileblock</Key><Value>word2000files</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\word\security\fileblock</Key><Value>word2003files</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\word\security\fileblock</Key><Value>word2007files</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\word\security\fileblock</Key><Value>word60files</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\word\security\fileblock</Key><Value>word95files</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\word\security\fileblock</Key><Value>word97files</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\word\security\fileblock</Key><Value>wordxpfiles</Value><RegType>REG_DWORD</RegType><RegData>2</RegData><SourceFile>C:\Policies\{429C628E-9B92-4D80-8EF5-EE3D5DB76B42}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Legacy File Block</PolicyName></UserConfig>
+<PolicyRules>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key>
+    <Value>dbasefiles</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key>
+    <Value>difandsylkfiles</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key>
+    <Value>xl2macros</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key>
+    <Value>xl2worksheets</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key>
+    <Value>xl3macros</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key>
+    <Value>xl3worksheets</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key>
+    <Value>xl4macros</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key>
+    <Value>xl4workbooks</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key>
+    <Value>xl4worksheets</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key>
+    <Value>xl95workbooks</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key>
+    <Value>xl9597workbooksandtemplates</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key>
+    <Value>xl97workbooksandtemplates</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key>
+    <Value>openinprotectedview</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>0</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\excel\security\fileblock</Key>
+    <Value>htmlandxmlssfiles</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\ms project\security</Key>
+    <Value>legacyfiles</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>0</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\powerpoint\security\fileblock</Key>
+    <Value>binaryfiles</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\powerpoint\security\fileblock</Key>
+    <Value>openinprotectedview</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>0</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\visio\security\fileblock</Key>
+    <Value>visio2000files</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\visio\security\fileblock</Key>
+    <Value>visio2003files</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\visio\security\fileblock</Key>
+    <Value>visio50andearlierfiles</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\word\security\fileblock</Key>
+    <Value>openinprotectedview</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>0</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\word\security\fileblock</Key>
+    <Value>word2files</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\word\security\fileblock</Key>
+    <Value>word2000files</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\word\security\fileblock</Key>
+    <Value>word2003files</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\word\security\fileblock</Key>
+    <Value>word2007files</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\word\security\fileblock</Key>
+    <Value>word60files</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\word\security\fileblock</Key>
+    <Value>word95files</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\word\security\fileblock</Key>
+    <Value>word97files</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\word\security\fileblock</Key>
+    <Value>wordxpfiles</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>2</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Legacy File Block</PolicyName>
+  </UserConfig>
 </PolicyRules>

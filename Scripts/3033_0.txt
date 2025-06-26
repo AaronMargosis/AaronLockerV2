@@ -1,0 +1,15 @@
+﻿    Event ID:       3033
+    Version:        0
+    Description:    Code Integrity determined that a process (%4) attempted to load %2 that did not meet the %5 signing level requirements.
+    Property count: 7
+    Template:
+                    <template xmlns="http://schemas.microsoft.com/win/2004/08/events">
+                      <data name="FileNameLength" inType="win:UInt16" outType="xs:unsignedShort"/>
+                      <data name="FileNameBuffer" inType="win:UnicodeString" outType="xs:string" length="FileNameLength"/>
+                      <data name="ProcessNameLength" inType="win:UInt16" outType="xs:unsignedShort"/>
+                      <data name="ProcessNameBuffer" inType="win:UnicodeString" outType="xs:string" length="ProcessNameLength"/>
+                      <data name="RequestedPolicy" inType="win:UInt8" outType="xs:unsignedByte"/>
+                      <data name="ValidatedPolicy" inType="win:UInt8" outType="xs:unsignedByte"/>
+                      <data name="Status" inType="win:UInt32" outType="xs:unsignedInt"/>
+                    </template>
+                    

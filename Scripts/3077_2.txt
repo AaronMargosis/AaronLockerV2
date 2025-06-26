@@ -1,0 +1,27 @@
+﻿    Event ID:       3077
+    Version:        2
+    Description:    Code Integrity determined that a process (%4) attempted to load %2 that did not meet the %5 signing level requirements or violated code integrity policy.
+    Property count: 19
+    Template:
+                    <template xmlns="http://schemas.microsoft.com/win/2004/08/events">
+                      <data name="FileNameLength" inType="win:UInt16" outType="xs:unsignedShort"/>
+                      <data name="File Name" inType="win:UnicodeString" outType="xs:string" length="FileNameLength"/>
+                      <data name="ProcessNameLength" inType="win:UInt16" outType="xs:unsignedShort"/>
+                      <data name="Process Name" inType="win:UnicodeString" outType="xs:string" length="ProcessNameLength"/>
+                      <data name="Requested Signing Level" inType="win:UInt8" outType="xs:unsignedByte"/>
+                      <data name="Validated Signing Level" inType="win:UInt8" outType="xs:unsignedByte"/>
+                      <data name="Status" inType="win:UInt32" outType="xs:unsignedInt"/>
+                      <data name="SHA1 Hash Size" inType="win:UInt32" outType="xs:unsignedInt"/>
+                      <data name="SHA1 Hash" inType="win:Binary" outType="xs:hexBinary" length="SHA1 Hash Size"/>
+                      <data name="SHA256 Hash Size" inType="win:UInt32" outType="xs:unsignedInt"/>
+                      <data name="SHA256 Hash" inType="win:Binary" outType="xs:hexBinary" length="SHA256 Hash Size"/>
+                      <data name="USN" inType="win:UInt64" outType="win:HexInt64"/>
+                      <data name="SI Signing Scenario" inType="win:UInt32" outType="xs:unsignedInt"/>
+                      <data name="PolicyNameLength" inType="win:UInt16" outType="xs:unsignedShort"/>
+                      <data name="PolicyName" inType="win:UnicodeString" outType="xs:string" length="PolicyNameLength"/>
+                      <data name="PolicyIDLength" inType="win:UInt16" outType="xs:unsignedShort"/>
+                      <data name="PolicyID" inType="win:UnicodeString" outType="xs:string" length="PolicyIDLength"/>
+                      <data name="PolicyHashSize" inType="win:UInt32" outType="xs:unsignedInt"/>
+                      <data name="PolicyHash" inType="win:Binary" outType="xs:hexBinary" length="PolicyHashSize"/>
+                    </template>
+                    

@@ -39,12 +39,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="FilesToDeploy\{496a5746-5600-4cdd-b22e-333fd5614d00}-Audit.cip">
-      <Filter>FilesToDeploy</Filter>
-    </None>
-    <None Include="FilesToDeploy\{496a5746-5600-4cdd-b22e-333fd5614d00}-Block.cip">
-      <Filter>FilesToDeploy</Filter>
-    </None>
     <None Include="FilesToDeploy\SiPolicy-Audit.p7b">
       <Filter>FilesToDeploy</Filter>
     </None>
@@ -53,6 +47,12 @@
     </None>
     <None Include="PolicyFileCreation\CreateWdacEnhancementsForAppLocker.ps1">
       <Filter>PolicyFileCreation</Filter>
+    </None>
+    <None Include="FilesToDeploy\{0f78c0e5-cb41-47b7-96f7-fedf43fafcb3}-Audit.cip">
+      <Filter>FilesToDeploy</Filter>
+    </None>
+    <None Include="FilesToDeploy\{0f78c0e5-cb41-47b7-96f7-fedf43fafcb3}-Block.cip">
+      <Filter>FilesToDeploy</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,22 @@
 ﻿<#
 .SYNOPSIS
-AaronLocker V2 scan-file parser
-
+AaronLocker V2 scan-file parser.
+Outputs a hash table from the contents of the named scan file.
+Attributes include:
+    ScanType
+    ComputerName
+    ScanStarted
+    ScanEnded
+    ScanDuration
+    WindowsDirectories
+    ErrorInfo
+    UnsafeDirsUnderWindows
+    UnsafeDirsUnderPF
+    SafePaths
+    FileDetails
+    AppLabels
+    PackagedApps
+    ShellLinks
 #>
 
 [CmdletBinding()]

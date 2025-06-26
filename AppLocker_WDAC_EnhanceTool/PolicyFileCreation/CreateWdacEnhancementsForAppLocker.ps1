@@ -14,7 +14,7 @@ script downloaded from a remote server.
 The combinations involved include mshtml.dll ("Microsoft (R) HTML Viewer") being loaded by rundll32.exe, and scrobj.dll 
 ("Windows ® Script Component Runtime") loaded directly or indirectly by one of rundll32.exe, regsvr32.exe, or cmstp.exe. None 
 of these EXE or DLL files can safely be blocked entirely, but there are no known legitimate purposes for which those executables
-ever need to load those specific DLLs, certainl not after Windows setup has completed.
+ever need to load those specific DLLs, certainly not after Windows setup has completed.
 
 AaronLocker's design intent is to provide comprehensive protection against unauthorized code execution, including through
 common "lolbins" ("living off the land binaries" - leveraging files already present on the target system). 
@@ -26,8 +26,8 @@ This script creates WDAC policy files tailored to those needs. It produces four 
 each of which supports one of these needs:
 * Audit policy for deployment on Windows 10 v1709-v1809 or Windows Server 2019 (which support only one WDAC policy at a time);
 * Block policy for deployment on Windows 10 v1709-v1809 or Windows Server 2019 (which support only one WDAC policy at a time);
-* Audit policy for deployment on Windows versions that support multiple WDAC policies (Win10 v1903+, Win11, WS2022);
-* Block policy for deployment on Windows versions that support multiple WDAC policies (Win10 v1903+, Win11, WS2022);
+* Audit policy for deployment on Windows versions that support multiple WDAC policies (Win10 v1903+, Win11, WS2022+);
+* Block policy for deployment on Windows versions that support multiple WDAC policies (Win10 v1903+, Win11, WS2022+);
 
 Windows versions earlier than Win10 v1709 are not supported, for reasons explained in the "More details" section below.
 Windows versions v1709-v1809 and Windows Server 2019 must be fully patched at least through October 2019 for the policies 
@@ -43,8 +43,8 @@ On Windows 10 v1903 and later, the policy file must be copied to:
     %windir%\System32\CodeIntegrity\CiPolicies\Active\{496a5746-5600-4cdd-b22e-333fd5614d00}.cip
 Note that the target computer must be rebooted for the changes to WDAC policy to take effect. To remove the enforcement, delete 
 the policy file and reboot.
-(Note that as of this writing (Jan 2022) Windows v1709, v1803, and v1809 are out of support, except for Windows 10 LTSC v1809
-and Windows Server 2019.)
+(Note that as of this writing (June 2025) v22H2 is the only non-LTSB/LTSC Windows 10 version still supported by Microsoft, and
+support for Win10 v22H2 ends in October 2025.)
 
 AaronLocker's AppLocker_WDAC_EnhanceTool.exe is designed to deploy the correct file to the correct location depending on operating
 system version.
@@ -54,7 +54,7 @@ Testing:
 To test whether the policies are working after reboot, run these commands from a Cmd.exe command prompt:
 
 regsvr32.exe scrobj.dll
-  * If policy working: "The module 'scrobj.dll' failed to load." and "Your organization used Device Guard to block this app."
+  * If policy working: "The module 'scrobj.dll' failed to load." and "An Application Control policy has blocked this file."
   * If not working: "DllRegisterServer in scrobj.dll succeeded."
 
 rundll32.exe mshtml.dll,NonExistent
@@ -64,13 +64,15 @@ rundll32.exe mshtml.dll,NonExistent
 
 More details:
 
-Windows Defender Application Control (WDAC), a.k.a. "Configurable Code Integrity" (CCI) and originally branded as "Device Guard," 
+Windows Defender Application Control (WDAC), a.k.a. "Configurable Code Integrity" (CCI), originally branded as "Device Guard,"
+and recently rebranded (again) as "App Control for Business,"
 was introduced in the first version of Windows 10. Windows 10 v1703 introduced improvements that enable the creation of WDAC rules 
 to disallow specific processes from loading specific DLLs. However, until Windows 10 v1903, enforcement of *any* WDAC rules causes 
-all PowerShell instances to run in Constrained Language (CL) mode, which is undesirable. Windows 10 v1903 introduced a WDAC policy-
+all PowerShell instances to run in Constrained Language (CL) mode, which is undesirable under AaronLocker, which distinguishes between
+what admins can do from what non-admins can do. Windows 10 v1903 introduced a WDAC policy-
 creation option not to enforce script controls. AaronLocker relies on AppLocker to enforce script controls, with which we can be
 more selective about when PowerShell should run in CL mode. Although this script must be executed on Windows 10 v1903 or later, the 
-rules it creates can be applied to fully-patched Windows 10 v1709 or later (including Windows 11). Based on testing, Windows 10 LTSB 
+rules it creates can be applied to fully-patched Windows 10 v1709 or later (including Windows 11). Based on my testing, Windows 10 LTSB 
 v1607 and Windows Server 2016 appear to support per-app rules, but not the script enforcement option, so these rules should not 
 be applied to those older systems.
 
@@ -84,7 +86,7 @@ Windows 10 v1709-v1809 and Windows Server 2019 support only a single WDAC policy
 
 
 TODO: determine how to manage situations on v1709-v1809 where a target system has a preexisting WDAC policy. (Note that as of this 
-writing (Jan 2022) Windows v1709, v1803, and v1809 are out of support, except for Windows 10 LTSC v1809 and Windows Server 2019.) 
+writing (June 2025) Windows 10 LTSC v1809 and Windows Server 2019 are the only still-supported OSes in that range.) 
 Initial tests with the WldpGetLockdownPolicy suggest that it returns different results on different Windows versions with the same
 WDAC policy. E.g., on 19H2 it says that lockdown is off even when these rules are in place.
 
@@ -132,6 +134,25 @@ Major WDAC blog post:
 
 param(
 )
+
+#TODO: Make sure this is Windows PowerShell v5.1. PowerShell 7 doesn't properly support WDAC cmdlets.
+# Only supported PowerShell version at this time: 5.1
+# PowerShell 6/7 doesn't properly support WDAC cmdlets.
+$psv = $PSVersionTable.PSVersion
+if (-not ($psv.Major -eq 5 -and $psv.Minor -eq 1))
+{
+    $errMsg = "This script requires Windows PowerShell v5.1.`nCurrent version = " + $PSVersionTable.PSVersion.ToString()
+    Write-Error $errMsg
+    return
+}
+
+# Make sure this script is running in FullLanguage mode
+if ($ExecutionContext.SessionState.LanguageMode -ne [System.Management.Automation.PSLanguageMode]::FullLanguage)
+{
+    $errMsg = "This script must run in FullLanguage mode, but is running in " + $ExecutionContext.SessionState.LanguageMode.ToString()
+    Write-Error $errMsg
+    return
+}
 
 # This script must be run on Win10 v1903 or later. Important features missing otherwise.
 $osver = [System.Environment]::OSVersion.Version
@@ -191,6 +212,32 @@ $rules =
 # Merge the deny rules and the "allow all" policy into a new policy XML file.
 Merge-CIPolicy -OutputFilePath $fnameTemp3 -PolicyPaths $fnameTemp2 -Rules $rules | Out-Null
 
+<#
+Set-RuleOption -Help
+    0 Enabled:UMCI                                      | Make sure that user-mode code integrity is enabled
+    1 Enabled:Boot Menu Protection                      | 
+    2 Required:WHQL                                     | 
+    3 Enabled:Audit Mode                                | Audit by default; DELETE this option for enforcement mode
+    4 Disabled:Flight Signing                           | 
+    5 Enabled:Inherit Default Policy                    | 
+    6 Enabled:Unsigned System Integrity Policy          | 
+    7 Allowed:Debug Policy Augmented                    | 
+    8 Required:EV Signers                               | 
+    9 Enabled:Advanced Boot Options Menu                | Allow the F8 advanced boot menu to continue to work
+    10 Enabled:Boot Audit On Failure                    | 
+    11 Disabled:Script Enforcement                      | If this option is enabled, can still use AppLocker to restrict PowerShell in interactive desktop sessions.
+    12 Required:Enforce Store Applications              | If this option is deleted, can still use AppLocker to restrict Store App rules
+    13 Enabled:Managed Installer                        | 
+    14 Enabled:Intelligent Security Graph Authorization | 
+    15 Enabled:Invalidate EAs on Reboot                 | 
+    16 Enabled:Update Policy No Reboot                  | Make it possible for future policy updates to be able to take effect without reboot
+    17 Enabled:Allow Supplemental Policies              | 
+    18 Disabled:Runtime FilePath Rule Protection        | 
+    19 Enabled:Dynamic Code Security                    | 
+    20 Enabled:Revoked Expired As Unsigned              | 
+    21 Disabled:Default Windows Certificate Remapping   | 
+#>
+
 #                                                           Make sure that user-mode code integrity is enabled
 Set-RuleOption -Option  0         -FilePath $fnameTemp3 	# Enabled:UMCI
 #                                                           Not requiring that these policies be signed
@@ -202,6 +249,8 @@ Set-RuleOption -Option  9         -FilePath $fnameTemp3 	# Enabled:Advanced Boot
 Set-RuleOption -Option 11         -FilePath $fnameTemp3 	# Disabled:Script Enforcement
 #                                                           Make it possible for future policy updates to be able to take effect without reboot
 Set-RuleOption -Option 16         -FilePath $fnameTemp3 	# Enabled:Update Policy No Reboot
+#                                                           Use this option on a base policy to allow supplemental policies to expand it.
+Set-RuleOption -Option 17         -FilePath $fnameTemp3 	# Enabled:Allow Supplemental Policies
 #                                                           Do not enforce Store App rules through WDAC (use AppLocker instead)
 Set-RuleOption -Option 12 -Delete -FilePath $fnameTemp3 	# REMOVE Required:Enforce Store Applications
 

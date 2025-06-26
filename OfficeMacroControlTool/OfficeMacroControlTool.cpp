@@ -422,6 +422,8 @@ int wmain(int argc, wchar_t** argv)
 				<< sErrorInfo << std::endl;
 		}
 
+		omc.CleanUpEmptyKeys();
+
 		HRESULT hr = omc.CommitChanges();
 		std::wcout << SysErrorMessage(hr) << std::endl;
 

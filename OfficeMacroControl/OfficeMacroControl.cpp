@@ -9,7 +9,7 @@
 #include "../AaronLocker_CommonUtils/AaronLocker_CommonUtils.h"
 #include "OfficeMacroGpoData.h"
 #include "OfficeMacroControl.h"
-
+#include "OfficeMacroKeysToClean.h"
 
 // ------------------------------------------------------------------------------------------
 // Local helper functions
@@ -66,6 +66,44 @@ OfficeMacroControl::OfficeMacroControl(bool bLgpoReadOnly /*= false*/)
 
 OfficeMacroControl::~OfficeMacroControl()
 {
+}
+
+/// <summary>
+/// Helper function for the CleanUpEmptyKeys member function.
+/// </summary>
+/// <param name="hBaseKey">Base key of the Computer or User GPO</param>
+/// <param name="keysToCleanUp">Array of pointers to key names to inspect in bottom-up order, ending with null entry.</param>
+static void CleanUpEmptyKeys_Helper(HKEY hBaseKey, const wchar_t** keysToCleanUp)
+{
+	// Last item is a null entry
+	for (const wchar_t** pszKeyName = keysToCleanUp; *pszKeyName; ++pszKeyName)
+	{
+		LSTATUS lstat;
+		HKEY hKeyToInspect = NULL;
+		lstat = RegCreateKeyExW(hBaseKey, *pszKeyName, 0, NULL, 0, KEY_READ | DELETE, NULL, &hKeyToInspect, NULL);
+		if (ERROR_SUCCESS == lstat)
+		{
+			DWORD nSubkeys = 0, nValues = 0;
+			lstat = RegQueryInfoKeyW(hKeyToInspect, NULL, NULL, NULL, &nSubkeys, NULL, NULL, &nValues, NULL, NULL, NULL, NULL);
+			// If the key has no subkeys or values, delete it.
+			if (ERROR_SUCCESS == lstat && 0 == nSubkeys && 0 == nValues)
+			{
+				RegDeleteKeyW(hBaseKey, *pszKeyName);
+			}
+			RegCloseKey(hKeyToInspect);
+		}
+	}
+}
+
+/// <summary>
+/// If any settings removed from policy, make sure to remove any now-empty keys that we might have created from the GPO.
+/// </summary>
+void OfficeMacroControl::CleanUpEmptyKeys()
+{
+	// These arrays should be defined in a bottom-up order. If bottom-most key is empty, delete it. 
+	// Then work up to the top level.
+	CleanUpEmptyKeys_Helper(m_lgpo.ComputerKey(), MachineKeysToCleanUp);
+	CleanUpEmptyKeys_Helper(m_lgpo.UserKey(), UserKeysToCleanUp);
 }
 
 /// <summary>

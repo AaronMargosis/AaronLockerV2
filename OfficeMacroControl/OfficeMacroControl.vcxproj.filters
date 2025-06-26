@@ -13,12 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="CodeGen">
+      <UniqueIdentifier>{99362fc1-24e8-4153-8ba2-0b014839de5c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OfficeMacroControl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OfficeMacroGpoData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OfficeMacroKeysToClean.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -29,5 +35,66 @@
     <ClCompile Include="OfficeMacroGpoData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OfficeMacroKeysToClean.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CodeGen\ASR-Audit.PolicyRules">
+      <Filter>CodeGen</Filter>
+    </None>
+    <None Include="CodeGen\ASR-Block.PolicyRules">
+      <Filter>CodeGen</Filter>
+    </None>
+    <None Include="CodeGen\ASR-Off.PolicyRules">
+      <Filter>CodeGen</Filter>
+    </None>
+    <None Include="CodeGen\ASR-Warn.PolicyRules">
+      <Filter>CodeGen</Filter>
+    </None>
+    <None Include="CodeGen\BlockMacrosFromRunningInOfficeFilesFromTheInternet.PolicyRules">
+      <Filter>CodeGen</Filter>
+    </None>
+    <None Include="CodeGen\DisableAllUnsignedMacros-basic.PolicyRules">
+      <Filter>CodeGen</Filter>
+    </None>
+    <None Include="CodeGen\DisableAllUnsignedMacros-reqTrustedPub.PolicyRules">
+      <Filter>CodeGen</Filter>
+    </None>
+    <None Include="CodeGen\DisableAllUnsignedMacros-strict.PolicyRules">
+      <Filter>CodeGen</Filter>
+    </None>
+    <None Include="CodeGen\DisableUnsignedAddins-ExcelAndPpt.PolicyRules">
+      <Filter>CodeGen</Filter>
+    </None>
+    <None Include="CodeGen\Mitigations-All.xlsx">
+      <Filter>CodeGen</Filter>
+    </None>
+    <None Include="CodeGen\MitigationsAllToCpp.ps1">
+      <Filter>CodeGen</Filter>
+    </None>
+    <None Include="CodeGen\Mitigations-All-Unedited.xlsx">
+      <Filter>CodeGen</Filter>
+    </None>
+    <None Include="CodeGen\Office-DisableAllTrustedLocations.PolicyRules">
+      <Filter>CodeGen</Filter>
+    </None>
+    <None Include="CodeGen\Office-DisableAllVBA.PolicyRules">
+      <Filter>CodeGen</Filter>
+    </None>
+    <None Include="CodeGen\Office-LegacyFileBlock.PolicyRules">
+      <Filter>CodeGen</Filter>
+    </None>
+    <None Include="CodeGen\Office-ScanEncryptedMacros.PolicyRules">
+      <Filter>CodeGen</Filter>
+    </None>
+    <None Include="CodeGen\ReadMe - code generation for OfficeMacroControl.htm">
+      <Filter>CodeGen</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CodeGen\Mitigations-All.txt">
+      <Filter>CodeGen</Filter>
+    </Text>
   </ItemGroup>
 </Project>

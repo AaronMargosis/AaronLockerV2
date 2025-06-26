@@ -1,28 +1,231 @@
-﻿<PolicyRules>
-<UserConfig><Key>software\policies\microsoft\office\16.0\access\security</Key><Value>vbawarnings</Value><RegType>REG_DWORD</RegType><RegData>3</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\access\security</Key><Value>vbadigsigtrustedpublishers</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\access\security</Key><Value>vbarequirelmtrustedpublisher</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\access\security</Key><Value>vbarequiredigsigwithcodesigningeku</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\excel\security</Key><Value>vbawarnings</Value><RegType>REG_DWORD</RegType><RegData>3</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\excel\security</Key><Value>vbadigsigtrustedpublishers</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\excel\security</Key><Value>vbarequirelmtrustedpublisher</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\excel\security</Key><Value>vbarequiredigsigwithcodesigningeku</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\ms project\security</Key><Value>vbawarnings</Value><RegType>REG_DWORD</RegType><RegData>3</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\powerpoint\security</Key><Value>vbawarnings</Value><RegType>REG_DWORD</RegType><RegData>3</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\powerpoint\security</Key><Value>vbadigsigtrustedpublishers</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\powerpoint\security</Key><Value>vbarequirelmtrustedpublisher</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\powerpoint\security</Key><Value>vbarequiredigsigwithcodesigningeku</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\publisher\security</Key><Value>vbawarnings</Value><RegType>REG_DWORD</RegType><RegData>3</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\publisher\security</Key><Value>vbadigsigtrustedpublishers</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\publisher\security</Key><Value>vbarequirelmtrustedpublisher</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\publisher\security</Key><Value>vbarequiredigsigwithcodesigningeku</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\visio\security</Key><Value>vbawarnings</Value><RegType>REG_DWORD</RegType><RegData>3</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\visio\security</Key><Value>vbadigsigtrustedpublishers</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\visio\security</Key><Value>vbarequirelmtrustedpublisher</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\visio\security</Key><Value>vbarequiredigsigwithcodesigningeku</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\word\security</Key><Value>vbawarnings</Value><RegType>REG_DWORD</RegType><RegData>3</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\word\security</Key><Value>vbadigsigtrustedpublishers</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\word\security</Key><Value>vbarequirelmtrustedpublisher</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<UserConfig><Key>software\policies\microsoft\office\16.0\word\security</Key><Value>vbarequiredigsigwithcodesigningeku</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile>C:\Policies\DisableAllUnsigned-Strict\{C66516AA-DF12-4E59-8832-0A573CC59807}\DomainSysvol\GPO\User\registry.pol</SourceFile><PolicyName>Disable All Unsigned Macros - strict</PolicyName></UserConfig>
-<CSE-User><GUID>{35378EAC-683F-11D2-A89A-00C04FBBCFA2}</GUID><Name>Registry Policy</Name></CSE-User>
+<PolicyRules>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\access\security</Key>
+    <Value>vbawarnings</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>3</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\access\security</Key>
+    <Value>vbadigsigtrustedpublishers</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>1</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\access\security</Key>
+    <Value>vbarequirelmtrustedpublisher</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>1</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\access\security</Key>
+    <Value>vbarequiredigsigwithcodesigningeku</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>1</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\excel\security</Key>
+    <Value>vbawarnings</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>3</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\excel\security</Key>
+    <Value>vbadigsigtrustedpublishers</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>1</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\excel\security</Key>
+    <Value>vbarequirelmtrustedpublisher</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>1</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\excel\security</Key>
+    <Value>vbarequiredigsigwithcodesigningeku</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>1</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\ms project\security</Key>
+    <Value>vbawarnings</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>3</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\powerpoint\security</Key>
+    <Value>vbawarnings</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>3</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\powerpoint\security</Key>
+    <Value>vbadigsigtrustedpublishers</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>1</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\powerpoint\security</Key>
+    <Value>vbarequirelmtrustedpublisher</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>1</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\powerpoint\security</Key>
+    <Value>vbarequiredigsigwithcodesigningeku</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>1</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\publisher\security</Key>
+    <Value>vbawarnings</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>3</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\publisher\security</Key>
+    <Value>vbadigsigtrustedpublishers</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>1</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\publisher\security</Key>
+    <Value>vbarequirelmtrustedpublisher</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>1</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\publisher\security</Key>
+    <Value>vbarequiredigsigwithcodesigningeku</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>1</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\visio\security</Key>
+    <Value>vbawarnings</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>3</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\visio\security</Key>
+    <Value>vbadigsigtrustedpublishers</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>1</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\visio\security</Key>
+    <Value>vbarequirelmtrustedpublisher</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>1</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\visio\security</Key>
+    <Value>vbarequiredigsigwithcodesigningeku</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>1</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\word\security</Key>
+    <Value>vbawarnings</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>3</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\word\security</Key>
+    <Value>vbadigsigtrustedpublishers</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>1</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\word\security</Key>
+    <Value>vbarequirelmtrustedpublisher</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>1</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <UserConfig>
+    <Key>software\policies\microsoft\office\16.0\word\security</Key>
+    <Value>vbarequiredigsigwithcodesigningeku</Value>
+    <RegType>REG_DWORD</RegType>
+    <RegData>1</RegData>
+    <SourceFile>
+    </SourceFile>
+    <PolicyName>Disable All Unsigned Macros - strict</PolicyName>
+  </UserConfig>
+  <CSE-User>
+    <GUID>{35378EAC-683F-11D2-A89A-00C04FBBCFA2}</GUID>
+    <Name>Registry Policy</Name>
+  </CSE-User>
 </PolicyRules>

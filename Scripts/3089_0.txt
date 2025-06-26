@@ -1,0 +1,23 @@
+﻿    Event ID:       3089
+    Version:        0
+    Description:    Signature information for another event. Match using the Correlation Id.
+    Property count: 15
+    Template:
+                    <template xmlns="http://schemas.microsoft.com/win/2004/08/events">
+                      <data name="TotalSignatureCount" inType="win:UInt32" outType="xs:unsignedInt"/>
+                      <data name="Signature" inType="win:UInt32" outType="xs:unsignedInt"/>
+                      <data name="Hash Size" inType="win:UInt32" outType="xs:unsignedInt"/>
+                      <data name="Hash" inType="win:Binary" outType="xs:hexBinary" length="Hash Size"/>
+                      <data name="SignatureType" inType="win:UInt8" outType="xs:unsignedByte"/>
+                      <data name="ValidatedSigningLevel" inType="win:UInt8" outType="xs:unsignedByte"/>
+                      <data name="VerificationError" inType="win:UInt8" outType="xs:unsignedByte"/>
+                      <data name="Flags" inType="win:UInt32" outType="win:HexInt32"/>
+                      <data name="PolicyBits" inType="win:UInt32" outType="win:HexInt32"/>
+                      <data name="NotValidBefore" inType="win:FILETIME" outType="xs:dateTime"/>
+                      <data name="NotValidAfter" inType="win:FILETIME" outType="xs:dateTime"/>
+                      <data name="PublisherNameLength" inType="win:UInt16" outType="xs:unsignedShort"/>
+                      <data name="PublisherName" inType="win:UnicodeString" outType="xs:string" length="PublisherNameLength"/>
+                      <data name="IssuerNameLength" inType="win:UInt16" outType="xs:unsignedShort"/>
+                      <data name="IssuerName" inType="win:UnicodeString" outType="xs:string" length="IssuerNameLength"/>
+                    </template>
+                    

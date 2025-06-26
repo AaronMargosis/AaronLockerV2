@@ -18,6 +18,9 @@
     <Rule>
       <Option>Enabled:Update Policy No Reboot</Option>
     </Rule>
+    <Rule>
+      <Option>Enabled:Allow Supplemental Policies</Option>
+    </Rule>
   </Rules>
   <!--EKUS-->
   <EKUs />
@@ -25,23 +28,23 @@
   <FileRules>
     <Allow ID="ID_ALLOW_A_1_0" FriendlyName="Allow all" FileName="*" />
     <Allow ID="ID_ALLOW_A_2_0" FriendlyName="Allow all" FileName="*" />
-    <Deny ID="ID_DENY_D_3_1" FriendlyName="C:\Windows\System32\scrobj.dll FileRule" FileName="scrobj.dll" AppIDs="CMSTP.EXE" />
-    <Deny ID="ID_DENY_D_4_1" FriendlyName="C:\Windows\System32\scrobj.dll FileRule" FileName="scrobj.dll" AppIDs="REGSVR32.EXE" />
-    <Deny ID="ID_DENY_D_5_1" FriendlyName="C:\Windows\System32\scrobj.dll FileRule" FileName="scrobj.dll" AppIDs="RUNDLL32.EXE" />
-    <Deny ID="ID_DENY_D_6_1" FriendlyName="C:\Windows\System32\mshtml.dll FileRule" FileName="MSHTML.DLL" AppIDs="RUNDLL32.EXE" />
+    <Deny ID="ID_DENY_D_3_1" FriendlyName="C:\WINDOWS\System32\scrobj.dll FileRule" FileName="scrobj.dll" AppIDs="CMSTP.EXE" />
+    <Deny ID="ID_DENY_D_4_1" FriendlyName="C:\WINDOWS\System32\scrobj.dll FileRule" FileName="scrobj.dll" AppIDs="REGSVR32.EXE" />
+    <Deny ID="ID_DENY_D_5_1" FriendlyName="C:\WINDOWS\System32\scrobj.dll FileRule" FileName="scrobj.dll" AppIDs="RUNDLL32.EXE" />
+    <Deny ID="ID_DENY_D_6_1" FriendlyName="C:\WINDOWS\System32\mshtml.dll FileRule" FileName="MSHTML.DLL" AppIDs="RUNDLL32.EXE" />
   </FileRules>
   <!--Signers-->
   <Signers />
   <!--Driver Signing Scenarios-->
   <SigningScenarios>
-    <SigningScenario Value="131" ID="ID_SIGNINGSCENARIO_DRIVERS_1" FriendlyName="Auto generated policy on 05-01-2025">
+    <SigningScenario Value="131" ID="ID_SIGNINGSCENARIO_DRIVERS_1" FriendlyName="Auto generated policy on 06-24-2025">
       <ProductSigners>
         <FileRulesRef>
           <FileRuleRef RuleID="ID_ALLOW_A_1_0" />
         </FileRulesRef>
       </ProductSigners>
     </SigningScenario>
-    <SigningScenario Value="12" ID="ID_SIGNINGSCENARIO_WINDOWS" FriendlyName="Auto generated policy on 05-01-2025">
+    <SigningScenario Value="12" ID="ID_SIGNINGSCENARIO_WINDOWS" FriendlyName="Auto generated policy on 06-24-2025">
       <ProductSigners>
         <FileRulesRef>
           <FileRuleRef RuleID="ID_ALLOW_A_2_0" />
