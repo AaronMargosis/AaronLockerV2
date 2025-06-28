@@ -2,15 +2,13 @@
 .SYNOPSIS
 Retrieves and sorts event data from AppLocker logs, synthesizes data, and reports as tab-delimited CSV output, PSCustomObjects, or as an Excel worksheet.
 
-TODO: Need to pick up events from "Packaged app-Deployment"
-
 .DESCRIPTION
 Get-AppLockerEvents.ps1 retrieves AppLocker event data from live or saved event logs on the local or a remote computer in a manner that makes analysis much easier than the raw data itself.
 In addition to reporting the raw data from the logs, Get-AppLockerEvents.ps1 synthesizes data so that commonalities between events involving different users or computers can be aggregated.
 Output can be tab-delimited CSV (the default), an array of PSCustomObjects, or a formatted Excel worksheet.
 
-By default, the script retrieves error and warning events from the AppLocker EXE/DLL, MSI/Script, and Packaged app-Execution event logs on the local computer.
-You can specify a remote computer, omit one or two of the default logs. AppLocker in audit mode produces warning events ("would have been blocked"), while enforce mode produces error events ("was blocked").
+By default, the script retrieves error and warning events from the AppLocker EXE/DLL, MSI/Script, Packaged app-Deployment, and Packaged app-Execution event logs on the local computer.
+You can specify a remote computer, omit one or more of the default logs. AppLocker in audit mode produces warning events ("would have been blocked"), while enforce mode produces error events ("was blocked").
 You can choose to report only errors, only warnings, only allowed (information) events, or all events.
 
 For forwarded events, you can retrieve from the ForwardedEvents log, and/or named event logs if you've forwarded AppLocker events to log(s) other than to ForwardedEvents.
@@ -18,13 +16,13 @@ Instead of live logs, you can specify the paths to one or more exported .evtx ev
 
 The -FromDateTime and -ToDateTime options enable you to limit events to time ranges.
 
-Data from each event is turned into a line of tab-delimited CSV. Lines are sorted before being output.
+Results are sorted before being output.
 
 Random-named temporary files created by PowerShell to test AppLocker script policy are filtered out by default.
 
 Use the -ComputerName parameter to name a remote computer from which to retrieve live-log events (default logs or event collectors).
 Use the -WarningOnly, -ErrorOnly, -AllowedOnly, or -AllEvents switches to retrieve events other than errors and warnings.
-Use the -NoExeAndDll, -NoMsiAndScript, and -NoPackagedAppExec switches not to retrieve events from one or two default AppLocker logs.
+Use the -NoExeAndDll, -NoMsiAndScript, -NoPackagedAppDeploy, and -NoPackagedAppExec switches not to retrieve events from one or more default AppLocker logs.
 Use the -ForwardedEvents switch to read from the ForwardedEvents log instead of from the default AppLocker logs.
 Use -EventLogNames to specify the names of logs where AppLocker events were forwarded.
 Use the -EvtxLogFilePaths parameter to name one or more saved event log files to read.
@@ -54,7 +52,7 @@ Output fields:
 * UserName      is the result of SID-to-name translation of the UserSID value performed on the local computer.
 * MachineName   is the computer name on which the event was logged.
 * EventTime     is the date and time that the event occurred, in the computer's local time zone and rendered in this sortable format "yyyy-MM-ddTHH:mm:ss.fffffff".
-                For example, June 13, 2018, 6:49pm plus 17.7210233 seconds is reported as 2018-06-13T18:49:17.7210233.
+                For example, June 13, 2025, 6:49pm plus 17.7210233 seconds is reported as 2025-06-13T18:49:17.7210233.
 * EventTimeXL   is the date and time that the event occurred, in the computer's local time zone and rendered in a format that Excel recognizes as a date/time, and its filter dropdown renders in a tree view.
 * PID           is the process ID. It can be used to correlate EXE files and other file types, including scripts and DLLs.
                 Note that a PID is a unique identifier only on the computer the process is running on and only while it is running. When the process exits, the PID value can be assigned to another process.
@@ -72,6 +70,9 @@ When specified in DefaultAppLockerLogs mode, does not retrieve events from the A
 
 .PARAMETER NoPackagedAppExec
 When specified in DefaultAppLockerLogs mode, does not retrieve events from the AppLocker Packaged app-Execution log.
+
+.PARAMETER NoPackagedAppDeploy
+When specified in DefaultAppLockerLogs mode, does not retrieve events from the AppLocker Packaged app-Deployment log.
 
 .PARAMETER ForwardedEvents
 Retrieves events from the ForwardedEvents log instead of from the default AppLocker logs. Can also be used with -EventLogNames.
@@ -95,11 +96,11 @@ Reports only Information events (files allowed to run) instead of Errors + Warni
 Reports all Information, Warning, and Error events.
 
 .PARAMETER FromDateTime
-Reports only events on or after the specified date or date-time. E.g., -FromDateTime "9/7/2017" or -FromDateTime "9/7/2017 12:00:00"
+Reports only events on or after the specified date or date-time. E.g., -FromDateTime "9/7/2024" or -FromDateTime "9/7/2024 12:00:00"
 Can be used with -ToDateTime to specify a date/time range. Date/time specified in local time zone.
 
 .PARAMETER ToDateTime
-Reports only events on or before the specified date or date-time. E.g., -ToDateTime "9/7/2017" or -ToDateTime "9/7/2017 12:00:00"
+Reports only events on or before the specified date or date-time. E.g., -ToDateTime "9/7/2024" or -ToDateTime "9/7/2024 12:00:00"
 Can be used with -FromDateTime to specify a date/time range. Date/time specified in local time zone.
 
 .PARAMETER NoAutoNGEN
@@ -128,7 +129,7 @@ This switch is ignored if -Excel or -GridView is also specified.
 Retrieves warning and error events from the AppLocker EXE and DLL log (MSI/Script and PackagedApp omitted).
 
 .EXAMPLE
-.\Get-AppLockerEvents.ps1 -Computer CONTOSO\RECEPTION1 -AllEvents -FromDateTime "6/1/2019 8:00" -ToDateTime "6/1/2019 9:00" -Excel
+.\Get-AppLockerEvents.ps1 -Computer CONTOSO\RECEPTION1 -AllEvents -FromDateTime "6/1/2025 8:00" -ToDateTime "6/1/2025 9:00" -Excel
 
 Retrieves all AppLocker events for a specified one-hour period on CONTOSO\RECEPTION1, and report in an Excel document.
 
@@ -172,7 +173,7 @@ param(
     [String]
     $ComputerName,
 
-    # When using default AppLocker logs, can exclude one or two of them.
+    # When using default AppLocker logs, can exclude one or more of them.
     [parameter(ParameterSetName="DefaultAppLockerLogs")]
     [switch]
     $NoExeAndDll = $false,
@@ -182,6 +183,9 @@ param(
     [parameter(ParameterSetName="DefaultAppLockerLogs")]
     [switch]
     $NoPackagedAppExec = $false,
+    [parameter(ParameterSetName="DefaultAppLockerLogs")]
+    [switch]
+    $NoPackagedAppDeploy = $false,
 
     # Instead of default AppLocker logs, can use ForwardedEvents and/or any named logs
     [parameter(ParameterSetName="LiveWEFLogs")]
@@ -263,9 +267,9 @@ if ($ExecutionContext.SessionState.LanguageMode -ne [System.Management.Automatio
 }
 
 # --------------------------------------------------------------------------------
-# Get configuration settings and global functions from ..\Support\Config.ps1)
-# Dot-source the config file.
-###. ([System.IO.Path]::Combine( [System.IO.Path]::GetDirectoryName($MyInvocation.MyCommand.Path), "..\Support\Config.ps1"))
+#
+# Strings/IDs
+#
 Set-Variable -Name sNoPublisher -Option Constant -Value "-"
 Set-Variable -Name sUnsigned    -Option Constant -Value "[not signed]"
 Set-Variable -Name sFiltered    -Option Constant -Value "FILTERED"
@@ -275,9 +279,28 @@ Set-Variable -Name sUnknownDir  -Option Constant -value "UnknownDir"
 Set-Variable -Name tab          -Option Constant -Value "`t"
 Set-Variable -Name bar          -Option Constant -Value "|"
 
-#
-# Strings/IDs
-#
+Set-Variable -Name ExeDllLogName        -Option Constant -Value 'Microsoft-Windows-AppLocker/EXE and DLL'
+Set-Variable -Name MsiScriptLogName     -Option Constant -Value 'Microsoft-Windows-AppLocker/MSI and Script'
+Set-Variable -Name PkgdAppExecLogName   -Option Constant -Value 'Microsoft-Windows-AppLocker/Packaged app-Execution'
+Set-Variable -Name PkgdAppDeployLogName -Option Constant -Value 'Microsoft-Windows-AppLocker/Packaged app-Deployment'
+Set-Variable -Name FwdEventsLogName     -Option Constant -Value 'ForwardedEvents'
+Set-Variable -Name ExeDllAllowed        -Option Constant -Value 'EventID=8002'
+Set-Variable -Name ExeDllWarning        -Option Constant -Value 'EventID=8003'
+Set-Variable -Name ExeDllError          -Option Constant -Value 'EventID=8004'
+Set-Variable -Name MsiScriptAllowed     -Option Constant -Value 'EventID=8005'
+Set-Variable -Name MsiScriptWarning     -Option Constant -Value 'EventID=8006'
+Set-Variable -Name MsiScriptError       -Option Constant -Value 'EventID=8007'
+Set-Variable -Name PkgdAppExecAllowed   -Option Constant -Value 'EventID=8020'
+Set-Variable -Name PkgdAppExecWarning   -Option Constant -Value 'EventID=8021'
+Set-Variable -Name PkgdAppExecError     -Option Constant -Value 'EventID=8022'
+Set-Variable -Name PkgdAppDeployAllowed -Option Constant -Value 'EventID=8023'
+Set-Variable -Name PkgdAppDeployWarning -Option Constant -Value 'EventID=8024'
+Set-Variable -Name PkgdAppDeployError   -Option Constant -Value 'EventID=8025'
+Set-Variable -Name SubscriptionBkmrk    -Option Constant -Value 'EventID=111'
+Set-Variable -Name WecBkmarkEventID     -Option Constant -Value 111
+Set-Variable -Name AppxEventIDs         -Option Constant -Value (8020, 8021, 8022, 8023, 8024, 8025)
+
+<#
 $ExeDllLogName    = 'Microsoft-Windows-AppLocker/EXE and DLL'
 $MsiScriptLogName = 'Microsoft-Windows-AppLocker/MSI and Script'
 $PkgdAppExecLogName='Microsoft-Windows-AppLocker/Packaged app-Execution'
@@ -294,7 +317,7 @@ $PkgdAppError     = 'EventID=8022'
 $SubscriptionBkmrk= 'EventID=111'
 $WecBkmarkEventID = 111
 $AppxEventIDs     = (8020, 8021, 8022)
-
+#>
 #
 # Event logs to query
 #
@@ -308,9 +331,10 @@ switch($PSCmdlet.ParameterSetName)
 {
     "DefaultAppLockerLogs"
     {
-        if (!$NoExeAndDll)       { $eventLogs.Add($ExeDllLogName) | Out-Null }
-        if (!$NoMsiAndScript)    { $eventLogs.Add($MsiScriptLogName) | Out-Null }
-        if (!$NoPackagedAppExec) { $eventLogs.Add($PkgdAppExecLogName) | Out-Null }
+        if (!$NoExeAndDll)         { [void]$eventLogs.Add($ExeDllLogName) }
+        if (!$NoMsiAndScript)      { [void]$eventLogs.Add($MsiScriptLogName) }
+        if (!$NoPackagedAppExec)   { [void]$eventLogs.Add($PkgdAppExecLogName) }
+        if (!$NoPackagedAppDeploy) { [void]$eventLogs.Add($PkgdAppDeployLogName) }
     }
     
     "LiveWEFLogs"
@@ -320,7 +344,7 @@ switch($PSCmdlet.ParameterSetName)
 
         if ($ForwardedEvents)
         {
-            $eventLogs.Add($FwdEventsLogName) | Out-Null
+            [void]$eventLogs.Add($FwdEventsLogName)
         }
 
         if ($EventLogNames)
@@ -362,22 +386,25 @@ if ($FromDateTime -or $ToDateTime)
 #
 # Event log XPath query: event IDs
 #
-$eventIdFilter = "$ExeDllWarning or $MsiScriptWarning or $PkgdAppWarning or $ExeDllError or $MsiScriptError or $PkgdAppError"
+Set-Variable -Name AllAllowedIDs -Option Constant -Value "$ExeDllAllowed or $MsiScriptAllowed or $PkgdAppExecAllowed or $PkgdAppDeployAllowed"
+Set-Variable -Name AllWarningIDs -Option Constant -Value "$ExeDllWarning or $MsiScriptWarning or $PkgdAppExecWarning or $PkgdAppDeployWarning"
+Set-Variable -Name AllErrorIDs   -Option Constant -Value "$ExeDllError or $MsiScriptError or $PkgdAppExecError or $PkgdAppDeployError"
+$eventIdFilter = "$AllErrorIDs or $AllWarningIDs"
 if ($WarningOnly)
 {
-    $eventIdFilter = "$ExeDllWarning or $MsiScriptWarning or $PkgdAppWarning"
+    $eventIdFilter = $AllWarningIDs
 }
 if ($ErrorOnly)
 {
-    $eventIdFilter = "$ExeDllError or $MsiScriptError or $PkgdAppError"
+    $eventIdFilter = $AllErrorIDs
 }
 if ($AllowedOnly)
 {
-    $eventIdFilter = "$ExeDllAllowed or $MsiScriptAllowed or $PkgdAppAllowed"
+    $eventIdFilter = $AllAllowedIDs
 }
 if ($AllEvents)
 {
-    $eventIdFilter = "$ExeDllAllowed or $MsiScriptAllowed or $PkgdAppAllowed or $ExeDllWarning or $MsiScriptWarning or $PkgdAppWarning or $ExeDllError or $MsiScriptError or $PkgdAppError"
+    $eventIdFilter = "$AllErrorIDs or $AllWarningIDs or $AllAllowedIDs"
 }
 if (($ForwardedEvents -or $EventLogNames -or $EvtxLogFilePaths) -and !$NoFilteredMachines)
 {
@@ -410,9 +437,8 @@ $PsPolicyTestFileHash2 = "0x96AD1146EB96877EAB5942AE0736B82D8B5E2039A80D3D693266
     PS script policy test file used to be a one-byte file containing "1", with SHA256 hash = 0x6B86B273FF34FCE19D6B804EFF5A3F5747ADA4EAA22F1D49C01E52DDB7875B4B
     That ended up colliding with some other Microsoft-catalog-signed file on some machines. Signature check came up positive and test file was allowed, so
     PS consoles ran in FullLanguage mode instead of ConstrainedLanguage. PS responded by randomizing the files' content, which avoided the collision but made a hash
-    comparison impossible. Current version now contains fixed content with a SHA256 hash = 0x96AD1146EB96877EAB5942AE0736B82D8B5E2039A80D3D6932665C1A4C87DCF7.
+    comparison impossible. In 2019 or so, it contained fixed content with a SHA256 hash = 0x96AD1146EB96877EAB5942AE0736B82D8B5E2039A80D3D6932665C1A4C87DCF7.
     Don't know how widely-deployed this is, though. For now, sticking with filepath pattern match.
-    Note: as of 17 June 2019, still seeing both hashes in different environments.
 #>
 
 # Filepath pattern that can be replaced by %PUBLIC%
@@ -494,7 +520,7 @@ Write-Host ($ev.Count.ToString() + " events retrieved.") -ForegroundColor Cyan
 # Create output array; add CSV headers
 #
 [System.Collections.ArrayList]$csv = @()
-$csv.Add($headers) | Out-Null
+[void]$csv.Add($headers)
 
 #
 # Lookups
@@ -658,10 +684,9 @@ $oLines = @(
         {
             # Computer name already in $machineName
             # high-granularity date/time where alpha sort = chronological sort; granularity = ten millionths of a second
-            $timeCreated = $_.TimeCreated.ToString("yyyy-MM-ddTHH:mm:ss.fffffff") 
+            $timeCreated   = $_.TimeCreated.ToString("yyyy-MM-ddTHH:mm:ss.fffffff")
             # Date/time format that Excel recognizes as date/time
-            #TODO: Verify that regional date/time preferences don't interfere with making this useful...
-            $timeCreatedXL = $timeCreated.Replace("T", " ").Substring(0, 19)
+            $timeCreatedXL = $_.TimeCreated.ToString("yyyy-MM-dd HH:mm:ss")
 
             # Manual text conversion in case LevelDisplayName is not populated
             if(![string]::IsNullOrEmpty($_.LevelDisplayName)){
@@ -874,7 +899,7 @@ else
       <data name="TargetLogonId" inType="win:HexInt64" outType="win:HexInt64"/>
     </template>
 
-    One template for "Packaged app-Execution" 8020, 8021, and 8022 events:
+    One template for "Packaged app-Execution" and "Packaged app-Deployment" 8020, 8021, 8022, 8023, 8024, and 8025 events:
     <template xmlns="http://schemas.microsoft.com/win/2004/08/events">
       <data name="PolicyNameLength" inType="win:UInt16" outType="xs:unsignedShort"/>
       <data name="PolicyNameBuffer" inType="win:UnicodeString" outType="xs:string" length="PolicyNameLength"/>
@@ -900,7 +925,7 @@ else
         <System>
         <Provider Name="Microsoft-Windows-EventForwarder"/>
         <EventID>111</EventID>
-        <TimeCreated SystemTime="2018-03-02T21:04:42.797Z"/>
+        <TimeCreated SystemTime="2025-03-02T21:04:42.797Z"/>
         <Computer>myworkstation.contoso.com</Computer>
         </System>
         <SubscriptionBookmarkEvent>

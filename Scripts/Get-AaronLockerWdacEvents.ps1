@@ -1,74 +1,28 @@
 ﻿<#
 .SYNOPSIS
-Get-WdacEvents
+Retrieve information about ACB (*) events controlled by AaronLocker.
+
+(*) ACB = App Control for Business, formerly Windows Defender Application Control (WDAC).
+
+.DESCRIPTION
+AaronLocker implements audits or blocks against AppLocker bypasses that rely on certain Windows executables
+loading certain Windows DLLs in combinations for which there is never any legitimate need.
+
+This script returns information about any such events that have occurred on the system.
 #>
 
 <#
-# Template info about the events we want data about:
-$evInfo = (Get-WinEvent -ListProvider "Microsoft-Windows-CodeIntegrity").Events | ?{ $_.Id -in @(3033, 3077, 3089) }
-$evInfo | group Id | %{
-    Write-Output ("Event ID " + $_.Name)
-    $_.Group | %{
-        "    Version:        " + $_.Version
-        "    Description:    " + $_.Description
-        "    Property count: " + (([xml]($_.Template)).template.data.Count)
-        "    Template:"
-        $_.Template.Split("`n") | %{ "                    " + $_.TrimEnd() }
-    }
-    ""
-} | Out-File -Encoding utf8 .\CiEventsOfInterest-Win11-24H2.txt
-#>
+Research findings:
 
-<#
-function OutputEvInfo($ev)
-{
-    "    Event ID:       " + $ev.Id
-    "    Version:        " + $ev.Version
-    "    Description:    " + $ev.Description
-    "    Property count: " + (([xml]($ev.Template)).template.data.Count)
-    "    Template:"
-    $ev.Template.Split("`n") | %{ "                    " + $_.TrimEnd() }
-}
+* Event ID 3076 is for audited events, and 3077 for blocked events. These two events are sufficient for what we need.
 
-$evInfo = (Get-WinEvent -ListProvider "Microsoft-Windows-CodeIntegrity").Events | ?{ $_.Id -in @(3033, 3076, 3077, 3089) }
-$evInfo | group Id | %{
-    #Write-Output ("Event ID " + $_.Name)
-    $_.Group | %{
-        $fname = $_.Id.ToString() + "_" + $_.Version.ToString() + ".txt"
-        OutputEvInfo -ev $_ | Out-File -Encoding utf8 $fname
-    }
-}
-#>
+* The versions are not backward compatible, as the index of a given property does not remain constant across all versions with that property.
 
-<#
-# 1 version of 3033
-# 6 versions of 3077
-$f3077 = @(gci 3077*.txt)
-0..($f3077.Count - 2) | %{ windiff ("3077_" + $_ + ".txt") ("3077_" + ($_ + 1) + ".txt") }
-$f3089 = @(gci 3089*.txt)
-0..($f3089.Count - 2) | %{ windiff ("3089_" + $_ + ".txt") ("3089_" + ($_ + 1) + ".txt") }
+* The versions of 3076 and 3077 change together. That is, the properties for a given version of event 3076 are identical with those of the corresponding 3077 version.
 
-# Compare 3076 versions to corresponding 3077 versions. Schema is the same for both
-0..5 | %{ windiff ("3076_" + ($_) + ".txt") ("3077_" + ($_) + ".txt") }
-#>
+Known property names associated with one or more versions of events 3076 and 3077 on Windows 11 24H2, with "+" marking the properties this script collects:
 
-#$ev = Get-WinEvent -LogName "Microsoft-Windows-CodeIntegrity/Operational" -FilterXPath '*[System[(EventID=3033 or EventID=3089 or EventID=3077)]]'
-
-# Event ID 3077 is really all we need, and with all the versions, just get the Message text
-
-$ev3077Info = @{}
-(Get-WinEvent -ListProvider "Microsoft-Windows-CodeIntegrity").Events | Where-Object { $_.Id -eq 3077 } | %{ 
-
-    $arrData = @(([xml]$_.Template).template.data)
-    $propDictionary = @{}
-    0 .. ($arrData.Count - 1) | %{ $propDictionary.Add( $arrData[$_].name, $_ ) }
-    $ev3077Info.Add($_.Version.ToString(), $propDictionary)
-
-}
-
-<#
-Known property names:
-    File Name
++   File Name
     FileDescription
     FileDescriptionLength
     FileNameLength
@@ -79,14 +33,14 @@ Known property names:
     OriginalFileNameLength
     PackageFamilyName
     PackageFamilyNameLength
-    PolicyGUID
++   PolicyGUID
     PolicyHash
     PolicyHashSize
-    PolicyID
++   PolicyID
     PolicyIDLength
-    PolicyName
++   PolicyName
     PolicyNameLength
-    Process Name
++   Process Name
     ProcessNameLength
     ProductName
     ProductNameLength
@@ -104,71 +58,53 @@ Known property names:
     UserWriteable
     USN
     Validated Signing Level
-
-Data of interest:
-    TimeCreated, UserID, Computer
-    Need to get Version to interpret properties
-    File Name
-    Process Name
-    PolicyName
-    PolicyID
-    PolicyGUID
 #>
 
-function GetTheEventData()
+# Build a lookup for the array indices of the property names for each version of events 3076 and 3077, so
+# we can get the "PolicyName" property (if present) in an event, regardless of the event version.
+# Note that the property arrays are the same for corresponding versions of events 3076 and 3077.
+# For $ev3077Info, the event version number is the lookup key; the value is a lookup for that event version.
+# In that lookup, the property name is the lookup key; the value is the array index for that property.
+$ev3077Info = @{}
+(Get-WinEvent -ListProvider "Microsoft-Windows-CodeIntegrity").Events | Where-Object { $_.Id -eq 3077 } | %{ 
+
+    $arrData = @(([xml]$_.Template).template.data)
+    $propDictionary = @{}
+    0 .. ($arrData.Count - 1) | %{ $propDictionary.Add( $arrData[$_].name, $_ ) }
+    $ev3077Info.Add($_.Version.ToString(), $propDictionary)
+}
+
+# Given an event, a lookup dictionary for that event version, and a property name,
+# returns the data associated with that property if it exists in the event.
+function GetPropertyValue($event, $dict, $propname)
 {
-    $ev3077 = @(Get-WinEvent -LogName 'Microsoft-Windows-CodeIntegrity/Operational' -FilterXPath '*[System[(EventID=3076 or EventID=3077)]]')
-
-    $headers = @(
-        "Date/time",
-        "Message",
-        "UserId",
-        "Computer",
-        "Level",
-        "Process Name", 
-        "File Name", 
-        "PolicyID", 
-        "PolicyName", 
-        "PolicyGUID") -join "`t"
-
-    Write-Output $headers
-
-    foreach ($ev in $ev3077) {
-
-        $ver = $ev.Version.ToString()
-        $dict = $ev3077Info[$ver]
-
-        $evData1 = @(
-            $ev.TimeCreated.ToString("yyyy-MM-dd HH:mm:ss"),
-            $ev.Message,
-            $ev.UserId,
-            $ev.MachineName,
-            $ev.LevelDisplayName
-        )
-
-        $evData2 = 
-            if ($null -ne $dict)
-            {
-                # Try to get these:
-                @("Process Name", "File Name", "PolicyID", "PolicyName", "PolicyGUID") | %{
-                    $ixProperty = $dict[$_]
-                    if ($null -ne $ixProperty)
-                    {
-                        $ev.Properties[$ixProperty].Value
-                    }
-                    else
-                    {
-                        ""
-                    }
-                }
-            }
-            else
-            {
-                @("", "", "", "", "")
-            }
-
-        ($evData1 + $evData2) -join "`t"
+    if ($null -ne $dict)
+    {
+        $ixProperty = $dict[$propname]
+        if ($null -ne $ixProperty)
+        {
+            Write-Output $event.Properties[$ixProperty].Value
+        }
     }
 }
 
-GetTheEventData | ConvertFrom-Csv -Delimiter "`t"
+# Retrieve all the 3076 and 3077 events
+foreach ($event in @(Get-WinEvent -LogName 'Microsoft-Windows-CodeIntegrity/Operational' -FilterXPath '*[System[(EventID=3076 or EventID=3077)]]' -ErrorAction SilentlyContinue))
+{
+    # Get the lookup dictionary associated with the event version
+    $ver = $event.Version.ToString()
+    $dict = $ev3077Info[$ver]
+
+    Write-Output ([pscustomobject]@{
+        TimeCreated = $event.TimeCreated;       # [datetime]
+        Message     = $event.Message;           # [string]
+        UserId      = $event.UserId;            # [System.Security.Principal.SecurityIdentifier]
+        Computer    = $event.MachineName;       # [string]
+        Level       = $event.LevelDisplayName;  # [string]
+        ProcessName = GetPropertyValue -ev $event -dict $dict -propname "Process Name"; # [string]
+        FileName    = GetPropertyValue -ev $event -dict $dict -propname "File Name";    # [string]
+        PolicyID    = GetPropertyValue -ev $event -dict $dict -propname "PolicyID";     # [string]
+        PolicyName  = GetPropertyValue -ev $event -dict $dict -propname "PolicyName";   # [string]
+        PolicyGUID  = GetPropertyValue -ev $event -dict $dict -propname "PolicyGUID";   # [string]
+    })
+}
