@@ -310,6 +310,10 @@ void BuiltInRules_SingletonImpl::Initialize()
 			L"Slack",
 			L"O=SLACK TECHNOLOGIES, INC., L=SAN FRANCISCO, S=CALIFORNIA, C=US"
 		),
+		PublisherRuleItem(
+			L"Slack",
+			L"O=SLACK TECHNOLOGIES, LLC, L=SAN FRANCISCO, S=CALIFORNIA, C=US"
+		),
 		// Store app
 		PublisherRuleItem(
 			L"Slack, from Slack Technologies Inc.",
@@ -543,66 +547,22 @@ void BuiltInRules_SingletonImpl::Initialize()
 			szProdNameMSWindowsOS,
 			RuleItem::Collection_t::Dll
 		),
-		//// During Windows upgrade, setup loads %OSDRIVE%\$WINDOWS.~BT\SOURCES\GENERALTEL.DLL, which loads two other DLLs in the same directory
+		//// Allow protected content to run in MS Edge
 		//PublisherRuleItem(
 		//	szMSDefaultSupportDLLs,
 		//	MicrosoftPublisher(),
-		//	szProdNameMSWindowsOS,
-		//	L"GENERALTEL.DLL",
-		//	L"Allow selected files from %OSDRIVE%\\$WINDOWS.~BT\\SOURCES during Windows upgrade",
+		//	L"WIDEVINE CONTENT DECRYPTION MODULE",
+		//	L"MS Edge content protection",
 		//	RuleItem::Collection_t::Dll
 		//),
-		//PublisherRuleItem(
-		//	szMSDefaultSupportDLLs,
-		//	MicrosoftPublisher(),
-		//	szProdNameMSWindowsOS,
-		//	L"WDSCORE.DLL",
-		//	L"Allow selected files from %OSDRIVE%\\$WINDOWS.~BT\\SOURCES during Windows upgrade",
-		//	RuleItem::Collection_t::Dll
-		//),
-		//PublisherRuleItem(
-		//	szMSDefaultSupportDLLs,
-		//	MicrosoftPublisher(),
-		//	szProdNameMSWindowsOS,
-		//	L"AEINV.DLL",
-		//	L"Allow selected files from %OSDRIVE%\\$WINDOWS.~BT\\SOURCES during Windows upgrade",
-		//	RuleItem::Collection_t::Dll
-		//),
-		// Allow protected content to run in MS Edge
+		// DirectX IL for Redistribution
 		PublisherRuleItem(
 			szMSDefaultSupportDLLs,
 			MicrosoftPublisher(),
-			L"WIDEVINE CONTENT DECRYPTION MODULE",
-			L"MS Edge content protection",
+			L"", // Missing product name
+			L"DXIL.DLL",
 			RuleItem::Collection_t::Dll
 		),
-		//##########################################################################
-		// Windows Universal CRT, API sets, redists
-		//##########################################################################
-		//PublisherRuleItem(
-		//	szMSDefaultSupportDLLs,
-		//	MicrosoftPublisher(),
-		//	szProdNameMSWindowsOS,
-		//	L"APISETSTUB",
-		//	L"MS Windows API set (api-ms-win-*.dll)",
-		//	RuleItem::Collection_t::Dll
-		//),
-		//PublisherRuleItem(
-		//	szMSDefaultSupportDLLs,
-		//	MicrosoftPublisher(),
-		//	szProdNameMSWindowsOS,
-		//	L"D3DCOMPILER_47.DLL",
-		//	L"MS Direct3D HLSL Compiler for Redistribution",
-		//	RuleItem::Collection_t::Dll
-		//),
-		//PublisherRuleItem(
-		//	szMSDefaultSupportDLLs,
-		//	MicrosoftPublisher(),
-		//	szProdNameMSWindowsOS,
-		//	L"UCRTBASE.DLL",
-		//	L"MS UCRT runtime DLL",
-		//	RuleItem::Collection_t::Dll
-		//),
 	};
 	
 	//
@@ -978,6 +938,10 @@ void BuiltInRules_SingletonImpl::Initialize()
 		{
 		L"MICROSOFT® VISUAL STUDIO®",
 		L"VCRUNTIME140_1.DLL"
+		},
+		{
+		L"MICROSOFT® VISUAL STUDIO®",
+		L"VCRUNTIME140_THREADS.DLL"
 		},
 	};
 	const size_t nMsvcRedistDlls = sizeof(MsvcRedistDlls) / sizeof(MsvcRedistDlls[0]);
