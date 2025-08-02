@@ -8,6 +8,7 @@
 #include "../AaronLocker_EndpointScanLogic/EndpointScan_Structs.h"
 
 //TODO: output machine type for PE files (e.g., x86, x64, ...)
+//TODO: output SHA256 flat file hash for all files (in addition to Authenticode hash for PE files)
 static bool SerializeFileDetailsTable(const FileDetailsCollection_t& fileDetails, std::wostream& os);
 static bool SerializeFileDetailsList(const FileDetailsCollection_t& fileDetails, std::wostream& os);
 

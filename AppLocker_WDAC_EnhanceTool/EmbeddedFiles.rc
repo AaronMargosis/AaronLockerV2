@@ -1,0 +1,24 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// CIPOLICYFILE
+//
+Single_Policy_Audit    CIPOLICYFILE  "FilesToDeploy\\SiPolicy-Audit.p7b"
+Single_Policy_Block    CIPOLICYFILE  "FilesToDeploy\\SiPolicy-Block.p7b"
+Multi_Policy_Audit     CIPOLICYFILE  "FilesToDeploy\\{aa1205ad-93da-43e2-9037-c50bbe220583}.cip"
+Multi_Policy_Blocking  CIPOLICYFILE  "FilesToDeploy\\{aa120602-611b-4455-b8d8-c13a815b4323}.cip"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_SinglePolicyFileName         L"SiPolicy.p7b"
+    IDS_MultiPolicyAuditFileName     L"{aa1205ad-93da-43e2-9037-c50bbe220583}.cip"
+    IDS_MultiPolicyBlockingFileName  L"{aa120602-611b-4455-b8d8-c13a815b4323}.cip"
+END

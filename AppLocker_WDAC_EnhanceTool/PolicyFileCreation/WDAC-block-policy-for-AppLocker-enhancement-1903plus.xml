@@ -37,14 +37,14 @@
   <Signers />
   <!--Driver Signing Scenarios-->
   <SigningScenarios>
-    <SigningScenario Value="131" ID="ID_SIGNINGSCENARIO_DRIVERS_1" FriendlyName="Auto generated policy on 06-24-2025">
+    <SigningScenario Value="131" ID="ID_SIGNINGSCENARIO_DRIVERS_1" FriendlyName="Auto generated policy on 07-02-2025">
       <ProductSigners>
         <FileRulesRef>
           <FileRuleRef RuleID="ID_ALLOW_A_1_0" />
         </FileRulesRef>
       </ProductSigners>
     </SigningScenario>
-    <SigningScenario Value="12" ID="ID_SIGNINGSCENARIO_WINDOWS" FriendlyName="Auto generated policy on 06-24-2025">
+    <SigningScenario Value="12" ID="ID_SIGNINGSCENARIO_WINDOWS" FriendlyName="Auto generated policy on 07-02-2025">
       <ProductSigners>
         <FileRulesRef>
           <FileRuleRef RuleID="ID_ALLOW_A_2_0" />
@@ -59,8 +59,8 @@
   <UpdatePolicySigners />
   <CiSigners />
   <HvciOptions>0</HvciOptions>
-  <BasePolicyID>{0f78c0e5-cb41-47b7-96f7-fedf43fafcb3}</BasePolicyID>
-  <PolicyID>{0f78c0e5-cb41-47b7-96f7-fedf43fafcb3}</PolicyID>
+  <BasePolicyID>{aa120602-611b-4455-b8d8-c13a815b4323}</BasePolicyID>
+  <PolicyID>{aa120602-611b-4455-b8d8-c13a815b4323}</PolicyID>
   <Settings>
     <Setting Provider="PolicyInfo" Key="Information" ValueName="Name">
       <Value>

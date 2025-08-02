@@ -19,22 +19,26 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CIPolicyPaths.h" />
+    <ClInclude Include="EmbeddedFiles.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppLocker_WDAC_EnhanceTool.cpp" />
+    <ClCompile Include="EmbeddedFiles.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="AppLocker_WDAC_EnhanceTool.rc" />
+    <ResourceCompile Include="EmbeddedFiles.rc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FilesToDeploy\SiPolicy-Audit.p7b" />
     <None Include="FilesToDeploy\SiPolicy-Block.p7b" />
-    <None Include="FilesToDeploy\{0f78c0e5-cb41-47b7-96f7-fedf43fafcb3}-Audit.cip" />
-    <None Include="FilesToDeploy\{0f78c0e5-cb41-47b7-96f7-fedf43fafcb3}-Block.cip" />
+    <None Include="FilesToDeploy\{aa1205ad-93da-43e2-9037-c50bbe220583}.cip" />
+    <None Include="FilesToDeploy\{aa120602-611b-4455-b8d8-c13a815b4323}.cip" />
     <None Include="PolicyFileCreation\CreateWdacEnhancementsForAppLocker.ps1" />
   </ItemGroup>
   <ItemGroup>

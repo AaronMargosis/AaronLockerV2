@@ -2,7 +2,6 @@
 //
 
 
-//TODO: Add PowerShell scripts to convert scan files to Excel and this output to Excel, and/or add C++ stuff to convert to Excel...
 //TODO: Add an option to remove store app rules
 //TODO: Consider making the command-line switches case sensitive, and then distinguishing -r R -rr -RR.
 
@@ -257,7 +256,6 @@ static void Helper_WriteProposedRuleSets(
 
 /// <summary>
 /// Output information about proposed rule sets for review to stdout.
-/// TODO: Consider reporting proposed non-Microsoft AppX rules. (Don't make the Microsoft ones optional for inclusion - too many are required for normal Windows operation.)
 /// </summary>
 /// <param name="ruleAnalyzer"></param>
 static void WriteProposedRuleSetInfo(const RuleAnalyzer& ruleAnalyzer)

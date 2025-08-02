@@ -103,6 +103,7 @@ std::unordered_map<std::wstring, AppLockerFileDetails_ftype_t> ExtensionLookups:
 
 	{ L"dll", AppLockerFileDetails_ftype_t::ft_DLL },
 	{ L"ocx", AppLockerFileDetails_ftype_t::ft_DLL },
+	{ L"pyd", AppLockerFileDetails_ftype_t::ft_DLL },
 
 	{ L"msi", AppLockerFileDetails_ftype_t::ft_MSI },
 	{ L"msp", AppLockerFileDetails_ftype_t::ft_MSI },

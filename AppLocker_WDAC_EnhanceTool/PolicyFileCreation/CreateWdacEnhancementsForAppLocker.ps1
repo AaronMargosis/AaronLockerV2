@@ -1,8 +1,10 @@
 ﻿<#
 .SYNOPSIS
-Implement WDAC rules to enhance AppLocker allowlisting for supported Windows versions, by disallowing a handful of EXE/DLL 
+Implement WDAC (*) rules to enhance AppLocker allowlisting for supported Windows versions, by disallowing a handful of EXE/DLL 
 combinations that have been shown to allow arbitrary code execution. These WDAC rules are designed to be used in combination
 with AppLocker rules that include DLL rule enforcement.
+
+(*) WDAC = "Windows Defender Application Control," which has since been renamed to "App Control for Business."
 
 .DESCRIPTION
 Numerous web pages that describe bypass of allowlisting rules (particularly AppLocker) describe techniques that use existing 
@@ -39,10 +41,14 @@ Deployment:
 
 On Windows 10 v1709-v1809 (including Windows Server 2019) the policy file must be copied to:
     %windir%\System32\CodeIntegrity\SiPolicy.p7b
-On Windows 10 v1903 and later, the policy file must be copied to:
-    %windir%\System32\CodeIntegrity\CiPolicies\Active\{496a5746-5600-4cdd-b22e-333fd5614d00}.cip
+On Windows 10 v1903 and later, the .cip policy file must be copied to:
+    %windir%\System32\CodeIntegrity\CiPolicies\Active\{guid}.cip
+(where "guid" is "aa120602-611b-4455-b8d8-c13a815b4323" for the blocking policy, or "aa1205ad-93da-43e2-9037-c50bbe220583" for
+the audit policy).
+
 Note that the target computer must be rebooted for the changes to WDAC policy to take effect. To remove the enforcement, delete 
-the policy file and reboot.
+the policy file and reboot. (Newer Windows versions include citool.exe which can be used to refresh policy without a reboot.)
+
 (Note that as of this writing (June 2025) v22H2 is the only non-LTSB/LTSC Windows 10 version still supported by Microsoft, and
 support for Win10 v22H2 ends in October 2025.)
 
@@ -51,49 +57,46 @@ system version.
 
 Testing:
 
-To test whether the policies are working after reboot, run these commands from a Cmd.exe command prompt:
+To test whether the blocking policy is working, run either of these command lines:
 
 regsvr32.exe scrobj.dll
-  * If policy working: "The module 'scrobj.dll' failed to load." and "An Application Control policy has blocked this file."
+  * If policy working: "The module 'scrobj.dll' failed to load" and either "Your organization used Device Guard to block this app"
+    or "An Application Control policy has blocked this file" (depending on Windows version).
   * If not working: "DllRegisterServer in scrobj.dll succeeded."
 
 rundll32.exe mshtml.dll,NonExistent
-  * If policy working: "There was a problem starting mshtml.dll. Your organization used Device Guard to block this app."
+  * If policy working: "There was a problem starting mshtml.dll" and either "Your organization used Device Guard to block this app"
+    or "An Application Control policy has blocked this file" (depending on Windows version).
   * If not working: "Error in mshtml.dll" and "Missing entry: NonExistent"
 
 
 More details:
 
 Windows Defender Application Control (WDAC), a.k.a. "Configurable Code Integrity" (CCI), originally branded as "Device Guard,"
-and recently rebranded (again) as "App Control for Business,"
-was introduced in the first version of Windows 10. Windows 10 v1703 introduced improvements that enable the creation of WDAC rules 
-to disallow specific processes from loading specific DLLs. However, until Windows 10 v1903, enforcement of *any* WDAC rules causes 
-all PowerShell instances to run in Constrained Language (CL) mode, which is undesirable under AaronLocker, which distinguishes between
-what admins can do from what non-admins can do. Windows 10 v1903 introduced a WDAC policy-
-creation option not to enforce script controls. AaronLocker relies on AppLocker to enforce script controls, with which we can be
-more selective about when PowerShell should run in CL mode. Although this script must be executed on Windows 10 v1903 or later, the 
-rules it creates can be applied to fully-patched Windows 10 v1709 or later (including Windows 11). Based on my testing, Windows 10 LTSB 
-v1607 and Windows Server 2016 appear to support per-app rules, but not the script enforcement option, so these rules should not 
-be applied to those older systems.
+and recently rebranded (again) as "App Control for Business," was introduced in the first version of Windows 10. Windows 10 v1703 
+introduced improvements that enable the creation of WDAC rules to disallow specific processes from loading specific DLLs. However, 
+until Windows 10 v1903, enforcement of *any* WDAC rules causes all PowerShell instances to run in Constrained Language (CL) mode, 
+which is undesirable under AaronLocker, which distinguishes between what admins can do from what non-admins can do. Windows 10 v1903 
+introduced a WDAC policy-creation option not to enforce script controls. AaronLocker relies on AppLocker to enforce script controls, 
+with which we can be more selective about when PowerShell should run in CL mode. Although this script must be executed on Windows 10 
+v1903 or later, the rules it creates can be applied to any fully-patched Windows later than Win10 v1709 or later. Based on my testing, 
+Windows 10 LTSB v1607 and Windows Server 2016 appear to support per-app rules, but not the script enforcement option, so these rules 
+should not be applied to those older systems.
 
 Testing on Win10 LTSC 2019 indicates that the internal policy GUID must be the predefined "allow-all" GUID, {A244370E-44C9-4C06-B551-F6016E563076}.
-For Windows versions that support multiple WDAC policies, we want to have our own unique but constant GUID.
+For Windows versions that support multiple WDAC policies, AaronLocker defines its own unique and constant GUID.
 
 Coexistence with other WDAC policies:
-This script creates a WDAC policy with a unique but constant GUID and can coexist with other WDAC policies on Windows systems that
-support multiple WDAC policies (Win10 v1903 and later).
+This script creates a blocking WDAC policy and an audit WDAC policy each with a unique but constant GUID and can coexist with other WDAC policies 
+on Windows systems that support multiple WDAC policies (Win10 v1903 and later).
 Windows 10 v1709-v1809 and Windows Server 2019 support only a single WDAC policy, represented in System32\CodeIntegrity\SiPolicy.p7b.
 
 
-TODO: determine how to manage situations on v1709-v1809 where a target system has a preexisting WDAC policy. (Note that as of this 
-writing (June 2025) Windows 10 LTSC v1809 and Windows Server 2019 are the only still-supported OSes in that range.) 
-Initial tests with the WldpGetLockdownPolicy suggest that it returns different results on different Windows versions with the same
-WDAC policy. E.g., on 19H2 it says that lockdown is off even when these rules are in place.
-
-TODO: Come up with a reliable way to determine whether a binary policy file is ours. E.g., find "AaronLocker" in its name/ID. (How? Just string search in a binary?)
+TODO: determine how to manage situations on single-policy platforms where a target system has a preexisting WDAC policy. (Note that as of this 
+writing (July 2025) Windows 10 LTSC v1809 and Windows Server 2019 are the only still-supported OSes in that range.) 
 TODO: Need to be able to identify and handle situations in which a customer is using signed WDAC policies.
 
-Can also deploy via CSP: https://docs.microsoft.com/en-us/windows/client-management/mdm/applicationcontrol-csp
+TODO: Can also deploy via CSP: https://docs.microsoft.com/en-us/windows/client-management/mdm/applicationcontrol-csp
 
 Note that Mshta.exe ("Microsoft (R) HTML Application host") can also run arbitrary script. AaronLocker's AppLocker rules disallow
 its execution by non-administrative users. Mshta.exe runs .hta files, which are essentially local HTML files that can include script.
@@ -132,16 +135,18 @@ Major WDAC blog post:
 
 #>
 
+[CmdletBinding()]
 param(
+    [Parameter(Mandatory=$false)]
+    [string]
+    $SigningCertPath
 )
 
-#TODO: Make sure this is Windows PowerShell v5.1. PowerShell 7 doesn't properly support WDAC cmdlets.
-# Only supported PowerShell version at this time: 5.1
-# PowerShell 6/7 doesn't properly support WDAC cmdlets.
+# Make sure this is Windows PowerShell v5.1: PowerShell 6/7 doesn't properly support the WDAC cmdlets (as of June 2025).
 $psv = $PSVersionTable.PSVersion
 if (-not ($psv.Major -eq 5 -and $psv.Minor -eq 1))
 {
-    $errMsg = "This script requires Windows PowerShell v5.1.`nCurrent version = " + $PSVersionTable.PSVersion.ToString()
+    $errMsg = "This script requires Windows PowerShell v5.1.`nRunning v" + $PSVersionTable.PSVersion.ToString()
     Write-Error $errMsg
     return
 }
@@ -162,12 +167,23 @@ if ($osver.Major -lt 10 -or $osver.Build -lt 18362)
     return
 }
 
+# If $SigningCertPath is provided, make sure it exists before proceeding any further.
+if ($SigningCertPath)
+{
+    if (-not (Test-Path $SigningCertPath -PathType Leaf))
+    {
+        Write-Error "Specified signing cert file does not exist: $SigningCertPath"
+        return
+    }
+}
+
 # Put files in the same directory with this script.
 $workingDir = [System.IO.Path]::GetDirectoryName($MyInvocation.MyCommand.Path)
 
 # Define GUIDs that we need.
-$PredefAllowAllGuid  = '{A244370E-44C9-4C06-B551-F6016E563076}'
-$AaronLockerGuid     = '{0f78c0e5-cb41-47b7-96f7-fedf43fafcb3}'
+$PredefAllowAllGuid      = '{A244370E-44C9-4C06-B551-F6016E563076}'
+$AaronLockerBlockingGuid = '{aa120602-611b-4455-b8d8-c13a815b4323}'
+$AaronLockerAuditGuid    = '{aa1205ad-93da-43e2-9037-c50bbe220583}'
 # Define target files - policy XML and corresponding binary files.
 $xmlAuditLegacy      = [System.IO.Path]::Combine($workingDir, "WDAC-audit-policy-for-AppLocker-enhancement-legacy.xml")
 $xmlBlockLegacy      = [System.IO.Path]::Combine($workingDir, "WDAC-block-policy-for-AppLocker-enhancement-legacy.xml")
@@ -177,8 +193,8 @@ $xmlBlock1903Plus    = [System.IO.Path]::Combine($workingDir, "WDAC-block-policy
 $binAuditLegacy      = [System.IO.Path]::Combine($workingDir, "SiPolicy-Audit.p7b")
 $binBlockLegacy      = [System.IO.Path]::Combine($workingDir, "SiPolicy-Block.p7b")
 # For v1903+ systems (with multiple policy support), the file name must be the policy ID GUID + ".cip"
-$binAudit1903Plus    = [System.IO.Path]::Combine($workingDir, $AaronLockerGuid + "-Audit.cip")
-$binBlock1903Plus    = [System.IO.Path]::Combine($workingDir, $AaronLockerGuid + "-Block.cip")
+$binAudit1903Plus    = [System.IO.Path]::Combine($workingDir, $AaronLockerAuditGuid + ".cip")
+$binBlock1903Plus    = [System.IO.Path]::Combine($workingDir, $AaronLockerBlockingGuid + ".cip")
 
 # Temporary XML files - keep them in the working dir.
 $fnameTemp1 = [System.IO.Path]::Combine($workingDir, [System.Guid]::NewGuid().Guid + ".xml")
@@ -238,10 +254,22 @@ Set-RuleOption -Help
     21 Disabled:Default Windows Certificate Remapping   | 
 #>
 
+if ($SigningCertPath)
+{
+    # The binary file will be signed (in a separate operation) with a certificate matching the input certificate file.
+    #
+    Add-SignerRule -FilePath $fnameTemp3 -CertificatePath $SigningCertPath -User -Update -Supplemental
+    #                                                       REQUIRING that these policies be signed
+    Set-RuleOption -Option  6 -Delete -FilePath $fnameTemp3 # Enabled:Unsigned System Integrity Policy
+}
+else
+{
+    #                                                       NOT requiring that these policies be signed
+    Set-RuleOption -Option  6         -FilePath $fnameTemp3 # Enabled:Unsigned System Integrity Policy
+}
+
 #                                                           Make sure that user-mode code integrity is enabled
 Set-RuleOption -Option  0         -FilePath $fnameTemp3 	# Enabled:UMCI
-#                                                           Not requiring that these policies be signed
-Set-RuleOption -Option  6         -FilePath $fnameTemp3 	# Enabled:Unsigned System Integrity Policy
 #                                                           Allow the F8 advanced boot menu to continue to work
 Set-RuleOption -Option  9         -FilePath $fnameTemp3 	# Enabled:Advanced Boot Options Menu
 #                                                           Disable script enforcement so that PowerShell is not always required to run in ConstrainedLanguage mode.
@@ -263,7 +291,7 @@ Set-RuleOption -Option  3         -FilePath $fnameTemp3 	# Enabled:Audit Mode
 $xmlTemp = [xml](gc $fnameTemp3)
 $xmlTemp.SiPolicy.PolicyID = $xmlTemp.SiPolicy.BasePolicyID = $PredefAllowAllGuid
 $xmlTemp.Save($xmlAuditLegacy)
-$xmlTemp.SiPolicy.PolicyID = $xmlTemp.SiPolicy.BasePolicyID = $AaronLockerGuid
+$xmlTemp.SiPolicy.PolicyID = $xmlTemp.SiPolicy.BasePolicyID = $AaronLockerAuditGuid
 $xmlTemp.Save($xmlAudit1903Plus)
 
 # Create the XMLs for the Block policies
@@ -274,7 +302,7 @@ Set-RuleOption -Option  3 -Delete -FilePath $fnameTemp3 	# REMOVE Enabled:Audit 
 $xmlTemp = [xml](gc $fnameTemp3)
 $xmlTemp.SiPolicy.PolicyID = $xmlTemp.SiPolicy.BasePolicyID = $PredefAllowAllGuid
 $xmlTemp.Save($xmlBlockLegacy)
-$xmlTemp.SiPolicy.PolicyID = $xmlTemp.SiPolicy.BasePolicyID = $AaronLockerGuid
+$xmlTemp.SiPolicy.PolicyID = $xmlTemp.SiPolicy.BasePolicyID = $AaronLockerBlockingGuid
 $xmlTemp.Save($xmlBlock1903Plus)
 
 # Convert the policy XMLs to binary form:
@@ -326,7 +354,7 @@ Example data from a single execution of "regsvr32.exe scrobj.dll" on Windows 10 
     LevelDisplayName : Error
     Message          : Code Integrity determined that a process (\Device\HarddiskVolume3\Windows\System32\regsvr32.exe) attempted 
                        to load \Device\HarddiskVolume3\Windows\System32\scrobj.dll that did not meet the Enterprise signing level 
-                       requirements or violated code integrity policy (Policy ID:{496a5746-5600-4cdd-b22e-333fd5614d00}).
+                       requirements or violated code integrity policy (Policy ID:{0f78c0e5-cb41-47b7-96f7-fedf43fafcb3}).
     UserId           : S-1-5-21-352879197-4051354371-3799005610-1001
 
     Id               : 3089
@@ -346,7 +374,7 @@ And the corresponding XML from those four events. Note that event 3077 includes 
         <Task>1</Task> 
         <Opcode>111</Opcode> 
         <Keywords>0x8000000000000000</Keywords> 
-        <TimeCreated SystemTime="2021-12-27T19:58:05.0166515Z" /> 
+        <TimeCreated SystemTime="2024-12-27T19:58:05.0166515Z" /> 
         <EventRecordID>191</EventRecordID> 
         <Correlation ActivityID="{06dc59e1-fb5b-0001-7580-dc065bfbd701}" /> 
         <Execution ProcessID="1800" ThreadID="1784" /> 
@@ -374,7 +402,7 @@ And the corresponding XML from those four events. Note that event 3077 includes 
         <Task>1</Task> 
         <Opcode>130</Opcode> 
         <Keywords>0x8000000000000000</Keywords> 
-        <TimeCreated SystemTime="2021-12-27T19:58:05.0166525Z" /> 
+        <TimeCreated SystemTime="2024-12-27T19:58:05.0166525Z" /> 
         <EventRecordID>192</EventRecordID> 
         <Correlation ActivityID="{06dc59e1-fb5b-0001-7580-dc065bfbd701}" /> 
         <Execution ProcessID="1800" ThreadID="1784" /> 
@@ -394,7 +422,7 @@ And the corresponding XML from those four events. Note that event 3077 includes 
         <Data Name="VerificationError">26</Data> 
         <Data Name="Flags">0</Data> 
         <Data Name="PolicyBits">2050</Data> 
-        <Data Name="NotValidBefore">2021-09-02T18:23:41.0000000Z</Data> 
+        <Data Name="NotValidBefore">2024-09-02T18:23:41.0000000Z</Data> 
         <Data Name="NotValidAfter">2022-09-01T18:23:41.0000000Z</Data> 
         <Data Name="PublisherNameLength">17</Data> 
         <Data Name="PublisherName">Microsoft Windows</Data> 
@@ -416,7 +444,7 @@ And the corresponding XML from those four events. Note that event 3077 includes 
         <Task>18</Task> 
         <Opcode>111</Opcode> 
         <Keywords>0x8000000000000000</Keywords> 
-        <TimeCreated SystemTime="2021-12-27T19:58:05.0190333Z" /> 
+        <TimeCreated SystemTime="2024-12-27T19:58:05.0190333Z" /> 
         <EventRecordID>193</EventRecordID> 
         <Correlation ActivityID="{06dc59e1-fb5b-0001-7580-dc065bfbd701}" /> 
         <Execution ProcessID="1800" ThreadID="1784" /> 
@@ -457,7 +485,7 @@ And the corresponding XML from those four events. Note that event 3077 includes 
         <Data Name="ProductNameLength">46</Data> 
         <Data Name="ProductName">Microsoft ® Windows ® Script Component Runtime</Data> 
         <Data Name="FileVersion">5.812.10240.16384</Data> 
-        <Data Name="PolicyGUID">{496a5746-5600-4cdd-b22e-333fd5614d00}</Data> 
+        <Data Name="PolicyGUID">{0f78c0e5-cb41-47b7-96f7-fedf43fafcb3}</Data> 
         <Data Name="UserWriteable">false</Data> 
         <Data Name="PackageFamilyNameLength">0</Data> 
         <Data Name="PackageFamilyName" /> 
@@ -473,7 +501,7 @@ And the corresponding XML from those four events. Note that event 3077 includes 
         <Task>1</Task> 
         <Opcode>130</Opcode> 
         <Keywords>0x8000000000000000</Keywords> 
-        <TimeCreated SystemTime="2021-12-27T19:58:05.0190352Z" /> 
+        <TimeCreated SystemTime="2024-12-27T19:58:05.0190352Z" /> 
         <EventRecordID>194</EventRecordID> 
         <Correlation ActivityID="{06dc59e1-fb5b-0001-7580-dc065bfbd701}" /> 
         <Execution ProcessID="1800" ThreadID="1784" /> 
@@ -493,7 +521,7 @@ And the corresponding XML from those four events. Note that event 3077 includes 
         <Data Name="VerificationError">26</Data> 
         <Data Name="Flags">0</Data> 
         <Data Name="PolicyBits">2050</Data> 
-        <Data Name="NotValidBefore">2021-09-02T18:23:41.0000000Z</Data> 
+        <Data Name="NotValidBefore">2024-09-02T18:23:41.0000000Z</Data> 
         <Data Name="NotValidAfter">2022-09-01T18:23:41.0000000Z</Data> 
         <Data Name="PublisherNameLength">17</Data> 
         <Data Name="PublisherName">Microsoft Windows</Data> 
@@ -512,7 +540,7 @@ Sample informational data at system start when the AaronLocker WDAC policy is ap
     Id               : 3099
     Version          : 1
     LevelDisplayName : Information
-    Message          : Refreshed and activated Code Integrity policy {496a5746-5600-4cdd-b22e-333fd5614d00} AaronLocker 
+    Message          : Refreshed and activated Code Integrity policy {0f78c0e5-cb41-47b7-96f7-fedf43fafcb3} AaronLocker 
                        AppLocker enhancement - disallow specific EXE/DLL combinations. id AaronLocker WDAC policy. Status 
                        0x0
     UserId           : S-1-5-18
@@ -528,7 +556,7 @@ And the corresponding XML from the event:
         <Task>21</Task> 
         <Opcode>131</Opcode> 
         <Keywords>0x8000000000000000</Keywords> 
-        <TimeCreated SystemTime="2021-12-27T23:02:53.9707587Z" /> 
+        <TimeCreated SystemTime="2024-12-27T23:02:53.9707587Z" /> 
         <EventRecordID>197</EventRecordID> 
         <Correlation /> 
         <Execution ProcessID="4" ThreadID="8" /> 
@@ -541,7 +569,7 @@ And the corresponding XML from the event:
         <Data Name="PolicyNameBuffer">AaronLocker AppLocker enhancement - disallow specific EXE/DLL combinations</Data> 
         <Data Name="PolicyIdLength">26</Data> 
         <Data Name="PolicyIdBuffer">AaronLocker WDAC policy</Data> 
-        <Data Name="PolicyGUID">{496a5746-5600-4cdd-b22e-333fd5614d00}</Data> 
+        <Data Name="PolicyGUID">{0f78c0e5-cb41-47b7-96f7-fedf43fafcb3}</Data> 
         <Data Name="Status">0x0</Data> 
         <Data Name="Options">0x91880004</Data> 
         <Data Name="PolicyHashSize">32</Data> 

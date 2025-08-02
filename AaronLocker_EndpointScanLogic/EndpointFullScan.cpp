@@ -568,7 +568,6 @@ static const wchar_t* szAppdatalocal_exclusions[] = {
 };
 
 // Subdirectories under AppData\Local\Microsoft not to scan
-//TODO: Come up with a way to exclude OneDrive's never-signed and always-changing CollectSyncLogs.bat file. (Might not be worth the trouble until OneDrive finally starts putting version resource info into all their files.)
 static const wchar_t* szAppdatalocalMSFT_exclusions[] = {
 	L"CLR_v2.0",
 	L"CLR_v4.0",

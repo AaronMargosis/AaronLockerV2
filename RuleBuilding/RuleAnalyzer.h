@@ -40,7 +40,7 @@ public:
 	/// <summary>
 	/// Takes one or more deserialized scans (at least one must be a full scan) and an
 	/// optional set of built-in EXEs not to exclude, and prepares rules.
-	/// TODO: Add an option not to build rules for resource-only DLLs. (Except that "resource-only" doesn't mean that apps don't use LoadLibrary without the resource-only flag to load them...)
+	/// TODO: Add an option not to build rules for resource-only DLLs. (Except that "resource-only" doesn't mean that apps don't use LoadLibrary without the resource-only flag to load them, which will fail in the absence of an allowing rule...)
 	/// </summary>
 	/// <param name="scans"></param>
 	/// <param name="windowsExesNotToExclude"></param>

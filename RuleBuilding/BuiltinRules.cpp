@@ -333,6 +333,7 @@ void BuiltInRules_SingletonImpl::Initialize()
 		)
 	};
 
+	static const wchar_t* szGoogleChromeMachineRuleName = L"Google Chrome (user-profile files in machine-wide install)";
 	GoogleChromeMachinewideInstallRules = {
 		// Enable these rules if Google Chrome is installed to ProgramFiles.
 		// Google Chrome runs some code in the user profile even when Chrome is installed to Program Files.
@@ -340,27 +341,34 @@ void BuiltInRules_SingletonImpl::Initialize()
 		// Note that Google's PublisherNames can use either "S=CA" or "S=CALIFORNIA" so we have to cover both.
 		// In the past the ESET publisher has incorporated "S=SLOVAKIA" but not lately.
 		PublisherRuleItem(
-			L"Google Chrome (user-profile files in machine-wide install)",
+			szGoogleChromeMachineRuleName,
+			L"O=GOOGLE LLC, L=MOUNTAIN VIEW, S=CALIFORNIA, C=US",
+			L"GOOGLE WIDEVINE WINDOWS CONTENT DECRYPTION MODULE",
+			L"GOOGLE.WIDEVINE.CDM.DLL",
+			RuleItem::Collection_t::Dll
+		),
+		PublisherRuleItem(
+			szGoogleChromeMachineRuleName,
 			L"O=GOOGLE LLC, L=MOUNTAIN VIEW, S=CA, C=US",
 			L"SOFTWARE REPORTER TOOL",
 			L"SOFTWARE_REPORTER_TOOL.EXE",
 			RuleItem::Collection_t::Exe
 		),
 		PublisherRuleItem(
-			L"Google Chrome (user-profile files in machine-wide install)",
+			szGoogleChromeMachineRuleName,
 			L"O=GOOGLE LLC, L=MOUNTAIN VIEW, S=CALIFORNIA, C=US",
 			L"SOFTWARE REPORTER TOOL",
 			L"SOFTWARE_REPORTER_TOOL.EXE",
 			RuleItem::Collection_t::Exe
 		),
 		PublisherRuleItem(
-			L"Google Chrome (user-profile files in machine-wide install)",
+			szGoogleChromeMachineRuleName,
 			L"O=ESET, SPOL. S R.O., L=BRATISLAVA, C=SK",
 			L"CHROME CLEANUP",
 			RuleItem::Collection_t::Dll
 		),
 		PublisherRuleItem(
-			L"Google Chrome (user-profile files in machine-wide install)",
+			szGoogleChromeMachineRuleName,
 			L"O=ESET, SPOL. S R.O., L=BRATISLAVA, C=SK",
 			L"CHROME PROTECTOR",
 			RuleItem::Collection_t::Dll
@@ -385,6 +393,10 @@ void BuiltInRules_SingletonImpl::Initialize()
 		PublisherRuleItem(
 			L"Mozilla Firefox",
 			L"O=MOZILLA CORPORATION, L=MOUNTAIN VIEW, S=CALIFORNIA, C=US"
+		),
+		PublisherRuleItem(
+			L"Mozilla Firefox",
+			L"O=MOZILLA CORPORATION, L=SAN FRANCISCO, S=CALIFORNIA, C=US"
 		),
 		// Store app
 		PublisherRuleItem(

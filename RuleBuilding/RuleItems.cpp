@@ -618,19 +618,9 @@ TimestampRule::TimestampRule()
     swprintf_s(szTimestampHash, L"0x00000000000000000000000000000000000000000000000000" L"%04u%02u%02u%02u%02u%02u", st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
     swprintf_s(szTimestampForFilename, L"%04u%02u%02u-%02u%02u", st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute);
 
-    //time_t tNow;
-    //std::time(&tNow);
-    //// Note that in "struct tm", tm_year is number of years since 1900, and tm_mon is zero-based (add 1 to get month number)
-    //struct tm tmNow = { 0 };
-    ////TODO: Always assume this call will succeed?
-    ///* errno_t gmtime_err = */ gmtime_s(&tmNow, &tNow);
-    //wchar_t szRuleDocTimestamp[32], szTimestampHash[72], szTimestampForFilename[20];
-    //swprintf(szRuleDocTimestamp, sizeof(szRuleDocTimestamp)/sizeof(szRuleDocTimestamp[0]), L"%04u-%02u-%02u %02u:%02u:%02u UTC", 1900 + tmNow.tm_year, 1 + tmNow.tm_mon, tmNow.tm_mday, tmNow.tm_hour, tmNow.tm_min, tmNow.tm_sec);
-    //swprintf(szTimestampHash, sizeof(szTimestampHash)/sizeof(szTimestampHash[0]), L"0x00000000000000000000000000000000000000000000000000" L"%04u%02u%02u%02u%02u%02u", 1900 + tmNow.tm_year, 1 + tmNow.tm_mon, tmNow.tm_mday, tmNow.tm_hour, tmNow.tm_min, tmNow.tm_sec);
-    //swprintf(szTimestampForFilename, sizeof(szTimestampForFilename)/sizeof(szTimestampForFilename[0]), L"%04u%02u%02u-%02u%02u%02u", 1900 + tmNow.tm_year, 1 + tmNow.tm_mon, tmNow.tm_mday, tmNow.tm_hour, tmNow.tm_min, tmNow.tm_sec);
-
     this->m_sName = std::wstring(L"Rule set created ") + szRuleDocTimestamp;
     this->m_sDescription = std::wstring(L"Never-applicable rule to document that this AppLocker rule set was created via AaronLocker automation at ") + szRuleDocTimestamp;
+    // The following properties set by the CommentRule base class.
     //this->m_collection = Collection_t::Exe;
     //this->m_bAllow = false;
     //this->m_sUserOrGroupSid = SidCreatorOwner();

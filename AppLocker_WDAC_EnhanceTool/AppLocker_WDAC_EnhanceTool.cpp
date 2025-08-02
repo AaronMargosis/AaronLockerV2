@@ -1,8 +1,10 @@
 // AppLocker_WDAC_EnhanceTool.cpp
 //
 // Command-line tool to manage WDAC-policy enhancements to AppLocker rules.
+// Policy files to deploy are embedded in this executable as resources.
 //
 //TODO: This needs detailed documentation... See CreateWdacEnhancementsForAppLocker.ps1 
+//TODO: These comments need to be cleaned up.
 /*TODO:
 * Need to be able to support upgrade scenario where a system goes from not supporting multiple policies to supporting them.
   E.g., scenario where policy file was SiPolicy.p7b but now the target file is in the CiPolicies\Active subdir.
@@ -59,13 +61,9 @@ WDAC policy items cannot be deleted through the WMI/CSP bridge.
 
 #include <Windows.h>
 #include <iostream>
-#include <fstream>
-
-// For directory listing...
-#include <string>
-#include <vector>
-
 #include "../AaronLocker_CommonUtils/AaronLocker_CommonUtils.h"
+#include "EmbeddedFiles.h"
+#include "CIPolicyPaths.h"
 
 // ------------------------------------------------------------------------------------------
 
@@ -78,25 +76,22 @@ static void Usage(const wchar_t* szError, const wchar_t* argv0)
 {
 	std::wstring sExe = GetFileNameFromFilePath(argv0);
 	if (szError)
-		std::wcerr << szError << std::endl;
+		std::wcerr << std::endl << szError << std::endl;
 	std::wcerr
+		<< std::endl
+		<< L"Manages AaronLocker WDAC policies to close some AppLocker gaps." << std::endl
 		<< std::endl
 		<< L"Usage:" << std::endl
 		<< std::endl
-		<< L"  " << sExe << L" [-audit | -block | -remove | -info]" << std::endl
+		<< L"  " << sExe << L" [-audit | -block | -remove | -files directory]" << std::endl
 		<< std::endl
-		<< L"-audit:  deploy Audit policy file to appropriate location." << std::endl
-		<< L"-block:  deploy Block policy file to appropriate location." << std::endl
-		<< L"-remove: delete policy from target location." << std::endl
-		<< L"-info:   report information about WDAC status." << std::endl
-		<< std::endl
-		<< L"Exit code is:" << std::endl
-		<< L"  0 if no error (*);" << std::endl
-		<< L"  Windows error code on error deploying or removing policy file;" << std::endl
-		<< L"  -1 for syntax or other major error." << std::endl
-		<< L"(*) The following are NOT error conditions:" << std::endl
-		<< L"  Running this program on a system that does not support the WDAC policy enhancements;" << std::endl
-		<< L"  Specifying -remove when the target file to delete doesn't exist;" << std::endl
+		<< L"  -audit:  deploy Audit policy to appropriate file location, and" << std::endl
+		<< L"           remove any existing Block policy file." << std::endl
+		<< L"  -block:  deploy Block policy to appropriate file location, and" << std::endl
+		<< L"           remove any existing Audit policy file." << std::endl
+		<< L"  -remove: delete policy file(s) from target location." << std::endl
+		<< L"  -files directory: export all embedded CI policy files to the" << std::endl
+		<< L"           named directory (absolute or relative path)." << std::endl
 		<< std::endl
 		<< L"To test whether policy is in effect, run the following command:" << std::endl
 		<< L"    regsvr32.exe scrobj.dll" << std::endl
@@ -106,87 +101,86 @@ static void Usage(const wchar_t* szError, const wchar_t* argv0)
 }
 
 // ------------------------------------------------------------------------------------------
-// File and directory names
+// Helper functions
 
 /// <summary>
-/// For systems that support only a single WDAC policy, the policy file goes in SiPolicy.p7b
-/// in the CodeIntegrity root directory.
+/// Verifies that the input name represents an existing directory.
+/// Also removes any trailing backslash from the parameter.
 /// </summary>
-static const std::wstring sAuditPolicyFileLegacy  = L"SiPolicy-Audit.p7b";
-static const std::wstring sBlockPolicyFileLegacy  = L"SiPolicy-Block.p7b";
-static const std::wstring sTargetPolicyFileLegacy = L"SiPolicy.p7b";
-/// <summary>
-/// For systems that support multiple WDAC policies (Win10 v1903+), the policy file has a
-/// GUID name and goes into the CiPolicies\Active subdirectory of the CodeIntegrity directory.
-/// The GUID file name must match the policy GUID embedded in the policy file.
-/// </summary>
-static const std::wstring sAuditPolicyFile1903Plus  = L"{0f78c0e5-cb41-47b7-96f7-fedf43fafcb3}-Audit.cip";
-static const std::wstring sBlockPolicyFile1903Plus  = L"{0f78c0e5-cb41-47b7-96f7-fedf43fafcb3}-Block.cip";
-static const std::wstring sTargetPolicyFile1903Plus = L"{0f78c0e5-cb41-47b7-96f7-fedf43fafcb3}.cip";
-
-/// <summary>
-/// Return the path to the CodeIntegrity root directory.
-/// Does not verify that the path exists.
-/// </summary>
-static const std::wstring& CodeIntegrityRootDir()
+/// <param name="sPolicyFileDirectory">In/out: directory name to verify; value can be altered</param>
+/// <returns>true if the name represents and existing directory; false otherwise</returns>
+static bool ValidateDirectory(std::wstring& sPolicyFileDirectory)
 {
-	// Build the value only on first use
-	static std::wstring sCodeIntegrityRootDir;
-	if (0 == sCodeIntegrityRootDir.length())
-	{
-		sCodeIntegrityRootDir = WindowsDirectories::System32Directory() + L"\\CodeIntegrity";
-	}
-	return sCodeIntegrityRootDir;
+	// Remove trailing path separator if it has one. (PowerShell autocomplete likes to append them, helpfully...)
+	while (EndsWith(sPolicyFileDirectory, L'\\') || EndsWith(sPolicyFileDirectory, L'/'))
+		sPolicyFileDirectory = sPolicyFileDirectory.substr(0, sPolicyFileDirectory.length() - 1);
+
+	// Verify that it is an existing directory
+	DWORD dwFileAttributes = GetFileAttributesW(sPolicyFileDirectory.c_str());
+	return (INVALID_FILE_ATTRIBUTES != dwFileAttributes && (0 != (FILE_ATTRIBUTE_DIRECTORY & dwFileAttributes)));
 }
 
 /// <summary>
-/// Return the path to the CodeIntegrity active CI policies directory (for systems with multiple WDAC policy support).
-/// Does not verify that the path exists.
+/// If we need to overwrite or delete a file, make sure it's not marked read-only.
 /// </summary>
-static const std::wstring& ActiveCiPoliciesDir()
+static void MarkFileNormal(const wchar_t* szTargetFile)
 {
-	// Build the value only on first use
-	static std::wstring sActiveCiPoliciesDir;
-	if (0 == sActiveCiPoliciesDir.length())
+	// (We don't need support for paths greater than MAX_PATH for these files, so just
+	// call the APIs directly.)
+	if (szTargetFile)
 	{
-		sActiveCiPoliciesDir = CodeIntegrityRootDir() + L"\\CiPolicies\\Active";
+		Wow64FsRedirection wow64FSRedir(true);
+		DWORD dwFileAttrs = GetFileAttributesW(szTargetFile);
+		if (INVALID_FILE_ATTRIBUTES != dwFileAttrs)
+		{
+			SetFileAttributesW(szTargetFile, FILE_ATTRIBUTE_NORMAL);
+		}
 	}
-	return sActiveCiPoliciesDir;
 }
 
-// ------------------------------------------------------------------------------------------
-// Helper function that gets information about a file or directory and adds it to fileInfoCollection.
-// TAKEN FROM AppLockerPolicy\EmergencyClean.cpp
-//TODO: Figure out what -info should report and do that instead of this.
-//TODO: If this is worth keeping, don't have multiple copies here and in EmergencyClean.
 /// <summary>
-/// File information to report
+/// Delete target file, if present.
 /// </summary>
-struct FileInfo_t
+/// <param name="szTargetFile">File to delete</param>
+/// <returns>true if file deleted or not present; false if file was present and couldn't be deleted</returns>
+static bool DeleteTargetFile(const wchar_t* szTargetFile)
 {
-	std::wstring sFullPath, sLastWriteTime, sCreateTime;
-	LARGE_INTEGER filesize;
-	bool bIsDirectory;
+	// Make sure it's not marked read-only before attempting delete.
+	MarkFileNormal(szTargetFile);
 
-	FileInfo_t() : bIsDirectory(false)
+	Wow64FsRedirection wow64FSRedir(true);
+	BOOL ret = DeleteFileW(szTargetFile);
+	if (ret)
 	{
-		filesize = { 0 };
+		std::wcout << L"Deleted " << szTargetFile << std::endl;
 	}
-};
-typedef std::vector<FileInfo_t> FileInfoCollection_t;
-static void AddFSObjectToCollection(const std::wstring& sObjName, bool bIsDirectory, FileInfoCollection_t& fileInfoCollection);
+	else
+	{
+		DWORD dwLastErr = GetLastError();
+		// Don't report failure to delete if the file wasn't there.
+		if (ERROR_FILE_NOT_FOUND != dwLastErr)
+		{
+			std::wcerr << L"Unable to delete " << szTargetFile << L":" << std::endl
+				<< SysErrorMessageWithCode(dwLastErr);
+			return false;
+		}
+	}
+	return true;
+}
 
 // ------------------------------------------------------------------------------------------
 
 int wmain(int argc, wchar_t** argv)
 {
+	// Internal sanity check before trying to use constructed paths:
+	CIPolicyPaths::ValidateConstructedPaths();
+
 	int exitCode = 0;
 	bool
 		bAudit  = false,
 		bBlock  = false,
-		bRemove = false,
-		bInfo   = false;
-	std::wstring sThisExeDir, sLocalFile, sTargetFile;
+		bRemove = false;
+	std::wstring sPolicyFileDirectory;
 
 	// Parse command line options
 	int ixArg = 1;
@@ -204,9 +198,13 @@ int wmain(int argc, wchar_t** argv)
 		{
 			bRemove = true;
 		}
-		else if (0 == StringCompareCaseInsensitive(L"-info", argv[ixArg]))
+		else if (0 == StringCompareCaseInsensitive(L"-files", argv[ixArg]))
 		{
-			bInfo = true;
+			if (++ixArg >= argc)
+				Usage(L"Missing arg for -files", argv[0]);
+			sPolicyFileDirectory = argv[ixArg];
+			if (!ValidateDirectory(sPolicyFileDirectory))
+				Usage(L"Invalid directory specified with -files", argv[0]);
 		}
 		else
 		{
@@ -220,10 +218,10 @@ int wmain(int argc, wchar_t** argv)
 	if (bAudit) operations++;
 	if (bBlock) operations++;
 	if (bRemove) operations++;
-	if (bInfo) operations++;
+	if (sPolicyFileDirectory.length() > 0) operations++;
 	if (1 != operations)
 	{
-		Usage(L"Pick one of -audit, -block, -remove, or -info", argv[0]);
+		Usage(L"Pick one of -audit, -block, -remove, or -files", argv[0]);
 	}
 
 	// These WDAC enhancements require fully-patched Win10 v1709 at a minimum:
@@ -234,168 +232,101 @@ int wmain(int argc, wchar_t** argv)
 	// backported all the way to v1709 via updates.
 	if (!IsWindows10v1709OrGreater())
 	{
-		std::wcout << L"AaronLocker WDAC enhancement for AppLocker not supported on this Windows version." << std::endl;
-		return 0;
+		std::wcerr << L"AaronLocker WDAC enhancement for AppLocker not supported on this Windows version." << std::endl;
+		exit(-2);
 	}
 
-	// Identify source and target file locations for -deploy and -remove.
-	// If needed, the binary policy file to deploy is expected to be in the same directory as this executable.
-	sThisExeDir = WindowsDirectories::ThisExeDirectory();
-	if (0 == sThisExeDir.length())
-	{
-		std::wcerr << L"Error getting path of current executable" << std::endl;
-		return -1;
-	}
-
-	// Windows 10 v1903 and newer supports multiple WDAC policies.
-	if (IsWindows10v1903OrGreater())
-	{
-		sLocalFile = sThisExeDir + L"\\" + (bAudit ? sAuditPolicyFile1903Plus : sBlockPolicyFile1903Plus);
-		sTargetFile = ActiveCiPoliciesDir() + L"\\" + sTargetPolicyFile1903Plus;
-	}
-	else
-	{
-		sLocalFile = sThisExeDir + L"\\" + (bAudit ? sAuditPolicyFileLegacy : sBlockPolicyFileLegacy);
-		sTargetFile = CodeIntegrityRootDir() + L"\\" + sTargetPolicyFileLegacy;
-	}
-
-	bool bSuccess = false;
 	if (bAudit || bBlock || bRemove)
 	{
-		// If we need to overwrite or delete a file, make sure it's not marked read-only.
-		// (We don't need support for paths greater than MAX_PATH for these files, so just
-		// call the APIs directly.)
-		Wow64FsRedirection wow64FSRedir(true);
-		DWORD dwFileAttrs = GetFileAttributesW(sTargetFile.c_str());
-		if (INVALID_FILE_ATTRIBUTES != dwFileAttrs)
+		// Windows 10 v1903 and newer supports multiple WDAC policies.
+		if (IsWindows10v1903OrGreater())
 		{
-			SetFileAttributesW(sTargetFile.c_str(), FILE_ATTRIBUTE_NORMAL);
-		}
-	}
-	if (bAudit || bBlock)
-	{
-		// Copy the local file to the target location.
-		Wow64FsRedirection wow64FSRedir(true);
-		BOOL ret = CopyFileW(sLocalFile.c_str(), sTargetFile.c_str(), FALSE);
-		if (ret)
-		{
-			std::wcout << L"Policy file copied to " << sTargetFile << std::endl;
-			bSuccess = true;
-		}
-		else
-		{
-			DWORD dwLastErr = GetLastError();
-			exitCode = (int)dwLastErr;
-			std::wcout
-				<< L"Policy file not copied: " << SysErrorMessage(dwLastErr) << std::endl
-				<< L"Source: " << sLocalFile << std::endl
-				<< L"Target: " << sTargetFile << std::endl;
-		}
-	}
-	else if (bRemove)
-	{
-		// Remove file from the target location.
-		Wow64FsRedirection wow64FSRedir(true);
-		BOOL ret = DeleteFileW(sTargetFile.c_str());
-		if (ret)
-		{
-			std::wcout << L"Policy file removed from " << sTargetFile << std::endl;
-			bSuccess = true;
-		}
-		else
-		{
-			// Set the exitCode to 0 if the file to delete already doesn't exist.
-			DWORD dwLastErr = GetLastError();
-			exitCode = (ERROR_FILE_NOT_FOUND == dwLastErr) ? 0 : (int)dwLastErr;
-			std::wcout
-				<< L"Policy file not removed: " << SysErrorMessage(dwLastErr) << std::endl
-				<< L"Target: " << sTargetFile << std::endl;
-		}
-	}
-	else if (bInfo)
-	{
-		//TODO: decide what information to report and report that.
-		//TODO: if keeping this code, refactor (also in EmergencyClean).
-		DirWalker dirWalker;
-		std::wstringstream strErrorInfo;
-		if (!dirWalker.Initialize(CodeIntegrityRootDir().c_str(), strErrorInfo))
-		{
-			std::wcerr << strErrorInfo.str() << std::endl;
-			exitCode = -1;
-		}
-		else
-		{
-			FileInfoCollection_t fileInfoCollection;
-			std::wstring sCurrDir;
-			while (dirWalker.GetCurrent(sCurrDir))
+			if (bAudit || bBlock)
 			{
-				// Add the current directory to the collection
-				AddFSObjectToCollection(sCurrDir, true, fileInfoCollection);
-
-				// Add all the files in the current directory to the collection
-				std::vector<std::wstring> files, subdirectories;
-				if (GetFiles(sCurrDir, files, false))
+				// Deploying one file, removing another if present
+				EmbeddedFiles::File_t fileId = bAudit ? EmbeddedFiles::File_t::Multi_Policy_Audit : EmbeddedFiles::File_t::Multi_Policy_Blocking;
+				const std::wstring& sFileToExtract = bAudit ? CIPolicyPaths::MultiPolicyAuditFilePath() : CIPolicyPaths::MultiPolicyBlockingFilePath();
+				const std::wstring& sFileToRemove  = bBlock ? CIPolicyPaths::MultiPolicyAuditFilePath() : CIPolicyPaths::MultiPolicyBlockingFilePath();
+				// If target file already present, remove "read-only" on it if set
+				MarkFileNormal(sFileToExtract.c_str());
+				DeleteTargetFile(sFileToRemove.c_str());
+				std::wstring sErrorInfo;
+				if (EmbeddedFiles::Extract(fileId, sFileToExtract.c_str(), sErrorInfo))
 				{
-					for (
-						std::vector<std::wstring>::const_iterator iterFiles = files.begin();
-						iterFiles != files.end();
-						++iterFiles
-						)
-					{
-						AddFSObjectToCollection(*iterFiles, false, fileInfoCollection);
-					}
-				}
-
-				dirWalker.DoneWithCurrent();
-			}
-
-			for (
-				FileInfoCollection_t::const_iterator iterFI = fileInfoCollection.begin();
-				iterFI != fileInfoCollection.end();
-				++iterFI
-				)
-			{
-				if (!iterFI->bIsDirectory)
-				{
-					std::wcout << iterFI->sCreateTime << L"  " << iterFI->sLastWriteTime << L"  " << std::setw(8) << iterFI->filesize.QuadPart << L"  " << iterFI->sFullPath << std::endl;
+					std::wcout << L"Deployed " << sFileToExtract << std::endl;
 				}
 				else
 				{
-					std::wcout << iterFI->sCreateTime << L"  " << iterFI->sLastWriteTime << L"  " << std::setw(8) << L"" << L"  " << iterFI->sFullPath << std::endl;
+					std::wcerr << sErrorInfo << std::endl;
+					exitCode = -3;
 				}
 			}
-
+			else if (bRemove)
+			{
+				// Remove file(s)
+				bool bDel1 = DeleteTargetFile(CIPolicyPaths::MultiPolicyAuditFilePath().c_str());
+				bool bDel2 = DeleteTargetFile(CIPolicyPaths::MultiPolicyBlockingFilePath().c_str());
+				if (!bDel1 || !bDel2)
+				{
+					exitCode = -4;
+				}
+			}
+		}
+		else
+		{
+			// Older Windows versions didn't support multiple WDAC policies.
+			const wchar_t* szSinglePolicyFilePath = CIPolicyPaths::SinglePolicyFilePath().c_str();
+			if (bAudit || bBlock)
+			{
+				EmbeddedFiles::File_t fileId = bAudit ? EmbeddedFiles::File_t::Single_Policy_Audit : EmbeddedFiles::File_t::Single_Policy_Block;
+				// If the policy file already exists, remove "read-only" if set
+				MarkFileNormal(szSinglePolicyFilePath);
+				std::wstring sErrorInfo;
+				if (EmbeddedFiles::Extract(fileId, szSinglePolicyFilePath, sErrorInfo))
+				{
+					std::wcout << L"Deployed " << szSinglePolicyFilePath << std::endl;
+				}
+				else
+				{
+					std::wcerr << sErrorInfo << std::endl;
+					exitCode = -5;
+				}
+			}
+			else if (bRemove)
+			{
+				if (!DeleteTargetFile(szSinglePolicyFilePath))
+				{
+					exitCode = -6;
+				}
+			}
+		}
+	}
+	else if (sPolicyFileDirectory.length() > 0)
+	{
+		// Extract all the embedded WDAC policy files to the named directory
+		struct policyFileInfo_t { EmbeddedFiles::File_t fileId; std::wstring sTargetPath; };
+		policyFileInfo_t polFiles[4] = {
+			{ EmbeddedFiles::File_t::Single_Policy_Audit, sPolicyFileDirectory + L"\\Audit-" + EmbeddedFiles::SinglePolicyFileName() },
+			{ EmbeddedFiles::File_t::Single_Policy_Block, sPolicyFileDirectory + L"\\Block-" + EmbeddedFiles::SinglePolicyFileName() },
+			{ EmbeddedFiles::File_t::Multi_Policy_Audit, sPolicyFileDirectory + L"\\" + EmbeddedFiles::MultiPolicyAuditFileName() },
+			{ EmbeddedFiles::File_t::Multi_Policy_Blocking, sPolicyFileDirectory + L"\\" + EmbeddedFiles::MultiPolicyBlockingFileName() }
+		};
+		for (size_t ixPolFiles = 0; ixPolFiles < 4; ++ixPolFiles)
+		{
+			const policyFileInfo_t& polFile = polFiles[ixPolFiles];
+			std::wstring sErrorInfo;
+			if (EmbeddedFiles::Extract(polFile.fileId, polFile.sTargetPath.c_str(), sErrorInfo))
+			{
+				std::wcout << L"Extracted " << EmbeddedFiles::FileIdToName(polFile.fileId) << L" to " << polFile.sTargetPath << std::endl;
+			}
+			else
+			{
+				std::wcerr << sErrorInfo << std::endl;
+				exitCode = -7;
+			}
 		}
 	}
 
 	return exitCode;
 }
 
-// Helper function that gets information about a file or directory and adds it to fileInfoCollection.
-// TAKEN FROM EmergencyClean.cpp
-static void AddFSObjectToCollection(const std::wstring& sObjName, bool bIsDirectory, FileInfoCollection_t& fileInfoCollection)
-{
-	FileInfo_t fileInfo;
-	fileInfo.bIsDirectory = bIsDirectory;
-	fileInfo.sFullPath = sObjName;
-
-	DWORD dwFlags = (bIsDirectory ? FILE_FLAG_BACKUP_SEMANTICS : 0);
-	Wow64FsRedirection wow64FSRedir(true);
-	HANDLE hFile = CreateFileW(sObjName.c_str(), 0, FILE_SHARE_DELETE | FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, dwFlags, NULL);
-	wow64FSRedir.Revert();
-	if (INVALID_HANDLE_VALUE != hFile)
-	{
-		FILETIME ftCreateTime, ftLastAccessTime, ftLastWriteTime;
-		if (GetFileTime(hFile, &ftCreateTime, &ftLastAccessTime, &ftLastWriteTime))
-		{
-			fileInfo.sCreateTime = FileTimeToWString(ftCreateTime);
-			fileInfo.sLastWriteTime = FileTimeToWString(ftLastWriteTime);
-		}
-		if (!bIsDirectory)
-		{
-			GetFileSizeEx(hFile, &fileInfo.filesize);
-		}
-		CloseHandle(hFile);
-	}
-	fileInfoCollection.push_back(fileInfo);
-}

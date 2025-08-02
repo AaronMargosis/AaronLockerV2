@@ -5,7 +5,7 @@
 //
 //
 
-#include "pch.h"
+#include <Windows.h>
 #include <stdio.h>
 #include "Utf8FileUtility.h"
 
@@ -73,26 +73,15 @@ bool Utf8FileUtility::OpenForReadingWithLocale(std::wifstream& fs, const wchar_t
 {
 	// Open the file and read the first four bytes (need four to identify UTF-32, but this doesn't support UTF-32 at this time.)
 
-	/*
-	* Windows API implementation:
-		HANDLE hFile = CreateFileW(szFilename, GENERIC_READ, FILE_SHARE_DELETE | FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
-		if (INVALID_HANDLE_VALUE == hFile)
-			return false;
-		DWORD numread = 0;
-		byte bomBytes[4] = { 0 };
-		BOOL rfRet = ReadFile(hFile, &bomBytes, sizeof(bomBytes), &numread, NULL);
-		CloseHandle(hFile);
-		if (!rfRet)
-			return false;
-	*/
-	// MSVC C++ offers _wfopen_s, but that's non-standard...
-	FILE* fp = NULL;
-	_wfopen_s(&fp, szFilename, L"r");
-	if (NULL == fp)
+	HANDLE hFile = CreateFileW(szFilename, GENERIC_READ, FILE_SHARE_DELETE | FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
+	if (INVALID_HANDLE_VALUE == hFile)
 		return false;
+	DWORD numread = 0;
 	byte bomBytes[4] = { 0 };
-	size_t numread = fread(bomBytes, sizeof(byte), 4, fp);
-	fclose(fp);
+	BOOL rfRet = ReadFile(hFile, &bomBytes, sizeof(bomBytes), &numread, NULL);
+	CloseHandle(hFile);
+	if (!rfRet)
+		return false;
 
 	// Not supporting UTF-32
 	bool bUtf16LE = false, bUtf16BE = false, bUtf8 = false;
@@ -107,7 +96,7 @@ bool Utf8FileUtility::OpenForReadingWithLocale(std::wifstream& fs, const wchar_t
 	else if (numread >= 3 && bomBytes[0] == 0xEF && bomBytes[1] == 0xBB && bomBytes[2] == 0xBF)
 		bUtf8 = true;
 
-	// Mode to open the file with. Need to add in binary for UTF-16 (more important when writing, though)
+	// Mode to open the file with. Need binary for UTF-16 (more important when writing, though)
 	std::ios_base::openmode mode = std::ios_base::in;
 	if (bUtf16BE || bUtf16LE)
 		mode |= std::ios_base::binary;

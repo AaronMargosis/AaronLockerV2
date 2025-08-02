@@ -34,7 +34,7 @@ bool AaronLockerSerializer::Serialize(const EndpointFullScan& scan, std::wostrea
 	SerializeSafePathInfo(scan.ScanResults_PlatformSafePathInfo(), os);
 	SerializeFileDetails(scan.ScanResults_FileDetails(), os);
 	SerializePackagedAppInfo(scan.ScanResults_InstalledPackagedApps(), os);
-	//TODO: These scan results won't be needed for rule-processing, but keep them in for now so that the link-to-appname processing can be improved.
+	// These scan results won't be needed for rule-processing, but keeping them in for now so that the link-to-appname processing can be improved.
 	SerializeShellLinks(scan.ScanResults_ShellLinks(), os, true);
 
 	return true;
@@ -47,7 +47,7 @@ bool AaronLockerSerializer::Serialize(const EndpointOneDirectoryScan& scan, cons
 	SerializeHeaderInfo(scan.GetStartTime(), scan.GetEndTime(), os);
 	SerializeErrorInfo(scan.ErrorInfo(), os);
 	SerializeFileDetails(scan.ScanResults_FileDetails(), os);
-	//TODO: These scan results won't be needed for rule-processing, but keep them in for now so that the link-to-appname processing can be improved.
+	// These scan results won't be needed for rule-processing, but keeping them in for now so that the link-to-appname processing can be improved.
 	SerializeShellLinks(scan.ScanResults_ShellLinks(), os, true);
 
 	return true;

@@ -1,25 +1,6 @@
 #pragma once
 #include "SidsToFilter.h"
 
-//TODO: Need a refinement here:
-/*
-Here's a directory that (AFAICT) can't be abused by non-admins. The parent Temp directory is user-writable, but non-admins can't enumerate
-that directory to find this subdirectory, and can't access anything inside that directory even if they know the full path names.
-
-	PS C:\> accesschk -nobanner -ld C:\Windows\Temp\IIF556A.tmp
-	C:\Windows\Temp\IIF556A.tmp
-	  DESCRIPTOR FLAGS:
-		  [SE_DACL_PRESENT]
-		  [SE_DACL_PROTECTED]
-		  [SE_SACL_PROTECTED]
-		  [SE_SELF_RELATIVE]
-	  OWNER: BUILTIN\Administrators
-	  [0] ACCESS_ALLOWED_ACE_TYPE: BUILTIN\Administrators
-			FILE_ALL_ACCESS
-	PS C:\>
-
-*/
-
 class SecurityDescriptorAnalyzer
 {
 public:

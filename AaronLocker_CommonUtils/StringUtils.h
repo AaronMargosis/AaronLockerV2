@@ -70,9 +70,6 @@ inline std::wistream& StdGetlineCRLF(std::wistream& stream, std::wstring& sLine)
 /// <returns></returns>
 inline std::wstring& WString_To_Upper(std::wstring& str)
 {
-	//TODO: Implement "wchar_t* WString_To_Upper(wchar_t* szStr, size_t count) and remove all separately-declared instances of std::locale used for upper-casing.
-
-	//TODO: Need more testing to verify globally that this matches how AppLocker upper-cases.
 	// Verified that loc("") works where locale::empty() or no locale doesn't for
 	// upper-casing German character 0xf6 to 0xd6. (O with umlaut.) Example found in signature
 	// of "C:\Program Files\Git\bin\bash.exe" on my machine.
