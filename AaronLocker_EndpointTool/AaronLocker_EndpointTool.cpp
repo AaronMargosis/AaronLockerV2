@@ -4,6 +4,8 @@
 //
 
 #include <Windows.h>
+#include <io.h>
+#include <fcntl.h>
 #include <iostream>
 #include <fstream>
 
@@ -52,6 +54,12 @@ void Usage(const wchar_t* szError, const wchar_t* argv0)
 
 int wmain(int argc, wchar_t** argv)
 {
+	// Set output mode to UTF8.
+	if (_setmode(_fileno(stdout), _O_U8TEXT) == -1 || _setmode(_fileno(stderr), _O_U8TEXT) == -1)
+	{
+		std::wcerr << L"Unable to set stdout and/or stderr modes to UTF8." << std::endl;
+	}
+
 	//{
 	//	std::wcout << L"argc/argv params:" << std::endl;
 	//	for (int i = 0; i < argc; ++i)
@@ -151,9 +159,9 @@ int wmain(int argc, wchar_t** argv)
 			std::wcerr << L"Cannot open output file " << sOutFile << std::endl;
 			Usage(NULL, argv[0]);
 		}
+		// Ensure that output is UTF-8.
+		pStream->imbue(Utf8FileUtility::LocaleForWritingUtf8File());
 	}
-	// Ensure that output is UTF-8.
-	pStream->imbue(Utf8FileUtility::LocaleForWritingUtf8File());
 
 	if (bLinksScan)
 	{

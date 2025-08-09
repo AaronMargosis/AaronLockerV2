@@ -1,6 +1,7 @@
 #include "pch.h"
 #include <mssip.h>
 #pragma comment(lib, "crypt32.lib")
+#pragma comment(lib, "Rpcrt4.lib")
 #include <sstream>
 #include "AuthenticodeTrustInfo.h"
 #include "../AaronLocker_CommonUtils/AaronLocker_CommonUtils.h"
@@ -15,6 +16,8 @@ AppLockerFileInformation::AppLockerFileInformation(const wchar_t* szFilePath)
 AppLockerFileInformation::~AppLockerFileInformation()
 {
 }
+
+// ------------------------------------------------------------------------------------------
 
 /// <summary>
 /// Retrieve the Publisher information that Get-AppLockerFileInformation returns (and additional info)
@@ -150,16 +153,106 @@ bool AppLockerFileInformation::GetPublisherInfo(std::wstring& sPublisherName, st
 	return retval;
 }
 
+// ------------------------------------------------------------------------------------------
+
+/// <summary>
+/// Retrieve a specific file hash type
+/// </summary>
+/// <param name="guidSubject">Input: identifies the subject type</param>
+/// <param name="hash">Output: hash of the file</param>
+/// <param name="dwApiError">Output: Win32 API error code in case of error</param>
+/// <returns>true if successful, false otherwise</returns>
+bool AppLockerFileInformation::GetHash256InfoInternal(GUID& guidSubject, Hash32_t& hash, DWORD dwApiError) const
+{
+	bool retval = false;
+
+	HCRYPTPROV hCryptProv = NULL;
+	if (CryptAcquireContextW(&hCryptProv, NULL, NULL, PROV_RSA_AES, CRYPT_VERIFYCONTEXT))
+	{
+		SIP_SUBJECTINFO subjectInfo = { 0 };
+		subjectInfo.cbSize = sizeof(subjectInfo);
+		subjectInfo.pgSubjectType = &guidSubject;
+		subjectInfo.pwsFileName = m_file.FilePath().c_str();
+		//subjectInfo.pwsDisplayName = szFilename; // Display name not needed AFAICT
+		subjectInfo.hProv = hCryptProv;
+		// Specify SHA256.
+		// The structure demands a non-const pointer to OID string, so create a writable buffer.
+		char szObjId[] = szOID_NIST_sha256;
+		subjectInfo.DigestAlgorithm.pszObjId = szObjId;
+		subjectInfo.DigestAlgorithm.Parameters.cbData = 0;
+		subjectInfo.DigestAlgorithm.Parameters.pbData = NULL;
+		/*
+		* With SPC_EXC_PE_PAGE_HASHES_FLAG seems to exclude from hashing the portions of the PE
+		* file that Authenticode hashes exclude. From the documentation:
+		* "Exclude page hashes when creating SIP indirect data for the PE file. [...]
+		* If neither the SPC_EXC_PE_PAGE_HASHES_FLAG or the SPC_INC_PE_PAGE_HASHES_FLAG
+		* flag is specified, the value set with the WintrustSetDefaultIncludePEPageHashes
+		* function is used for this setting. The default for this setting is to exclude page
+		* hashes when creating SIP indirect data for PE files."
+		*/
+		subjectInfo.dwFlags = SPC_EXC_PE_PAGE_HASHES_FLAG;
+		subjectInfo.dwEncodingType = X509_ASN_ENCODING | PKCS_7_ASN_ENCODING;
+		subjectInfo.psFlat = NULL;
+		subjectInfo.psCatMember = NULL;
+		subjectInfo.psBlob = NULL;
+		subjectInfo.pClientData = NULL;
+
+		// First call, determine amount of memory required to receive data
+		DWORD cbIndirectData = 0;
+		BOOL ret = CryptSIPCreateIndirectData(&subjectInfo, &cbIndirectData, NULL);
+		if (ret && cbIndirectData > 0)
+		{
+			// Allocate the memory to retrieve the data
+			byte* pBuffer = new byte[cbIndirectData];
+			SIP_INDIRECT_DATA* pData = (SIP_INDIRECT_DATA*)pBuffer;
+			// Second call, get the hash
+			ret = CryptSIPCreateIndirectData(&subjectInfo, &cbIndirectData, pData);
+			if (ret)
+			{
+				// Make sure the size of the returned hash is the size we're expecting.
+				if (sizeof(hash) == pData->Digest.cbData)
+				{
+					// Copy hash bytes into the output parameter.
+					CopyMemory(hash, pData->Digest.pbData, sizeof(hash));
+					// And indicate success
+					retval = true;
+				}
+			}
+			else
+			{
+				dwApiError = GetLastError();
+			}
+			delete[] pBuffer;
+		}
+		else
+		{
+			dwApiError = GetLastError();
+		}
+
+		CryptReleaseContext(hCryptProv, 0);
+	}
+	else
+	{
+		dwApiError = GetLastError();
+	}
+
+
+	return retval;
+}
+
+
 /// <summary>
 /// Retrieve the Hash information that Get-AppLockerFileInformation returns
 /// </summary>
-/// <param name="hash">Output: Authenticode hash for Portable Executable files, SHA256 flat-file hash for non-PE files</param>
+/// <param name="authenticodeHash">Output: Authenticode hash for Portable Executable files, SHA256 flat-file hash for non-PE files</param>
+/// <param name="flatFileHash">Output: SHA256 flat-file hash</param>
 /// <param name="sFilename">Output: filename without directory, upper case</param>
 /// <param name="filesize">Output: file size</param>
 /// <param name="dwApiError">Output: error code from any API that fails</param>
 /// <returns>true if successful; false otherwise</returns>
 bool AppLockerFileInformation::GetHash256Info(
-	Hash32_t& hash, 
+	Hash32_t& authenticodeHash,
+	Hash32_t& flatFileHash,
 	std::wstring& sFilename, 
 	LARGE_INTEGER& filesize,
 	DWORD& dwApiError) const
@@ -192,12 +285,13 @@ bool AppLockerFileInformation::GetHash256Info(
 	//
 
 	// Get the GUID required for the call to CryptSIPCreateIndirectData.
+	// Documentation says "This function only supports subject interface packages(SIPs) that are used for portable executable images(.exe), cabinet(.cab) images, and flat files."
 	// I've seen two GUIDs come back from this call:
 	// * c689aab8-8e78-11d0-8c47-00c04fc295ee for PE files
 	// * de351a42-8e59-11d0-8c47-00c04fc295ee for non-PE files
-	// This GUID *appears* to drive whether we get an Authenticode hash or a flat-file hash.
 	GUID guidSubject = { 0 };
-	//TODO: Although documentation fails to mention it, this API can fail with ERROR_SHARING_VIOLATION. If that happens it should be captured.
+	GUID guidSubjectFlatFile = { 0xde351a42, 0x8e59, 0x11d0, {0x8c, 0x47, 0x00, 0xc0, 0x4f, 0xc2, 0x95, 0xee} };
+	// Although documentation fails to mention it, this API can fail with ERROR_SHARING_VIOLATION.
 	BOOL ret = CryptSIPRetrieveSubjectGuidForCatalogFile(m_file.FilePath().c_str(), NULL, &guidSubject);
 	if (!ret)
 	{
@@ -205,68 +299,37 @@ bool AppLockerFileInformation::GetHash256Info(
 		return false;
 	}
 
-	//TODO: Set dwApiError on other failures
-
-	HCRYPTPROV hCryptProv = NULL;
-	if (CryptAcquireContextW(&hCryptProv, NULL, NULL, PROV_RSA_AES, CRYPT_VERIFYCONTEXT))
+	if (GetHash256InfoInternal(guidSubject, authenticodeHash, dwApiError))
 	{
-		SIP_SUBJECTINFO subjectInfo = { 0 };
-		subjectInfo.cbSize = sizeof(subjectInfo);
-		subjectInfo.pgSubjectType = &guidSubject;
-		subjectInfo.pwsFileName = m_file.FilePath().c_str();
-		//subjectInfo.pwsDisplayName = szFilename; // Display name not needed AFAICT
-		subjectInfo.hProv = hCryptProv;
-		// Specify SHA256.
-		// The structure demands a non-const pointer to OID string, so create a writable buffer.
-		char szObjId[] = szOID_NIST_sha256;
-		subjectInfo.DigestAlgorithm.pszObjId = szObjId;
-		subjectInfo.DigestAlgorithm.Parameters.cbData = 0;
-		subjectInfo.DigestAlgorithm.Parameters.pbData = NULL;
-		/*
-		* With SPC_EXC_PE_PAGE_HASHES_FLAG seems to exclude from hashing the portions of the PE
-		* file that Authenticode hashes exclude. From the documentation:
-		* "Exclude page hashes when creating SIP indirect data for the PE file. [...]
-		* If neither the SPC_EXC_PE_PAGE_HASHES_FLAG or the SPC_INC_PE_PAGE_HASHES_FLAG 
-		* flag is specified, the value set with the WintrustSetDefaultIncludePEPageHashes 
-		* function is used for this setting. The default for this setting is to exclude page 
-		* hashes when creating SIP indirect data for PE files."
-		*/
-		subjectInfo.dwFlags = SPC_EXC_PE_PAGE_HASHES_FLAG;
-		subjectInfo.dwEncodingType = X509_ASN_ENCODING | PKCS_7_ASN_ENCODING;
-		subjectInfo.psFlat = NULL;
-		subjectInfo.psCatMember = NULL;
-		subjectInfo.psBlob = NULL;
-		subjectInfo.pClientData = NULL;
-
-		// First call, determine amount of memory required to receive data
-		DWORD cbIndirectData = 0;
-		ret = CryptSIPCreateIndirectData(&subjectInfo, &cbIndirectData, NULL);
-		if (ret && cbIndirectData > 0)
+		// If we already got the flat file hash, just copy it rather than recalculate it.
+		RPC_STATUS status = 0;
+		if (TRUE == UuidEqual(&guidSubject, &guidSubjectFlatFile, &status))
 		{
-			// Allocate the memory to retrieve the data
-			byte* pBuffer = new byte[cbIndirectData];
-			SIP_INDIRECT_DATA* pData = (SIP_INDIRECT_DATA*)pBuffer;
-			// Second call, get the hash
-			ret = CryptSIPCreateIndirectData(&subjectInfo, &cbIndirectData, pData);
-			if (ret)
-			{
-				// Make sure the size of the returned hash is the size we're expecting.
-				if (sizeof(hash) == pData->Digest.cbData)
-				{
-					// Copy hash bytes into the output parameter.
-					CopyMemory(hash, pData->Digest.pbData, sizeof(hash));
-					// And indicate success
-					retval = true;
-				}
-			}
-			delete[] pBuffer;
+			memcpy(flatFileHash, authenticodeHash, sizeof(Hash32_t));
+			retval = true;
 		}
-
-		CryptReleaseContext(hCryptProv, 0);
+		else
+		{
+			retval = GetHash256InfoInternal(guidSubjectFlatFile, flatFileHash, dwApiError);
+		}
 	}
 
 	return retval;
 }
+
+/// <summary>
+/// Convert 32-byte hash to a string
+/// </summary>
+// static
+std::wstring AppLockerFileInformation::Hash32toString(Hash32_t& hash)
+{
+	std::wstringstream strHash;
+	strHash << L"0x";
+	for (size_t ixHash = 0; ixHash < sizeof(Hash32_t); ++ixHash)
+		strHash << HEX(hash[ixHash], 2, true);
+	return strHash.str();
+}
+
 
 /// <summary>
 /// Retrieve the Hash information that Get-AppLockerFileInformation returns, in string form
@@ -277,27 +340,26 @@ bool AppLockerFileInformation::GetHash256Info(
 /// <param name="dwApiError">Output: error code from any API that fails</param>
 /// <returns>true if successful; false otherwise</returns>
 bool AppLockerFileInformation::GetHash256Info(
-	std::wstring& hash, 
-	std::wstring& sFilename, 
+	std::wstring& sAuthenticodeHash,
+	std::wstring& sFlatFileHash,
+	std::wstring& sFilename,
 	std::wstring& filesize,
 	DWORD& dwApiError) const
 {
-	hash.clear();
+	sAuthenticodeHash.clear();
+	sFlatFileHash.clear();
 	sFilename.clear();
 	filesize.clear();
 	dwApiError = 0;
 
-	Hash32_t binaryHash;
+	Hash32_t authenticodeHash, flatFileHash;
 	LARGE_INTEGER binaryFilesize;
 
-	bool retval = GetHash256Info(binaryHash, sFilename, binaryFilesize, dwApiError);
+	bool retval = GetHash256Info(authenticodeHash, flatFileHash, sFilename, binaryFilesize, dwApiError);
 	if (retval)
 	{
-		std::wstringstream strHash;
-		strHash << L"0x";
-		for (size_t ixHash = 0; ixHash < sizeof(AppLockerFileInformation::Hash32_t); ++ixHash)
-			strHash << HEX(binaryHash[ixHash], 2, true);
-		hash = strHash.str();
+		sAuthenticodeHash = Hash32toString(authenticodeHash);
+		sFlatFileHash = Hash32toString(flatFileHash);
 	}
 
 	// Return file size even if 0.

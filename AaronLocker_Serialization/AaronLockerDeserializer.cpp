@@ -214,6 +214,7 @@ bool AaronLockerDeserializer::Deserialize(const wchar_t* szFilename, std::wstrin
 					fileDetails.m_ALBinaryName = vStrings[ix++];
 					fileDetails.m_ALBinaryVersion = vStrings[ix++];
 					fileDetails.m_ALHash = vStrings[ix++];
+					fileDetails.m_FlatFileHash = vStrings[ix++];
 					fileDetails.m_fileSize = vStrings[ix++];
 					fileDetails.m_sSigningTimestamp = vStrings[ix++];
 					fileDetails.m_sPEFileLinkDate = vStrings[ix++];

@@ -84,34 +84,17 @@ public:
 	) const;
 
 	/// <summary>
-	/// typedef for byte array for SHA256/PESHA256 hash (32 bytes)
-	/// </summary>
-	typedef BYTE Hash32_t[32];
-
-	/// <summary>
-	/// Retrieve the Hash information that Get-AppLockerFileInformation returns
-	/// </summary>
-	/// <param name="hash">Output: Authenticode hash for Portable Executable files, SHA256 flat-file hash for non-PE files</param>
-	/// <param name="sFilename">Output: filename without directory, upper case</param>
-	/// <param name="filesize">Output: file size</param>
-	/// <param name="dwApiError">Output: error code from any API that fails</param>
-	/// <returns>true if successful; false otherwise</returns>
-	bool GetHash256Info(
-		Hash32_t& hash,
-		std::wstring& sFilename,
-		LARGE_INTEGER& filesize,
-		DWORD& dwApiError) const;
-
-	/// <summary>
 	/// Retrieve the Hash information that Get-AppLockerFileInformation returns, in string form
 	/// </summary>
-	/// <param name="hash">Output: Authenticode hash for Portable Executable files, SHA256 flat-file hash for non-PE files</param>
+	/// <param name="sAuthenticodeHash">Output: Authenticode hash for Portable Executable files, SHA256 flat-file hash for non-PE files</param>
+	/// <param name="sFlatFileHash">Output: SHA256 flat-file hash</param>
 	/// <param name="sFilename">Output: filename without directory, upper case</param>
 	/// <param name="filesize">Output: file size</param>
 	/// <param name="dwApiError">Output: error code from any API that fails</param>
 	/// <returns>true if successful; false otherwise</returns>
 	bool GetHash256Info(
-		std::wstring& hash,
+		std::wstring& sAuthenticodeHash,
+		std::wstring& sFlatFileHash,
 		std::wstring& sFilename,
 		std::wstring& filesize,
 		DWORD& dwApiError) const;
@@ -121,6 +104,45 @@ public:
 	/// </summary>
 	/// <returns>Reference to interface to query additional information about the file</returns>
 	const AppLockerFileDetails& FileDetails() const { return m_file; }
+
+private:
+	/// <summary>
+	/// typedef for byte array for SHA256/PESHA256 hash (32 bytes)
+	/// </summary>
+	typedef BYTE Hash32_t[32];
+	
+	/// <summary>
+	/// Convert 32-byte hash to a string
+	/// </summary>
+	static std::wstring Hash32toString(Hash32_t& hash);
+
+	/// <summary>
+	/// Retrieve the Hash information that Get-AppLockerFileInformation returns
+	/// </summary>
+	/// <param name="authenticodeHash">Output: Authenticode hash for Portable Executable files, SHA256 flat-file hash for non-PE files</param>
+	/// <param name="flatFileHash">Output: SHA256 flat-file hash</param>
+	/// <param name="sFilename">Output: filename without directory, upper case</param>
+	/// <param name="filesize">Output: file size</param>
+	/// <param name="dwApiError">Output: error code from any API that fails</param>
+	/// <returns>true if successful; false otherwise</returns>
+	bool GetHash256Info(
+		Hash32_t& authenticodeHash,
+		Hash32_t& flatFileHash,
+		std::wstring& sFilename,
+		LARGE_INTEGER& filesize,
+		DWORD& dwApiError) const;
+
+	/// <summary>
+	/// Retrieve a specific file hash type
+	/// </summary>
+	/// <param name="guidSubject">Input: identifies the subject type</param>
+	/// <param name="hash">Output: hash of the file</param>
+	/// <param name="dwApiError">Output: Win32 API error code in case of error</param>
+	/// <returns>true if successful, false otherwise</returns>
+	bool GetHash256InfoInternal(
+		GUID& guidSubject,
+		Hash32_t& hash,
+		DWORD dwApiError) const;
 
 private:
 	AppLockerFileDetails m_file;

@@ -63,6 +63,15 @@ public:
 	/// Returns true if the file is an x64 (AMD64) binary.
 	/// </summary>
 	bool IsX64() const;
+	/// <summary>
+	/// Returns image file machine type identifier
+	/// </summary>
+	WORD ImageFileMachine() const;
+	/// <summary>
+	/// Returns image file machine type manifest constant
+	/// </summary>
+	const wchar_t* ImageFileMachineString() const;
+	static const wchar_t* ImageFileMachineString(WORD wImageFileMachine);
 
 public:
 	// Raw data from the PE file's headers

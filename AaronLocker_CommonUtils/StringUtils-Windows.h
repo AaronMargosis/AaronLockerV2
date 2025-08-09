@@ -62,4 +62,9 @@ inline std::wstring TimeTToWString(const time_t& t, bool bCheckForZero = false)
 	return FileTimeToWString(ft);
 }
 
-
+/// <summary>
+/// Convert a GUID to a wide-character string
+/// </summary>
+/// <param name="guid">Input: binary GUID to convert</param>
+/// <returns>GUID converted to wide-character string</returns>
+std::wstring GuidToString(const GUID& guid);

@@ -62,6 +62,7 @@
     <ClCompile Include="PlatformInfo.cpp" />
     <ClCompile Include="ShellLinkInfo.cpp" />
     <ClCompile Include="SidStrings.cpp" />
+    <ClCompile Include="StringUtils-Windows.cpp" />
     <ClCompile Include="StringUtils.cpp" />
     <ClCompile Include="SysErrorMessage.cpp" />
     <ClCompile Include="Utf8FileUtility.cpp" />

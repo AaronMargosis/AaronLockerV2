@@ -178,7 +178,7 @@ void EndpointScan_Base::ScanOneFile(const std::wstring& sFilePath, const wchar_t
 			std::wstring sFilenameIgnored;
 			DWORD dwApiError = 0;
 			// If we can't get the hash for any reason, don't continue (e.g., zero-length file)
-			bAddThisFile = alfi.GetHash256Info(fileDetails.m_ALHash, sFilenameIgnored, fileDetails.m_fileSize, dwApiError);
+			bAddThisFile = alfi.GetHash256Info(fileDetails.m_ALHash, fileDetails.m_FlatFileHash, sFilenameIgnored, fileDetails.m_fileSize, dwApiError);
 			if (bAddThisFile)
 			{
 				// If an app label is provided and favored, use it as the app label.

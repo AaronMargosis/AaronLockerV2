@@ -3,12 +3,13 @@
 #include <Windows.h>
 #include <iostream>
 #include <fstream>
+#include <io.h>
+#include <fcntl.h>
 #include "../AppLockerFunctionality/AppLockerFunctionality.h"
 #include "../AaronLocker_CommonUtils/AaronLocker_CommonUtils.h"
 #include "../AaronLocker_EndpointScanLogic/EndpointScan_Structs.h"
 
-//TODO: output machine type for PE files (e.g., x86, x64, ...)
-//TODO: output SHA256 flat file hash for all files (in addition to Authenticode hash for PE files)
+//TODO: output machine type for PE files (e.g., x86, x64, ...) - done, but move changes lower in so the file details always gets it
 static bool SerializeFileDetailsTable(const FileDetailsCollection_t& fileDetails, std::wostream& os);
 static bool SerializeFileDetailsList(const FileDetailsCollection_t& fileDetails, std::wostream& os);
 
@@ -38,6 +39,12 @@ static void Usage(const wchar_t* szError, const wchar_t* argv0)
 
 int wmain(int argc, wchar_t** argv)
 {
+	// Set output mode to UTF8.
+	if (_setmode(_fileno(stdout), _O_U8TEXT) == -1 || _setmode(_fileno(stderr), _O_U8TEXT) == -1)
+	{
+		std::wcerr << L"Unable to set stdout and/or stderr modes to UTF8." << std::endl;
+	}
+
 	std::vector<std::wstring> fileSpecs, files;
 	std::wstring sOutFile;
 	bool bFileMode = false;
@@ -157,10 +164,10 @@ int wmain(int argc, wchar_t** argv)
 			std::wcerr << L"Cannot open output file " << sOutFile << std::endl;
 			Usage(NULL, argv[0]);
 		}
-	}
 
-	// Ensure that output is UTF-8, with BOM if writing to file.
-	pStream->imbue(bOutToFile ? Utf8FileUtility::LocaleForWritingUtf8File() : Utf8FileUtility::LocaleForWritingUtf8NoHeader());
+		// Ensure that output is UTF-8, with BOM if writing to file.
+		pStream->imbue(bOutToFile ? Utf8FileUtility::LocaleForWritingUtf8File() : Utf8FileUtility::LocaleForWritingUtf8NoHeader());
+	}
 
 	if (bLinkMode)
 	{
@@ -280,7 +287,7 @@ int wmain(int argc, wchar_t** argv)
 				// GetHash256Info returns the filename portion of the file path to include in an AppLocker rule.
 				// Ignoring what it returns because we can reconstitute it again later from the full path.
 				std::wstring sFilenameIgnored;
-				alfi.GetHash256Info(fileDetails.m_ALHash, sFilenameIgnored, fileDetails.m_fileSize, dwApiError);
+				alfi.GetHash256Info(fileDetails.m_ALHash, fileDetails.m_FlatFileHash, sFilenameIgnored, fileDetails.m_fileSize, dwApiError);
 				if (0 != dwApiError)
 				{
 					std::wcerr << L"Failure getting hash info from " << szFilename << L": " << SysErrorMessage(dwApiError) << std::endl;
@@ -299,6 +306,7 @@ int wmain(int argc, wchar_t** argv)
 					fileDetails.m_sVerFileDescription = vi.FileDescription();
 					alfi.GetPublisherInfo(fileDetails.m_ALPublisherName, fileDetails.m_ALProductName, fileDetails.m_ALBinaryName, fileDetails.m_ALBinaryVersion, fileDetails.m_sX500CertSigner, fileDetails.m_sSigningTimestamp, dwApiError);
 					peFileInfo.LinkTimestamp(fileDetails.m_sPEFileLinkDate);
+					fileDetails.m_PEImageFileMachineType = peFileInfo.ImageFileMachine();
 				}
 				else
 				{
@@ -439,6 +447,8 @@ bool SerializeFileDetailsTable(const FileDetailsCollection_t& fileDetails, std::
 		<< L"ALBinaryName" << szDelim
 		<< L"ALBinaryVersion" << szDelim
 		<< L"ALHash" << szDelim
+		<< L"SHA256Hash" << szDelim
+		<< L"PEImageFileMachineType" << szDelim
 		<< L"FileSize" << szDelim
 		<< L"SigningTimestamp" << szDelim
 		<< L"PEFileLinkDate" << szDelim
@@ -465,7 +475,9 @@ bool SerializeFileDetailsTable(const FileDetailsCollection_t& fileDetails, std::
 			<< iterFileDetails->m_ALBinaryName << szDelim
 			<< iterFileDetails->m_ALBinaryVersion << szDelim
 			<< iterFileDetails->m_ALHash << szDelim
+			<< iterFileDetails->m_FlatFileHash << szDelim
 			<< iterFileDetails->m_fileSize << szDelim
+			<< PEFileInfo::ImageFileMachineString(iterFileDetails->m_PEImageFileMachineType) << szDelim
 			<< iterFileDetails->m_sSigningTimestamp << szDelim
 			<< iterFileDetails->m_sPEFileLinkDate << szDelim
 			<< iterFileDetails->m_ftCreateTime << szDelim
@@ -501,7 +513,9 @@ bool SerializeFileDetailsList(const FileDetailsCollection_t& fileDetails, std::w
 			<< std::setw(nLabelWidth) << L"ALBinaryName" << iterFileDetails->m_ALBinaryName << std::endl
 			<< std::setw(nLabelWidth) << L"ALBinaryVersion" << iterFileDetails->m_ALBinaryVersion << std::endl
 			<< std::setw(nLabelWidth) << L"ALHash" << iterFileDetails->m_ALHash << std::endl
+			<< std::setw(nLabelWidth) << L"SHA256" << iterFileDetails->m_FlatFileHash << std::endl
 			<< std::setw(nLabelWidth) << L"FileSize" << iterFileDetails->m_fileSize << std::endl
+			<< std::setw(nLabelWidth) << L"PEImageFileType" << PEFileInfo::ImageFileMachineString(iterFileDetails->m_PEImageFileMachineType) << std::endl
 			<< std::setw(nLabelWidth) << L"SigningTimestamp" << iterFileDetails->m_sSigningTimestamp << std::endl
 			<< std::setw(nLabelWidth) << L"PEFileLinkDate" << iterFileDetails->m_sPEFileLinkDate << std::endl
 			<< std::setw(nLabelWidth) << L"CreateTime" << iterFileDetails->m_ftCreateTime << std::endl

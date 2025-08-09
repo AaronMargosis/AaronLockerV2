@@ -258,6 +258,7 @@ bool SerializeFileDetails(const FileDetailsCollection_t& fileDetails, std::wostr
 		<< L"ALBinaryName" << szDelim
 		<< L"ALBinaryVersion" << szDelim
 		<< L"ALHash" << szDelim
+		<< L"SHA256" << szDelim
 		<< L"FileSize" << szDelim
 		<< L"SigningTimestamp" << szDelim
 		<< L"PEFileLinkDate" << szDelim
@@ -305,6 +306,7 @@ bool SerializeFileDetails(const FileDetailsCollection_t& fileDetails, std::wostr
 			<< iterFileDetails->m_ALBinaryName << szDelim
 			<< iterFileDetails->m_ALBinaryVersion << szDelim
 			<< iterFileDetails->m_ALHash << szDelim
+			<< iterFileDetails->m_FlatFileHash << szDelim
 			<< iterFileDetails->m_fileSize << szDelim
 			<< iterFileDetails->m_sSigningTimestamp << szDelim
 			<< iterFileDetails->m_sPEFileLinkDate << szDelim

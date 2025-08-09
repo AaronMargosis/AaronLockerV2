@@ -90,6 +90,78 @@ bool PEFileInfo::IsX64() const
 	return m_bIsPEFile && (IMAGE_FILE_MACHINE_AMD64 == m_Machine);
 }
 
+WORD PEFileInfo::ImageFileMachine() const
+{
+	return m_Machine;
+}
+
+const wchar_t* PEFileInfo::ImageFileMachineString() const
+{
+	return ImageFileMachineString(m_Machine);
+}
+
+const wchar_t* PEFileInfo::ImageFileMachineString(WORD wImageFileMachine)
+{
+	switch (wImageFileMachine)
+	{
+	case IMAGE_FILE_MACHINE_UNKNOWN:    return L"N/A";
+		// Intel 386.
+	case IMAGE_FILE_MACHINE_I386:       return L"IMAGE_FILE_MACHINE_I386";
+		// MIPS little-endian,
+	case IMAGE_FILE_MACHINE_R3000:      return L"IMAGE_FILE_MACHINE_R3000";
+		// MIPS little-endian
+	case IMAGE_FILE_MACHINE_R4000:      return L"IMAGE_FILE_MACHINE_R4000";
+		// MIPS little-endian
+	case IMAGE_FILE_MACHINE_R10000:     return L"IMAGE_FILE_MACHINE_R10000";
+		// MIPS little-endian WCE v2
+	case IMAGE_FILE_MACHINE_WCEMIPSV2:  return L"IMAGE_FILE_MACHINE_WCEMIPSV2";
+		// Alpha_AXP
+	case IMAGE_FILE_MACHINE_ALPHA:      return L"IMAGE_FILE_MACHINE_ALPHA";
+		// SH3 little-endian
+	case IMAGE_FILE_MACHINE_SH3:        return L"IMAGE_FILE_MACHINE_SH3";
+	case IMAGE_FILE_MACHINE_SH3DSP:     return L"IMAGE_FILE_MACHINE_SH3DSP";
+		// SH3E little-endian
+	case IMAGE_FILE_MACHINE_SH3E:       return L"IMAGE_FILE_MACHINE_SH3E";
+		// SH4 little-endian
+	case IMAGE_FILE_MACHINE_SH4:        return L"IMAGE_FILE_MACHINE_SH4";
+		// SH5
+	case IMAGE_FILE_MACHINE_SH5:        return L"IMAGE_FILE_MACHINE_SH5";
+		// ARM Little-Endian
+	case IMAGE_FILE_MACHINE_ARM:        return L"IMAGE_FILE_MACHINE_ARM";
+		// ARM Thumb/Thumb-2 Little-Endian
+	case IMAGE_FILE_MACHINE_THUMB:      return L"IMAGE_FILE_MACHINE_THUMB";
+		// ARM Thumb-2 Little-Endian
+	case IMAGE_FILE_MACHINE_ARMNT:      return L"IMAGE_FILE_MACHINE_ARMNT";
+	case IMAGE_FILE_MACHINE_AM33:       return L"IMAGE_FILE_MACHINE_AM33";
+		// IBM PowerPC Little-Endian
+	case IMAGE_FILE_MACHINE_POWERPC:    return L"IMAGE_FILE_MACHINE_POWERPC";
+	case IMAGE_FILE_MACHINE_POWERPCFP:  return L"IMAGE_FILE_MACHINE_POWERPCFP";
+		// Intel 64
+	case IMAGE_FILE_MACHINE_IA64:       return L"IMAGE_FILE_MACHINE_IA64";
+		// MIPS
+	case IMAGE_FILE_MACHINE_MIPS16:     return L"IMAGE_FILE_MACHINE_MIPS16";
+		// ALPHA64
+	case IMAGE_FILE_MACHINE_ALPHA64:    return L"IMAGE_FILE_MACHINE_ALPHA64";
+		// MIPS
+	case IMAGE_FILE_MACHINE_MIPSFPU:    return L"IMAGE_FILE_MACHINE_MIPSFPU";
+		// MIPS
+	case IMAGE_FILE_MACHINE_MIPSFPU16:  return L"IMAGE_FILE_MACHINE_MIPSFPU16";
+		// Infineon
+	case IMAGE_FILE_MACHINE_TRICORE:    return L"IMAGE_FILE_MACHINE_TRICORE";
+	case IMAGE_FILE_MACHINE_CEF:        return L"IMAGE_FILE_MACHINE_CEF";
+		// EFI Byte Code
+	case IMAGE_FILE_MACHINE_EBC:        return L"IMAGE_FILE_MACHINE_EBC";
+		// AMD64 (K8)
+	case IMAGE_FILE_MACHINE_AMD64:      return L"IMAGE_FILE_MACHINE_AMD64";
+		// M32R little-endian
+	case IMAGE_FILE_MACHINE_M32R:       return L"IMAGE_FILE_MACHINE_M32R";
+		// ARM64 Little-Endian
+	case IMAGE_FILE_MACHINE_ARM64:      return L"IMAGE_FILE_MACHINE_ARM64";
+	case IMAGE_FILE_MACHINE_CEE:        return L"IMAGE_FILE_MACHINE_CEE";
+	default:                            return L"[Unrecognized]";
+	}
+}
+
 /*
 References about reproducible builds and this technique for digging into the 
 PE's debugger headers where the flag indicating reproducible build is:
