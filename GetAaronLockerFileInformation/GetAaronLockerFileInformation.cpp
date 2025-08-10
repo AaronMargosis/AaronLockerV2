@@ -9,7 +9,6 @@
 #include "../AaronLocker_CommonUtils/AaronLocker_CommonUtils.h"
 #include "../AaronLocker_EndpointScanLogic/EndpointScan_Structs.h"
 
-//TODO: output machine type for PE files (e.g., x86, x64, ...) - done, but move changes lower in so the file details always gets it
 static bool SerializeFileDetailsTable(const FileDetailsCollection_t& fileDetails, std::wostream& os);
 static bool SerializeFileDetailsList(const FileDetailsCollection_t& fileDetails, std::wostream& os);
 
@@ -297,6 +296,10 @@ int wmain(int argc, wchar_t** argv)
 				//fileDetails.m_bIsSafeDir = IsThisDirectorySafe(*iterFiles, bIsSafeDirChecked, bIsSafeDir, pvUnsafeDirectoryInfo);
 				fileDetails.m_fileType = ftype;
 				fileDetails.m_sFilePath = *iterFiles;
+				if (peFileInfo.m_bIsPEFile)
+				{
+					fileDetails.m_PEImageFileMachineType = peFileInfo.ImageFileMachineString();
+				}
 				dwApiError = 0;
 				if (AppLockerFileDetails_ftype_t::ft_MSI != ftype)
 				{
@@ -306,7 +309,6 @@ int wmain(int argc, wchar_t** argv)
 					fileDetails.m_sVerFileDescription = vi.FileDescription();
 					alfi.GetPublisherInfo(fileDetails.m_ALPublisherName, fileDetails.m_ALProductName, fileDetails.m_ALBinaryName, fileDetails.m_ALBinaryVersion, fileDetails.m_sX500CertSigner, fileDetails.m_sSigningTimestamp, dwApiError);
 					peFileInfo.LinkTimestamp(fileDetails.m_sPEFileLinkDate);
-					fileDetails.m_PEImageFileMachineType = peFileInfo.ImageFileMachine();
 				}
 				else
 				{
@@ -448,8 +450,8 @@ bool SerializeFileDetailsTable(const FileDetailsCollection_t& fileDetails, std::
 		<< L"ALBinaryVersion" << szDelim
 		<< L"ALHash" << szDelim
 		<< L"SHA256Hash" << szDelim
-		<< L"PEImageFileMachineType" << szDelim
 		<< L"FileSize" << szDelim
+		<< L"PEImageFileMachineType" << szDelim
 		<< L"SigningTimestamp" << szDelim
 		<< L"PEFileLinkDate" << szDelim
 		<< L"CreateTime" << szDelim
@@ -477,7 +479,7 @@ bool SerializeFileDetailsTable(const FileDetailsCollection_t& fileDetails, std::
 			<< iterFileDetails->m_ALHash << szDelim
 			<< iterFileDetails->m_FlatFileHash << szDelim
 			<< iterFileDetails->m_fileSize << szDelim
-			<< PEFileInfo::ImageFileMachineString(iterFileDetails->m_PEImageFileMachineType) << szDelim
+			<< iterFileDetails->m_PEImageFileMachineType << szDelim
 			<< iterFileDetails->m_sSigningTimestamp << szDelim
 			<< iterFileDetails->m_sPEFileLinkDate << szDelim
 			<< iterFileDetails->m_ftCreateTime << szDelim
@@ -515,7 +517,7 @@ bool SerializeFileDetailsList(const FileDetailsCollection_t& fileDetails, std::w
 			<< std::setw(nLabelWidth) << L"ALHash" << iterFileDetails->m_ALHash << std::endl
 			<< std::setw(nLabelWidth) << L"SHA256" << iterFileDetails->m_FlatFileHash << std::endl
 			<< std::setw(nLabelWidth) << L"FileSize" << iterFileDetails->m_fileSize << std::endl
-			<< std::setw(nLabelWidth) << L"PEImageFileType" << PEFileInfo::ImageFileMachineString(iterFileDetails->m_PEImageFileMachineType) << std::endl
+			<< std::setw(nLabelWidth) << L"PEMachineType" << iterFileDetails->m_PEImageFileMachineType << std::endl
 			<< std::setw(nLabelWidth) << L"SigningTimestamp" << iterFileDetails->m_sSigningTimestamp << std::endl
 			<< std::setw(nLabelWidth) << L"PEFileLinkDate" << iterFileDetails->m_sPEFileLinkDate << std::endl
 			<< std::setw(nLabelWidth) << L"CreateTime" << iterFileDetails->m_ftCreateTime << std::endl

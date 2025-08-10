@@ -108,9 +108,9 @@ HRESULT LocalGPO::SaveWithRetries(BOOL bComputer, GUID* pGuidExtension)
 	// I.e., it's supposed to represent the tool that's editing the policy - it doesn't need to be
 	// (and probably shouldn't be) someone else's GUID.
 	// GUIDGen.exe tool provides this native formatting; no need to translate a string to a GUID
-	// {AE23F827-82C3-4134-964C-12E5BBA2ED5D}
+	// {586343C6-F45A-4A1C-BA32-70E09609EDC1}
 	static GUID ThisAdminToolGuid =
-	{ 0xae23f827, 0x82c3, 0x4134, { 0x96, 0x4c, 0x12, 0xe5, 0xbb, 0xa2, 0xed, 0x5d } };
+	{ 0x586343c6, 0xf45a, 0x4a1c, { 0xba, 0x32, 0x70, 0xe0, 0x96, 0x9, 0xed, 0xc1 } };
 
 	// I've observed that occasionally the Save operation will fail on a transient sharing 
 	// violation condition that is overcome simply by trying again.

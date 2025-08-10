@@ -3,61 +3,8 @@
 // Command-line tool to manage WDAC-policy enhancements to AppLocker rules.
 // Policy files to deploy are embedded in this executable as resources.
 //
-//TODO: This needs detailed documentation... See CreateWdacEnhancementsForAppLocker.ps1 
-//TODO: These comments need to be cleaned up.
-/*TODO:
-* Need to be able to support upgrade scenario where a system goes from not supporting multiple policies to supporting them.
-  E.g., scenario where policy file was SiPolicy.p7b but now the target file is in the CiPolicies\Active subdir.
-* Should report WDAC status information such as WldpGetLockdownPolicy (even though it seems to be inconsistent across Windows versions).
-* If there's any way to determine whether a binary policy file is an AaronLocker one, that would be good to report.
-
-* Possible to force a refresh with code like this (NOT compatible with multiple-policy WDAC):
-Invoke-CimMethod -Namespace root\Microsoft\Windows\CI -ClassName PS_UpdateAndCompareCIPolicy -MethodName Update -Arguments @{FilePath = $DestinationBinary}
---> copies target to SiPolicy.p7b, though...
-
-
-Info can try to obtain information about current policies through WMI bridge to CSP - requires running as SY:
-ROOT\CIMV2\mdm\dmmap:MDM_ApplicationControl_Policies01_01
-ROOT\CIMV2\mdm\dmmap:MDM_ApplicationControl_PolicyInfo03
-
-Query existing policy state:
-
-*	On Win10 v1903+, can query some information about WDAC policies through the ApplicationControl CSP – look at instances of MDM_ApplicationControl_PolicyInfo03 and MDM_ApplicationControl_Policies01_01. Note that on Win11 (21H2) there is an always-present but not-in-effect policy called WindowsE_Lockdown_Flight_Policy_Supplemental – we should probably ignore it, and anything else that’s not in effect and not ours.
-
-*	On all Windows versions that support WDAC: can try to look at CodeIntegrity event 3099 for latest policy application (e.g., policy name).
-
-*	Citool.exe coming in insider builds to query policies.
-
-*	Acknowledged bug in the definitions of CodeIntegrity event 3077 differing on different Windows versions.
-
-*	Binary file format of the policy files remains undocumented, so they can’t be queried/inspected in a supported way.
-
-*	Bug (*) in v1903+ reported to MS: replace a multi-policy file with another with a different name, different policy, but same policy ID GUID, and no refresh action; query CSP reports new name but says it's in effect when it's not.
-
-	(*) Possible workaround to determine what policy is in place - look at most recent event IDs 3099 matching PolicyGUID, then compare the PolicyHash value reported in that event to the SHA256 hash of the policy file in place.
-	If the hash doesn't match, the file in place is not in effect. (Total PITA - over 6 years after the first release of Device Guard / WDAC, and its management story is still shit. "What policies are in effect right now?" "Sorry,
-	can't answer that.")
-
-Rebootless policy update:
-
-*	Rebootless policy update is not possible at all prior to Windows v1809 / WS2019.
-
-*	If not using multiple policies (i.e., using just the SiPolicy.p7b), can use a WMI method invocation to refresh policy: ROOT\Microsoft\Windows\CI:PS_UpdateAndCompareCIPolicy
-	Note that this method has not been updated to properly handle the new multiple policy format. One side effect is that it copies the target policy file to SiPolicy.p7b.
-	The PowerShell implementation of the WMI command is:
-		Invoke-CimMethod -Namespace root\Microsoft\Windows\CI -ClassName PS_UpdateAndCompareCIPolicy -MethodName Update -Arguments @{FilePath = $DestinationBinary}
-
-*	There’s a “Refresh CI Policy” tool download from Microsoft that uses an undocumented API (NtSetSystemInformation) to refresh CI policy. The MS security PM says the tool is supported, but IMO it’s not really supported – 
-	it’s not part of Windows, has no EULA, no update mechanism, no support expiration, etc. PM says customers can deploy it internally, but there’s nothing stated about whether a vendor can redist it.
-
-*	Citool.exe will be in the next Win11 version and can do rebootless policy update; it will be backported to supported Win10 v1903+ versions, depending on customer demand.
-
-*	Removing a policy always requires a reboot. The closest approximation to removing a policy without reboot is to replace existing policy files with corresponding Allow-All binary files with the same policy ID GUID 
-	as the policy being replaced and a supported rebootless refresh, then delete that allow-all policy which remains effective and is removed at next reboot.
-
-WDAC policy items cannot be deleted through the WMI/CSP bridge.
-
-*/
+// For detailed documentation, see CreateWdacEnhancementsForAppLocker.ps1
+//
 
 #include <Windows.h>
 #include <iostream>
@@ -274,7 +221,7 @@ int wmain(int argc, wchar_t** argv)
 		}
 		else
 		{
-			// Older Windows versions didn't support multiple WDAC policies.
+			// Older Windows versions don't support multiple WDAC policies.
 			const wchar_t* szSinglePolicyFilePath = CIPolicyPaths::SinglePolicyFilePath().c_str();
 			if (bAudit || bBlock)
 			{
@@ -308,8 +255,8 @@ int wmain(int argc, wchar_t** argv)
 		policyFileInfo_t polFiles[4] = {
 			{ EmbeddedFiles::File_t::Single_Policy_Audit, sPolicyFileDirectory + L"\\Audit-" + EmbeddedFiles::SinglePolicyFileName() },
 			{ EmbeddedFiles::File_t::Single_Policy_Block, sPolicyFileDirectory + L"\\Block-" + EmbeddedFiles::SinglePolicyFileName() },
-			{ EmbeddedFiles::File_t::Multi_Policy_Audit, sPolicyFileDirectory + L"\\" + EmbeddedFiles::MultiPolicyAuditFileName() },
-			{ EmbeddedFiles::File_t::Multi_Policy_Blocking, sPolicyFileDirectory + L"\\" + EmbeddedFiles::MultiPolicyBlockingFileName() }
+			{ EmbeddedFiles::File_t::Multi_Policy_Audit, sPolicyFileDirectory + L"\\Audit-" + EmbeddedFiles::MultiPolicyAuditFileName() },
+			{ EmbeddedFiles::File_t::Multi_Policy_Blocking, sPolicyFileDirectory + L"\\Block-" + EmbeddedFiles::MultiPolicyBlockingFileName() }
 		};
 		for (size_t ixPolFiles = 0; ixPolFiles < 4; ++ixPolFiles)
 		{

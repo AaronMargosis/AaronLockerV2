@@ -260,6 +260,7 @@ bool SerializeFileDetails(const FileDetailsCollection_t& fileDetails, std::wostr
 		<< L"ALHash" << szDelim
 		<< L"SHA256" << szDelim
 		<< L"FileSize" << szDelim
+		<< L"PEImageFileMachineType" << szDelim
 		<< L"SigningTimestamp" << szDelim
 		<< L"PEFileLinkDate" << szDelim
 		<< L"CreateTime" << szDelim
@@ -272,27 +273,6 @@ bool SerializeFileDetails(const FileDetailsCollection_t& fileDetails, std::wostr
 		++iterFileDetails
 		)
 	{
-		/*
-			// Determined from outside the file
-			std::wstring m_sAppLabel;                    // Information that can be used in rule name/description
-			bool m_bIsSafeDir;                           // Safe dir can use path rules; unsafe requires publisher or hash rules
-			// Determined from the file itself
-			AppLockerFileDetails_ftype_t m_fileType;    // determines which rule collection to use
-			std::wstring m_sFilePath;                    // full path to the file
-			std::wstring m_sVerProductName;              // Product name from version resource (for information only, not for AppLocker publisher rule)
-			std::wstring m_sVerFileDescription;          // File description from version resource
-			std::wstring m_sX500CertSigner;              // For a signed file, the full subject name in X.500 form
-			std::wstring m_ALPublisherName;              // For a signed file, publisher name for AppLocker rule
-			std::wstring m_ALProductName;                // For a signed file, product name for AppLocker rule
-			std::wstring m_ALBinaryName;                 // For a signed file, binary name for AppLocker rule
-			std::wstring m_ALBinaryVersion;              // For a signed file, binary version for AppLocker rule
-			std::wstring m_ALHash;                       // Hash value for hash rules
-			std::wstring m_fileSize;                     // File size (can be used in hash rule)
-			std::wstring m_sSigningTimestamp;            // Date/time of signing, if file is signed and timestamped
-			std::wstring m_sPEFileLinkDate;              // Date/time file was linked, if file is a PE file and not a repeatable build (in which the field is not a link date)
-			std::wstring m_ftCreateTime;                 // File creation time according to the file system
-			std::wstring m_ftLastWriteTime;              // File last write time according to the file system
-		*/
 		os
 			<< iterFileDetails->m_sAppLabel << szDelim
 			<< Bool2Str(iterFileDetails->m_bIsSafeDir) << szDelim
@@ -308,6 +288,7 @@ bool SerializeFileDetails(const FileDetailsCollection_t& fileDetails, std::wostr
 			<< iterFileDetails->m_ALHash << szDelim
 			<< iterFileDetails->m_FlatFileHash << szDelim
 			<< iterFileDetails->m_fileSize << szDelim
+			<< iterFileDetails->m_PEImageFileMachineType << szDelim
 			<< iterFileDetails->m_sSigningTimestamp << szDelim
 			<< iterFileDetails->m_sPEFileLinkDate << szDelim
 			<< iterFileDetails->m_ftCreateTime << szDelim

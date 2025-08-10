@@ -198,6 +198,10 @@ void EndpointScan_Base::ScanOneFile(const std::wstring& sFilePath, const wchar_t
 				fileDetails.m_bIsSafeDir = bIsSafeDirectory;
 				fileDetails.m_fileType = ftype;
 				fileDetails.m_sFilePath = sFilePath;
+				if (peFileInfo.m_bIsPEFile)
+				{
+					fileDetails.m_PEImageFileMachineType = peFileInfo.ImageFileMachineString();
+				}
 				if (AppLockerFileDetails_ftype_t::ft_MSI != ftype)
 				{
 					// Using this instead of szFilePath gets the extended-path name if needed.

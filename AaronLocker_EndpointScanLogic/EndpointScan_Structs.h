@@ -78,8 +78,7 @@ struct FileDetails_t {
 	std::wstring m_ALHash;                       // Hash value for hash rules
 	std::wstring m_FlatFileHash;                 // Flat file hash (can be used with reputation services)
 	std::wstring m_fileSize;                     // File size (can be used in hash rule)
-	//TODO: Make sure this always gets populated, maybe with an extra bool indicating whether the file is a PE.
-	unsigned short m_PEImageFileMachineType;     // PE image file machine type
+	std::wstring m_PEImageFileMachineType;       // PE image file machine type
 	std::wstring m_sSigningTimestamp;            // Date/time of signing, if file is signed and timestamped
 	std::wstring m_sPEFileLinkDate;              // Date/time file was linked, if file is a PE file and not a repeatable build (in which the field is not a link date)
 	std::wstring m_ftCreateTime;                 // File creation time according to the file system
@@ -87,8 +86,7 @@ struct FileDetails_t {
 
 	FileDetails_t() : // Constructor
 		m_bIsSafeDir(false),
-		m_fileType(AppLockerFileDetails_ftype_t::ft_Unknown),
-		m_PEImageFileMachineType(0)
+		m_fileType(AppLockerFileDetails_ftype_t::ft_Unknown)
 	{}
 };
 

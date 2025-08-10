@@ -4,7 +4,14 @@ Implement WDAC (*) rules to enhance AppLocker allowlisting for supported Windows
 combinations that have been shown to allow arbitrary code execution. These WDAC rules are designed to be used in combination
 with AppLocker rules that include DLL rule enforcement.
 
+If optional signing-certificate path is provided, the resulting binaries are intended to be signed with that certificate.
+This script does not perform the signing.
+
 (*) WDAC = "Windows Defender Application Control," which has since been renamed to "App Control for Business."
+
+.PARAMETER SigningCertPath
+If optional signing-certificate path is provided, the resulting binaries are intended to be signed with that certificate.
+This script does not perform the signing.
 
 .DESCRIPTION
 Numerous web pages that describe bypass of allowlisting rules (particularly AppLocker) describe techniques that use existing 
@@ -49,7 +56,7 @@ the audit policy).
 Note that the target computer must be rebooted for the changes to WDAC policy to take effect. To remove the enforcement, delete 
 the policy file and reboot. (Newer Windows versions include citool.exe which can be used to refresh policy without a reboot.)
 
-(Note that as of this writing (June 2025) v22H2 is the only non-LTSB/LTSC Windows 10 version still supported by Microsoft, and
+(Note that as of this writing (August 2025) v22H2 is the only non-LTSB/LTSC Windows 10 version still supported by Microsoft, and
 support for Win10 v22H2 ends in October 2025.)
 
 AaronLocker's AppLocker_WDAC_EnhanceTool.exe is designed to deploy the correct file to the correct location depending on operating
@@ -83,7 +90,7 @@ v1903 or later, the rules it creates can be applied to any fully-patched Windows
 Windows 10 LTSB v1607 and Windows Server 2016 appear to support per-app rules, but not the script enforcement option, so these rules 
 should not be applied to those older systems.
 
-Testing on Win10 LTSC 2019 indicates that the internal policy GUID must be the predefined "allow-all" GUID, {A244370E-44C9-4C06-B551-F6016E563076}.
+My testing on Win10 LTSC 2019 indicates that the internal policy GUID must be the predefined "allow-all" GUID, {A244370E-44C9-4C06-B551-F6016E563076}.
 For Windows versions that support multiple WDAC policies, AaronLocker defines its own unique and constant GUID.
 
 Coexistence with other WDAC policies:
@@ -93,7 +100,7 @@ Windows 10 v1709-v1809 and Windows Server 2019 support only a single WDAC policy
 
 
 TODO: determine how to manage situations on single-policy platforms where a target system has a preexisting WDAC policy. (Note that as of this 
-writing (July 2025) Windows 10 LTSC v1809 and Windows Server 2019 are the only still-supported OSes in that range.) 
+writing (August 2025) Windows 10 LTSC v1809 and Windows Server 2019 are the only still-supported OSes in that range.) 
 TODO: Need to be able to identify and handle situations in which a customer is using signed WDAC policies.
 
 TODO: Can also deploy via CSP: https://docs.microsoft.com/en-us/windows/client-management/mdm/applicationcontrol-csp
@@ -105,7 +112,6 @@ team has no intention of updating Mshta.exe to enforce allowlisting rules, and b
 
 See comment block at the end of this script file for details about Windows events to monitor to track when policy is applied and when
 rules are enforced.
-
 
 References:
 
@@ -132,7 +138,6 @@ WDAC multiple-policy support (Windows 10 v1903 and newer):
 Major WDAC blog post:
   DEPLOYING WINDOWS 10 APPLICATION CONTROL POLICY
   https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/deploying-windows-10-application-control-policy/ba-p/2486267
-
 #>
 
 [CmdletBinding()]
@@ -236,7 +241,7 @@ Set-RuleOption -Help
     3 Enabled:Audit Mode                                | Audit by default; DELETE this option for enforcement mode
     4 Disabled:Flight Signing                           | 
     5 Enabled:Inherit Default Policy                    | 
-    6 Enabled:Unsigned System Integrity Policy          | 
+    6 Enabled:Unsigned System Integrity Policy          | Keep or delete this depending on whether the binaries should be signed
     7 Allowed:Debug Policy Augmented                    | 
     8 Required:EV Signers                               | 
     9 Enabled:Advanced Boot Options Menu                | Allow the F8 advanced boot menu to continue to work
