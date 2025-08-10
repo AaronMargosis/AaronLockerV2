@@ -2,7 +2,7 @@
 
 ## "What it is" overview
 
-[Explain "AaronLocker," goals, history, ...]
+[TODO: Explain "AaronLocker," goals, history, ...]
 
 ## "How-To" overview
 
@@ -60,6 +60,7 @@ Command-line syntax:
            Flash   - Allows Flash player in Chromium-based browsers
            Intuit  - Allows Intuit products to run per-user data updaters, such as for TurboTax
            StoreAll - Allows users to download and run all apps from the Microsoft Store app
+           StoreMS - Allows users to download and run Microsoft-signed apps from the Microsoft Store app
            MSDLLs  - Allows users to load any Microsoft-signed DLLs (DISCOURAGED, only as last resort)
          You can specify "+o appRuleOption" multiple times on the command line.
 
@@ -69,6 +70,9 @@ Command-line syntax:
            Mshta   - Allow non-admin execution of Mshta.exe (Microsoft (R) HTML Application host)
            WMIC    - Allow non-admin execution of WMIC.exe (WMI Commandline Utility)
          You can specify "+w windowsExeOption" multiple times on the command line.
+
+    +winTemp:  create rules for files found under the \Windows\Temp directory.
+         By default these files are ignored for rule-building.
 
     -r:  remove a proposed rule set by name prior to export.
          You can specify "-r ruleSetToRemove" multiple times.
@@ -104,26 +108,23 @@ Already published here: https://github.com/AaronMargosis/AppLockerPolicyTool/
 
 ### AppLocker_WDAC_EnhanceTool.exe
 
-Command-line tool to manage WDAC-policy enhancements to AppLocker rules.
+Command-line tool to manage WDAC-policy enhancements to close some AppLocker gaps.
 
 Command-line syntax:
 ```
-Usage:
+  AppLocker_WDAC_EnhanceTool.exe [-audit | -block | -remove | -files directory]
 
-  AppLocker_WDAC_EnhanceTool.exe [-deploy | -remove | -info] [-reboot]
+  -audit:  deploy Audit policy to appropriate file location, and
+           remove any existing Block policy file.
+  -block:  deploy Block policy to appropriate file location, and
+           remove any existing Audit policy file.
+  -remove: delete policy file(s) from target location.
+  -files directory: export all embedded CI policy files to the
+           named directory (absolute or relative path).
 
--deploy: deploy policy file to appropriate location.
--remove: delete policy from target location.
--info:   report information about WDAC status.
--reboot: reboot if -deploy or -remove make changes successfully.
+To test whether policy is in effect, run the following command:
+    regsvr32.exe scrobj.dll
 
-Exit code is:
-  0 if no error (*);
-  Windows error code on error deploying or removing policy file;
-  -1 for syntax or other major error.
-(*) The following are NOT error conditions:
-  Running this program on a system that does not support the WDAC policy enhancements;
-  Specifying -remove when the target file to delete doesn't exist;
 ```
 
 ### GetAaronLockerFileInformation.exe
@@ -134,30 +135,34 @@ Command-line syntax:
 
 ```
     GetAaronLockerFileInformation.exe -file filepath... [-table] [-out outputFilename]
+ or
+    GetAaronLockerFileInformation.exe -link filepath... [-table] [-out outputFilename]
 
-You can specify multiple filepaths; each must be preceded by "-file".
+You can specify multiple filepaths; each must be preceded by "-file" or "-link".
 "filepath" can include wildcard characters.
 ```
 
 Example output:
 
 ```
-> GetAaronLockerFileInformation.exe -file C:\Python39\DLLs\select.pyd
-FilePath           C:\Python39\DLLs\select.pyd
+> GetAaronLockerFileInformation.exe -file C:\Temp\Newtonsoft.Json.Bson.dll
+FilePath           C:\Temp\Newtonsoft.Json.Bson.dll
 FileType           DLL
-VerProductName     Python
-VerFileDescription Python Core
-X500CertSigner     CN=Python Software Foundation, O=Python Software Foundation, L=Wolfeboro, S=New Hampshire, C=US
-ALPublisherName    O=PYTHON SOFTWARE FOUNDATION, L=WOLFEBORO, S=NEW HAMPSHIRE, C=US
-ALProductName      PYTHON
-ALBinaryName       SELECT.PYD
-ALBinaryVersion    3.9.1150.1013
-ALHash             0x49773DB698DAC457E634A7400E2877AC7C9F1E4EFE6C3C157422D7E0731D71EE
-FileSize           28216
-SigningTimestamp   2020-12-07 17:24:13
-PEFileLinkDate     2020-12-07 17:12:43
-CreateTime         2020-12-07 23:12:26
-LastWriteTime      2020-12-07 23:12:26
+VerProductName     Json.NET BSON
+VerFileDescription Json.NET BSON .NET Standard 2.0
+X500CertSigner     CN=Json.NET (.NET Foundation), O=Json.NET (.NET Foundation), L=Redmond, S=wa, C=US, SERIALNUMBER=603 389 068
+ALPublisherName    O=JSON.NET (.NET FOUNDATION), L=REDMOND, S=WA, C=US
+ALProductName      JSON.NET BSON
+ALBinaryName       NEWTONSOFT.JSON.BSON.DLL
+ALBinaryVersion    1.0.2.22727
+ALHash             0xADD5C49A220AD27F6C97B5D9D55B42E62D151C512CE074F28CD73D0C829E58C9
+SHA256             0xF3C56166D7F90296BBE6B03F64335623C3165ED25948288F1F316FA74DD8327F
+FileSize           97720
+PEMachineType      I386
+SigningTimestamp   2018-11-27 23:10:19
+PEFileLinkDate
+CreateTime         2024-08-31 04:00:06
+LastWriteTime      2018-11-28 04:10:18
 ```
 
 ### OfficeMacroControlTool.exe
