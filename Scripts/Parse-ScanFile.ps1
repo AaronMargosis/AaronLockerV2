@@ -1,7 +1,7 @@
 ﻿<#
 .SYNOPSIS
 AaronLocker V2 scan-file parser.
-Outputs a hash table from the contents of the named scan file.
+Outputs a hash table from the contents of the named AaronLocker scan file.
 Attributes include:
     ScanType
     ComputerName

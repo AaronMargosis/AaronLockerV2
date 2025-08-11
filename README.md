@@ -6,13 +6,18 @@
 
 ## "How-To" overview
 
-Gather information about one or more endpoints using AaronLocker_EndpointTool.exe into scan files.
+Gather information about one or more endpoints using AaronLocker_EndpointTool.exe into scan files. (The Parse-ScanFile.ps1 script can be useful
+for inspecting those results.)
 
 AaronLocker_RuleBuilder.exe consumes these files to propose sets of rules and then to create AppLocker policy XML files (corresponding audit and enforce policies).
 
 Apply the policy using GPO, AppLocker PowerShell cmdlets, or SysNocturnals AppLockerPolicyTool.exe.
 
 Use AppLocker_WDAC_EnhanceTool.exe to apply some WDAC rules to close some AppLocker gaps, and OfficeMacroControlTool.exe to apply local GPO policies to close gaps exposed by Office apps.
+
+The Get-AppLockerEvents.ps1, Get-AaronLockerAsrEvents.ps1, and Get-AaronLockerWdacEvents.ps1 scripts are useful for retrieving relevant events triggered by AaronLocker rules.
+
+More details about The Tools and The Scripts follow.
 
 ## The Tools
 
@@ -236,3 +241,69 @@ Windows DLL that encapsulates Windows Runtime functionality, to be loaded on dem
 
 Primary purpose is to gather information about all installed packaged apps (a.k.a., Store apps, AppX)
 
+## The Scripts
+
+### Parse-ScanFile.ps1
+
+Simplifies the inspection of the scan files produced by AaronLocker_EndpointTool.exe.
+It outputs a hash table from the contents of the named AaronLocker scan file.
+Attributes include:
+```
+    ScanType
+    ComputerName
+    ScanStarted
+    ScanEnded
+    ScanDuration
+    WindowsDirectories
+    ErrorInfo
+    UnsafeDirsUnderWindows
+    UnsafeDirsUnderPF
+    SafePaths
+    FileDetails
+    AppLabels
+    PackagedApps
+    ShellLinks
+```
+Example:
+```
+    $scan = Parse-ScanFile.ps1 .\fullscan.txt
+    # List the generated app labels
+    $scan.AppLabels
+```
+
+### ConfigureForAppLocker.ps1
+
+Performs basic one-time single-computer configuration changes for AppLocker.
+Requires administrative rights.
+* Configures the Application Identity service (AppIDSvc) for automatic start
+* Starts the Application Identity service
+* Sets the maximum log size for each of the AppLocker event logs to 1GB.
+
+### ClearApplockerLogs.ps1
+
+Clears events from local AppLocker event logs.
+Requires administrative rights.
+
+### Get-AppLockerEvents.ps1
+
+Retrieves and sorts relevant event data from AppLocker logs, filters out noise, synthesizes data, and reports as 
+tab-delimited CSV output, PSCustomObjects, or as a PowerShell GridView.
+
+Run `help Get-AppLockerEvents.ps1` for much more information.
+
+### Get-AaronLockerAsrEvents.ps1
+
+Get event information for the Exploit Guard Attack Surface Reduction (ASR) events relevant to AaronLocker.
+
+Returns the Get-WinEvent results, with the corresponding ASR rule name added to each event object.
+
+### Get-AaronLockerWdacEvents.ps1
+
+Retrieve information about ACB (*) events controlled by AaronLocker.
+
+AaronLocker implements audits or blocks against AppLocker bypasses that rely on certain Windows executables
+loading certain Windows DLLs in combinations for which there is never any legitimate need.
+
+This script returns information about any such events that have occurred on the system.
+
+(*) ACB = App Control for Business, formerly Windows Defender Application Control (WDAC).

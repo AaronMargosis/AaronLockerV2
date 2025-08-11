@@ -1,11 +1,11 @@
 <#
 .SYNOPSIS
-Retrieves and sorts event data from AppLocker logs, synthesizes data, and reports as tab-delimited CSV output, PSCustomObjects, or as an Excel worksheet.
+Retrieves and sorts event data from AppLocker logs, synthesizes data, and reports as tab-delimited CSV output, PSCustomObjects, or as a PowerShell GridView.
 
 .DESCRIPTION
 Get-AppLockerEvents.ps1 retrieves AppLocker event data from live or saved event logs on the local or a remote computer in a manner that makes analysis much easier than the raw data itself.
 In addition to reporting the raw data from the logs, Get-AppLockerEvents.ps1 synthesizes data so that commonalities between events involving different users or computers can be aggregated.
-Output can be tab-delimited CSV (the default), an array of PSCustomObjects, or a formatted Excel worksheet.
+Output can be tab-delimited CSV (the default), an array of PSCustomObjects, or a PowerShell GridView.
 
 By default, the script retrieves error and warning events from the AppLocker EXE/DLL, MSI/Script, Packaged app-Deployment, and Packaged app-Execution event logs on the local computer.
 You can specify a remote computer, omit one or more of the default logs. AppLocker in audit mode produces warning events ("would have been blocked"), while enforce mode produces error events ("was blocked").
@@ -112,15 +112,12 @@ If specified, does not try to filter out random-named PowerShell scripts used to
 .PARAMETER NoFilteredMachines
 By default, this script outputs a single artificial "empty" event line for every machine for which all observed events were filtered out.
 
-.PARAMETER Excel
-If this optional switch is specified, outputs to a formatted Excel rather than tab-delimited CSV text to the pipeline.
-
 .PARAMETER GridView
 If this optional switch is specified, outputs to a PowerShell GridView.
 
 .PARAMETER Objects
 If this optional switch is specified, outputs PSCustomObjects rather than tab-delimited CSV. (Passes CSV through ConvertFrom-Csv.)
-This switch is ignored if -Excel or -GridView is also specified.
+This switch is ignored if -GridView is also specified.
 
 
 .EXAMPLE
@@ -129,9 +126,9 @@ This switch is ignored if -Excel or -GridView is also specified.
 Retrieves warning and error events from the AppLocker EXE and DLL log (MSI/Script and PackagedApp omitted).
 
 .EXAMPLE
-.\Get-AppLockerEvents.ps1 -Computer CONTOSO\RECEPTION1 -AllEvents -FromDateTime "6/1/2025 8:00" -ToDateTime "6/1/2025 9:00" -Excel
+.\Get-AppLockerEvents.ps1 -Computer CONTOSO\RECEPTION1 -AllEvents -FromDateTime "6/1/2025 8:00" -ToDateTime "6/1/2025 9:00" -GridView
 
-Retrieves all AppLocker events for a specified one-hour period on CONTOSO\RECEPTION1, and report in an Excel document.
+Retrieves all AppLocker events for a specified one-hour period on CONTOSO\RECEPTION1, and report in a PowerShell GridView.
 
 .EXAMPLE
 .\Get-AppLockerEvents.ps1 -EvtxLogFilePaths .\ForwardedEvents1.evtx, .\ForwardedEvents2.evtx
@@ -229,10 +226,6 @@ param(
     # If specified, do not create artificial "empty" event lines for machines for which all observed events were filtered out.
     [switch]
     $NoFilteredMachines = $false,
-
-    # Output to Excel
-    [switch]
-    $Excel,
 
     # Output to GridView
     [switch]
@@ -855,15 +848,7 @@ if (!$NoFilteredMachines)
 Write-Host "" # New line after the dots
 Write-Host "$filteredOut events filtered out." -ForegroundColor Cyan
 
-if ($Excel)
-{
-    if (CreateExcelApplication)
-    {
-        AddWorksheetFromCsvData -csv $csv -tabname "AppLocker events"
-        ReleaseExcelApplication
-    }
-}
-elseif ($GridView)
+if ($GridView)
 {
     $csv | ConvertFrom-Csv -Delimiter "`t" | Out-GridView -Title $MyInvocation.MyCommand.Name
 }
