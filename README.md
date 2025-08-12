@@ -53,6 +53,28 @@ The Get-AppLockerEvents.ps1, Get-AaronLockerAsrEvents.ps1, and Get-AaronLockerWd
 
 More details about The Tools and The Scripts follow.
 
+## Table of Contents
+
+|[The Tools](#The-Tools)||
+|:-----|----|
+||[AaronLocker_EndpointTool.exe](#AaronLocker_EndpointTool.exe)|
+||[AaronLocker_RuleBuilder.exe](#AaronLocker_RuleBuilder.exe)|
+||[AppLockerPolicyTool.exe](#AppLockerPolicyTool.exe)|
+||[AppLocker_WDAC_EnhanceTool.exe](#AppLocker_WDAC_EnhanceTool.exe)|
+||[GetAaronLockerFileInformation.exe](#GetAaronLockerFileInformation.exe)|
+||[OfficeMacroControlTool.exe](#OfficeMacroControlTool.exe)|
+||[PathToAppNameTool.exe](#PathToAppNameTool.exe)|
+||[WinrtFunctionalityDll.dll](#WinrtFunctionalityDll.dll)|
+
+|[The Scripts](#The-Scripts)||
+|:-----|----|
+||[Parse-ScanFile.ps1](#Parse-ScanFile.ps1)|
+||[ConfigureForAppLocker.ps1](#ConfigureForAppLocker.ps1)|
+||[ClearApplockerLogs.ps1](#ClearApplockerLogs.ps1)|
+||[Get-AppLockerEvents.ps1](#Get-AppLockerEvents.ps1)|
+||[Get-AaronLockerAsrEvents.ps1](#Get-AaronLockerAsrEvents.ps1)|
+||[Get-AaronLockerWdacEvents.ps1](#Get-AaronLockerWdacEvents.ps1)|
+
 ## The Tools
 
 ### AaronLocker_EndpointTool.exe
