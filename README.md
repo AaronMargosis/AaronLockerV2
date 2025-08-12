@@ -6,14 +6,14 @@ August 2025
 
 ## "What it is" overview
 
+AaronLocker makes the creation and maintenance of robust and strict allowlisting rules on Windows as easy and practical as possible. 
+AaronLocker is built primarily on AppLocker along with Microsoft Office macro controls, and some WDAC rules to close identified gaps in AppLocker.
+
 Application allowlisting is a powerful defense against malware, including ransomware, and is strongly recommended by security experts. 
 Properly configured, allowlisting can prevent users from being tricked into running malicious code and from intentionally downloading 
 and running unauthorized programs, and can severely limit what an exploited vulnerability in a user program can accomplish. Unlike
 with traditional anti-malware, anything not explicitly allowed by an allowlisting rule is not allowed to execute, which dramatically
 reduces attack surface.
-
-AaronLocker makes the creation and maintenance of robust and strict allowlisting rules on Windows as easy and practical as possible. 
-AaronLocker is built primarily on AppLocker along with Microsoft Office macro controls, and some WDAC rules to close identified gaps in AppLocker.
 
 AaronLocker restricts program and script execution only by non-administrative users;
 administrative users are allowed to run anything they need. Two principles behind this approach:
@@ -80,6 +80,10 @@ More details about The Tools and The Scripts follow.
 ### AaronLocker_EndpointTool.exe
 
 Command-line utility to perform full endpoint scans or single-directory scans on Windows endpoints to gather information from which to build AaronLocker/AppLocker rules. Writes output to UTF-8 encoded text file.
+
+(Note that the Parse-ScanFile.ps1 script can be useful for inspecting those results.)
+
+It is recommended that this tool be executed using the System account for full scans.
 
 Command-line syntax:
 
