@@ -34,7 +34,7 @@ const wchar_t* const szGpName_ASRRuleBlockOfficeapplicationsfromcreatingexecutab
 const wchar_t* const szGpName_ASRRuleBlockOfficeapplicationsfrominjectingcodeintootherprocesses = L"ASR Rule: Block Office applications from injecting code into other processes";
 const wchar_t* const szGpName_ASRRuleBlockOfficecommunicationapplicationfromcreatingchildprocesses = L"ASR Rule: Block Office communication application from creating child processes";
 const wchar_t* const szGpName_ASRRuleBlockWin32APIcallsfromOfficemacro = L"ASR Rule: Block Win32 API calls from Office macro";
-const wchar_t* const szGpName_BlockmacrosfromrunninginOfficefilesfromtheInternet = L"Block macros from running in Office files from the Internet";
+const wchar_t* const szGpName_BlockmacrosfromrunninginOfficefilesfromtheinternet = L"Block macros from running in Office files from the internet";
 const wchar_t* const szGpName_ConfigureAttackSurfaceReductionrules = L"Configure Attack Surface Reduction rules";
 const wchar_t* const szGpName_dBaseIIIIVfiles = L"dBase III / IV files";
 const wchar_t* const szGpName_DifandSylkfiles = L"Dif and Sylk files";
@@ -152,8 +152,8 @@ const wchar_t* const szRegVal_xl97workbooksandtemplates = L"xl97workbooksandtemp
 // ------------------------------------------------------------------------------------------
 // DisableAllVBA - setting definitions
 
-const GpoDefn_t DisableAllVBA_1_vbaoff = {
-    true,
+const GpoDefn_t DisableAllVBA_1_vbaoff = { 
+    true, 
     szGpPath_MicrosoftOffice2016MachineSecuritySettings,
     szGpName_DisableVBAforOfficeapplications,
     szRegKey_softwarepoliciesmicrosoftoffice160common,
@@ -166,44 +166,44 @@ const GpoItemChoice_t DisableAllVBA_choice_Enabled = { L"Enabled", REG_DWORD, 1 
 // ------------------------------------------------------------------------------------------
 // ASR - setting definitions
 
-const GpoDefn_t ASR_1_ExploitGuard_ASR_Rules = {
-    true,
+const GpoDefn_t ASR_1_ExploitGuard_ASR_Rules = { 
+    true, 
     szGpPath_WindowsComponentsMicrosoftDefenderAntivirusMicrosoftDefenderExploitGuardAttackSurfaceReduction,
     szGpName_ConfigureAttackSurfaceReductionrules,
     szRegKey_SoftwarePoliciesMicrosoftWindowsDefenderWindowsDefenderExploitGuardASR,
     szRegVal_ExploitGuard_ASR_Rules };
-const GpoDefn_t ASR_2_26190899_1602_49e8_8b27_eb1d0a1ce869 = {
-    true,
+const GpoDefn_t ASR_2_26190899_1602_49e8_8b27_eb1d0a1ce869 = { 
+    true, 
     szGpPath_WindowsComponentsMicrosoftDefenderAntivirusMicrosoftDefenderExploitGuardAttackSurfaceReduction,
     szGpName_ASRRuleBlockOfficecommunicationapplicationfromcreatingchildprocesses,
     szRegKey_SoftwarePoliciesMicrosoftWindowsDefenderWindowsDefenderExploitGuardASRRules,
     szRegVal_26190899_1602_49e8_8b27_eb1d0a1ce869 };
-const GpoDefn_t ASR_3_3b576869_a4ec_4529_8536_b80a7769e899 = {
-    true,
+const GpoDefn_t ASR_3_3b576869_a4ec_4529_8536_b80a7769e899 = { 
+    true, 
     szGpPath_WindowsComponentsMicrosoftDefenderAntivirusMicrosoftDefenderExploitGuardAttackSurfaceReduction,
     szGpName_ASRRuleBlockOfficeapplicationsfromcreatingexecutablecontent,
     szRegKey_SoftwarePoliciesMicrosoftWindowsDefenderWindowsDefenderExploitGuardASRRules,
     szRegVal_3b576869_a4ec_4529_8536_b80a7769e899 };
-const GpoDefn_t ASR_4_75668c1f_73b5_4cf0_bb93_3ecf5cb7cc84 = {
-    true,
+const GpoDefn_t ASR_4_75668c1f_73b5_4cf0_bb93_3ecf5cb7cc84 = { 
+    true, 
     szGpPath_WindowsComponentsMicrosoftDefenderAntivirusMicrosoftDefenderExploitGuardAttackSurfaceReduction,
     szGpName_ASRRuleBlockOfficeapplicationsfrominjectingcodeintootherprocesses,
     szRegKey_SoftwarePoliciesMicrosoftWindowsDefenderWindowsDefenderExploitGuardASRRules,
     szRegVal_75668c1f_73b5_4cf0_bb93_3ecf5cb7cc84 };
-const GpoDefn_t ASR_5_92E97FA1_2EDF_4476_BDD6_9DD0B4DDDC7B = {
-    true,
+const GpoDefn_t ASR_5_92E97FA1_2EDF_4476_BDD6_9DD0B4DDDC7B = { 
+    true, 
     szGpPath_WindowsComponentsMicrosoftDefenderAntivirusMicrosoftDefenderExploitGuardAttackSurfaceReduction,
     szGpName_ASRRuleBlockWin32APIcallsfromOfficemacro,
     szRegKey_SoftwarePoliciesMicrosoftWindowsDefenderWindowsDefenderExploitGuardASRRules,
     szRegVal_92E97FA1_2EDF_4476_BDD6_9DD0B4DDDC7B };
-const GpoDefn_t ASR_6_d4f940ab_401b_4efc_aadc_ad5f3c50688a = {
-    true,
+const GpoDefn_t ASR_6_d4f940ab_401b_4efc_aadc_ad5f3c50688a = { 
+    true, 
     szGpPath_WindowsComponentsMicrosoftDefenderAntivirusMicrosoftDefenderExploitGuardAttackSurfaceReduction,
     szGpName_ASRRuleBlockallOfficeapplicationsfromcreatingchildprocesses,
     szRegKey_SoftwarePoliciesMicrosoftWindowsDefenderWindowsDefenderExploitGuardASRRules,
     szRegVal_d4f940ab_401b_4efc_aadc_ad5f3c50688a };
-const GpoDefn_t ASR_7_DisableRealtimeMonitoring = {
-    true,
+const GpoDefn_t ASR_7_DisableRealtimeMonitoring = { 
+    true, 
     szGpPath_WindowsComponentsMicrosoftDefenderAntivirusReal_timeProtection,
     szGpName_Turnoffreal_timeprotection,
     szRegKey_SoftwarePoliciesMicrosoftWindowsDefenderReal_TimeProtection,
@@ -221,34 +221,46 @@ const GpoItemChoice_t ASR_choice_Disabled = { L"Disabled", REG_DWORD, 0 };
 // ------------------------------------------------------------------------------------------
 // BlockMacrosFromRunningInOfficeFilesFromTheInternet - setting definitions
 
-const GpoDefn_t BlockMacrosFromRunningInOfficeFilesFromTheInternet_1_blockcontentexecutionfrominternet = {
-    false,
+const GpoDefn_t BlockMacrosFromRunningInOfficeFilesFromTheInternet_1_blockcontentexecutionfrominternet = { 
+    false, 
     szGpPath_MicrosoftAccess2016ApplicationSettingsSecurityTrustCenter,
-    szGpName_BlockmacrosfromrunninginOfficefilesfromtheInternet,
+    szGpName_BlockmacrosfromrunninginOfficefilesfromtheinternet,
     szRegKey_softwarepoliciesmicrosoftoffice160accesssecurity,
     szRegVal_blockcontentexecutionfrominternet };
-const GpoDefn_t BlockMacrosFromRunningInOfficeFilesFromTheInternet_2_blockcontentexecutionfrominternet = {
-    false,
+const GpoDefn_t BlockMacrosFromRunningInOfficeFilesFromTheInternet_2_blockcontentexecutionfrominternet = { 
+    false, 
     szGpPath_MicrosoftExcel2016ExcelOptionsSecurityTrustCenter,
-    szGpName_BlockmacrosfromrunninginOfficefilesfromtheInternet,
+    szGpName_BlockmacrosfromrunninginOfficefilesfromtheinternet,
     szRegKey_softwarepoliciesmicrosoftoffice160excelsecurity,
     szRegVal_blockcontentexecutionfrominternet };
-const GpoDefn_t BlockMacrosFromRunningInOfficeFilesFromTheInternet_3_blockcontentexecutionfrominternet = {
-    false,
+const GpoDefn_t BlockMacrosFromRunningInOfficeFilesFromTheInternet_3_blockcontentexecutionfrominternet = { 
+    false, 
     szGpPath_MicrosoftPowerPoint2016PowerPointOptionsSecurityTrustCenter,
-    szGpName_BlockmacrosfromrunninginOfficefilesfromtheInternet,
+    szGpName_BlockmacrosfromrunninginOfficefilesfromtheinternet,
     szRegKey_softwarepoliciesmicrosoftoffice160powerpointsecurity,
     szRegVal_blockcontentexecutionfrominternet };
-const GpoDefn_t BlockMacrosFromRunningInOfficeFilesFromTheInternet_4_blockcontentexecutionfrominternet = {
-    false,
+const GpoDefn_t BlockMacrosFromRunningInOfficeFilesFromTheInternet_4_blockcontentexecutionfrominternet = { 
+    false, 
+    szGpPath_MicrosoftProject2016ProjectOptionsSecurityTrustCenter,
+    szGpName_BlockmacrosfromrunninginOfficefilesfromtheinternet,
+    szRegKey_softwarepoliciesmicrosoftoffice160msprojectsecurity,
+    szRegVal_blockcontentexecutionfrominternet };
+const GpoDefn_t BlockMacrosFromRunningInOfficeFilesFromTheInternet_5_blockcontentexecutionfrominternet = { 
+    false, 
+    szGpPath_MicrosoftPublisher2016SecurityTrustCenter,
+    szGpName_BlockmacrosfromrunninginOfficefilesfromtheinternet,
+    szRegKey_softwarepoliciesmicrosoftoffice160publishersecurity,
+    szRegVal_blockcontentexecutionfrominternet };
+const GpoDefn_t BlockMacrosFromRunningInOfficeFilesFromTheInternet_6_blockcontentexecutionfrominternet = { 
+    false, 
     szGpPath_MicrosoftVisio2016VisioOptionsSecurityTrustCenter,
-    szGpName_BlockmacrosfromrunninginOfficefilesfromtheInternet,
+    szGpName_BlockmacrosfromrunninginOfficefilesfromtheinternet,
     szRegKey_softwarepoliciesmicrosoftoffice160visiosecurity,
     szRegVal_blockcontentexecutionfrominternet };
-const GpoDefn_t BlockMacrosFromRunningInOfficeFilesFromTheInternet_5_blockcontentexecutionfrominternet = {
-    false,
+const GpoDefn_t BlockMacrosFromRunningInOfficeFilesFromTheInternet_7_blockcontentexecutionfrominternet = { 
+    false, 
     szGpPath_MicrosoftWord2016WordOptionsSecurityTrustCenter,
-    szGpName_BlockmacrosfromrunninginOfficefilesfromtheInternet,
+    szGpName_BlockmacrosfromrunninginOfficefilesfromtheinternet,
     szRegKey_softwarepoliciesmicrosoftoffice160wordsecurity,
     szRegVal_blockcontentexecutionfrominternet };
 
@@ -259,152 +271,152 @@ const GpoItemChoice_t BlockMacrosFromRunningInOfficeFilesFromTheInternet_choice_
 // ------------------------------------------------------------------------------------------
 // DisableAllUnsignedMacros - setting definitions
 
-const GpoDefn_t DisableAllUnsignedMacros_1_vbawarnings = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_1_vbawarnings = { 
+    false, 
     szGpPath_MicrosoftAccess2016ApplicationSettingsSecurityTrustCenter,
     szGpName_VBAMacroNotificationSettings,
     szRegKey_softwarepoliciesmicrosoftoffice160accesssecurity,
     szRegVal_vbawarnings };
-const GpoDefn_t DisableAllUnsignedMacros_2_vbarequirelmtrustedpublisher = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_2_vbarequirelmtrustedpublisher = { 
+    false, 
     szGpPath_MicrosoftAccess2016ApplicationSettingsSecurityTrustCenter,
     szGpName_VBAMacroNotificationSettings__Blockcertificatesfromtrustedpublishersthatareonlyinstalledinthecurrentusercertificatestore,
     szRegKey_softwarepoliciesmicrosoftoffice160accesssecurity,
     szRegVal_vbarequirelmtrustedpublisher };
-const GpoDefn_t DisableAllUnsignedMacros_3_vbarequiredigsigwithcodesigningeku = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_3_vbarequiredigsigwithcodesigningeku = { 
+    false, 
     szGpPath_MicrosoftAccess2016ApplicationSettingsSecurityTrustCenter,
     szGpName_VBAMacroNotificationSettings__RequireExtendedKeyUsageEKUforcertificatesfromtrustedpublishers,
     szRegKey_softwarepoliciesmicrosoftoffice160accesssecurity,
     szRegVal_vbarequiredigsigwithcodesigningeku };
-const GpoDefn_t DisableAllUnsignedMacros_4_vbadigsigtrustedpublishers = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_4_vbadigsigtrustedpublishers = { 
+    false, 
     szGpPath_MicrosoftAccess2016ApplicationSettingsSecurityTrustCenter,
     szGpName_VBAMacroNotificationSettings__Requiremacrostobesignedbyatrustedpublisher,
     szRegKey_softwarepoliciesmicrosoftoffice160accesssecurity,
     szRegVal_vbadigsigtrustedpublishers };
-const GpoDefn_t DisableAllUnsignedMacros_5_vbawarnings = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_5_vbawarnings = { 
+    false, 
     szGpPath_MicrosoftExcel2016ExcelOptionsSecurityTrustCenter,
     szGpName_MacroNotificationSettings,
     szRegKey_softwarepoliciesmicrosoftoffice160excelsecurity,
     szRegVal_vbawarnings };
-const GpoDefn_t DisableAllUnsignedMacros_6_vbarequirelmtrustedpublisher = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_6_vbarequirelmtrustedpublisher = { 
+    false, 
     szGpPath_MicrosoftExcel2016ExcelOptionsSecurityTrustCenter,
     szGpName_MacroNotificationSettings__Blockcertificatesfromtrustedpublishersthatareonlyinstalledinthecurrentusercertificatestore,
     szRegKey_softwarepoliciesmicrosoftoffice160excelsecurity,
     szRegVal_vbarequirelmtrustedpublisher };
-const GpoDefn_t DisableAllUnsignedMacros_7_vbarequiredigsigwithcodesigningeku = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_7_vbarequiredigsigwithcodesigningeku = { 
+    false, 
     szGpPath_MicrosoftExcel2016ExcelOptionsSecurityTrustCenter,
     szGpName_MacroNotificationSettings__RequireExtendedKeyUsageEKUforcertificatesfromtrustedpublishers,
     szRegKey_softwarepoliciesmicrosoftoffice160excelsecurity,
     szRegVal_vbarequiredigsigwithcodesigningeku };
-const GpoDefn_t DisableAllUnsignedMacros_8_vbadigsigtrustedpublishers = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_8_vbadigsigtrustedpublishers = { 
+    false, 
     szGpPath_MicrosoftExcel2016ExcelOptionsSecurityTrustCenter,
     szGpName_MacroNotificationSettings__Requiremacrostobesignedbyatrustedpublisher,
     szRegKey_softwarepoliciesmicrosoftoffice160excelsecurity,
     szRegVal_vbadigsigtrustedpublishers };
-const GpoDefn_t DisableAllUnsignedMacros_9_vbawarnings = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_9_vbawarnings = { 
+    false, 
     szGpPath_MicrosoftPowerPoint2016PowerPointOptionsSecurityTrustCenter,
     szGpName_VBAMacroNotificationSettings,
     szRegKey_softwarepoliciesmicrosoftoffice160powerpointsecurity,
     szRegVal_vbawarnings };
-const GpoDefn_t DisableAllUnsignedMacros_10_vbarequirelmtrustedpublisher = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_10_vbarequirelmtrustedpublisher = { 
+    false, 
     szGpPath_MicrosoftPowerPoint2016PowerPointOptionsSecurityTrustCenter,
     szGpName_VBAMacroNotificationSettings__Blockcertificatesfromtrustedpublishersthatareonlyinstalledinthecurrentusercertificatestore,
     szRegKey_softwarepoliciesmicrosoftoffice160powerpointsecurity,
     szRegVal_vbarequirelmtrustedpublisher };
-const GpoDefn_t DisableAllUnsignedMacros_11_vbarequiredigsigwithcodesigningeku = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_11_vbarequiredigsigwithcodesigningeku = { 
+    false, 
     szGpPath_MicrosoftPowerPoint2016PowerPointOptionsSecurityTrustCenter,
     szGpName_VBAMacroNotificationSettings__RequireExtendedKeyUsageEKUforcertificatesfromtrustedpublishers,
     szRegKey_softwarepoliciesmicrosoftoffice160powerpointsecurity,
     szRegVal_vbarequiredigsigwithcodesigningeku };
-const GpoDefn_t DisableAllUnsignedMacros_12_vbadigsigtrustedpublishers = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_12_vbadigsigtrustedpublishers = { 
+    false, 
     szGpPath_MicrosoftPowerPoint2016PowerPointOptionsSecurityTrustCenter,
     szGpName_VBAMacroNotificationSettings__Requiremacrostobesignedbyatrustedpublisher,
     szRegKey_softwarepoliciesmicrosoftoffice160powerpointsecurity,
     szRegVal_vbadigsigtrustedpublishers };
-const GpoDefn_t DisableAllUnsignedMacros_13_vbawarnings = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_13_vbawarnings = { 
+    false, 
     szGpPath_MicrosoftProject2016ProjectOptionsSecurityTrustCenter,
     szGpName_VBAMacroNotificationSettings,
     szRegKey_softwarepoliciesmicrosoftoffice160msprojectsecurity,
     szRegVal_vbawarnings };
-const GpoDefn_t DisableAllUnsignedMacros_14_vbawarnings = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_14_vbawarnings = { 
+    false, 
     szGpPath_MicrosoftPublisher2016SecurityTrustCenter,
     szGpName_VBAMacroNotificationSettings,
     szRegKey_softwarepoliciesmicrosoftoffice160publishersecurity,
     szRegVal_vbawarnings };
-const GpoDefn_t DisableAllUnsignedMacros_15_vbarequirelmtrustedpublisher = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_15_vbarequirelmtrustedpublisher = { 
+    false, 
     szGpPath_MicrosoftPublisher2016SecurityTrustCenter,
     szGpName_VBAMacroNotificationSettings__Blockcertificatesfromtrustedpublishersthatareonlyinstalledinthecurrentusercertificatestore,
     szRegKey_softwarepoliciesmicrosoftoffice160publishersecurity,
     szRegVal_vbarequirelmtrustedpublisher };
-const GpoDefn_t DisableAllUnsignedMacros_16_vbarequiredigsigwithcodesigningeku = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_16_vbarequiredigsigwithcodesigningeku = { 
+    false, 
     szGpPath_MicrosoftPublisher2016SecurityTrustCenter,
     szGpName_VBAMacroNotificationSettings__RequireExtendedKeyUsageEKUforcertificatesfromtrustedpublishers,
     szRegKey_softwarepoliciesmicrosoftoffice160publishersecurity,
     szRegVal_vbarequiredigsigwithcodesigningeku };
-const GpoDefn_t DisableAllUnsignedMacros_17_vbadigsigtrustedpublishers = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_17_vbadigsigtrustedpublishers = { 
+    false, 
     szGpPath_MicrosoftPublisher2016SecurityTrustCenter,
     szGpName_VBAMacroNotificationSettings__Requiremacrostobesignedbyatrustedpublisher,
     szRegKey_softwarepoliciesmicrosoftoffice160publishersecurity,
     szRegVal_vbadigsigtrustedpublishers };
-const GpoDefn_t DisableAllUnsignedMacros_18_vbawarnings = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_18_vbawarnings = { 
+    false, 
     szGpPath_MicrosoftVisio2016VisioOptionsSecurityTrustCenter,
     szGpName_VBAMacroNotificationSettings,
     szRegKey_softwarepoliciesmicrosoftoffice160visiosecurity,
     szRegVal_vbawarnings };
-const GpoDefn_t DisableAllUnsignedMacros_19_vbarequirelmtrustedpublisher = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_19_vbarequirelmtrustedpublisher = { 
+    false, 
     szGpPath_MicrosoftVisio2016VisioOptionsSecurityTrustCenter,
     szGpName_VBAMacroNotificationSettings__Blockcertificatesfromtrustedpublishersthatareonlyinstalledinthecurrentusercertificatestore,
     szRegKey_softwarepoliciesmicrosoftoffice160visiosecurity,
     szRegVal_vbarequirelmtrustedpublisher };
-const GpoDefn_t DisableAllUnsignedMacros_20_vbarequiredigsigwithcodesigningeku = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_20_vbarequiredigsigwithcodesigningeku = { 
+    false, 
     szGpPath_MicrosoftVisio2016VisioOptionsSecurityTrustCenter,
     szGpName_VBAMacroNotificationSettings__RequireExtendedKeyUsageEKUforcertificatesfromtrustedpublishers,
     szRegKey_softwarepoliciesmicrosoftoffice160visiosecurity,
     szRegVal_vbarequiredigsigwithcodesigningeku };
-const GpoDefn_t DisableAllUnsignedMacros_21_vbadigsigtrustedpublishers = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_21_vbadigsigtrustedpublishers = { 
+    false, 
     szGpPath_MicrosoftVisio2016VisioOptionsSecurityTrustCenter,
     szGpName_VBAMacroNotificationSettings__Requiremacrostobesignedbyatrustedpublisher,
     szRegKey_softwarepoliciesmicrosoftoffice160visiosecurity,
     szRegVal_vbadigsigtrustedpublishers };
-const GpoDefn_t DisableAllUnsignedMacros_22_vbawarnings = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_22_vbawarnings = { 
+    false, 
     szGpPath_MicrosoftWord2016WordOptionsSecurityTrustCenter,
     szGpName_VBAMacroNotificationSettings,
     szRegKey_softwarepoliciesmicrosoftoffice160wordsecurity,
     szRegVal_vbawarnings };
-const GpoDefn_t DisableAllUnsignedMacros_23_vbarequirelmtrustedpublisher = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_23_vbarequirelmtrustedpublisher = { 
+    false, 
     szGpPath_MicrosoftWord2016WordOptionsSecurityTrustCenter,
     szGpName_VBAMacroNotificationSettings__Blockcertificatesfromtrustedpublishersthatareonlyinstalledinthecurrentusercertificatestore,
     szRegKey_softwarepoliciesmicrosoftoffice160wordsecurity,
     szRegVal_vbarequirelmtrustedpublisher };
-const GpoDefn_t DisableAllUnsignedMacros_24_vbarequiredigsigwithcodesigningeku = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_24_vbarequiredigsigwithcodesigningeku = { 
+    false, 
     szGpPath_MicrosoftWord2016WordOptionsSecurityTrustCenter,
     szGpName_VBAMacroNotificationSettings__RequireExtendedKeyUsageEKUforcertificatesfromtrustedpublishers,
     szRegKey_softwarepoliciesmicrosoftoffice160wordsecurity,
     szRegVal_vbarequiredigsigwithcodesigningeku };
-const GpoDefn_t DisableAllUnsignedMacros_25_vbadigsigtrustedpublishers = {
-    false,
+const GpoDefn_t DisableAllUnsignedMacros_25_vbadigsigtrustedpublishers = { 
+    false, 
     szGpPath_MicrosoftWord2016WordOptionsSecurityTrustCenter,
     szGpName_VBAMacroNotificationSettings__Requiremacrostobesignedbyatrustedpublisher,
     szRegKey_softwarepoliciesmicrosoftoffice160wordsecurity,
@@ -420,38 +432,38 @@ const GpoItemChoice_t DisableAllUnsignedMacros_choice_DisableVBAmacrosexceptdigi
 // ------------------------------------------------------------------------------------------
 // DisableAllTrustedLocations - setting definitions
 
-const GpoDefn_t DisableAllTrustedLocations_1_alllocationsdisabled = {
-    false,
+const GpoDefn_t DisableAllTrustedLocations_1_alllocationsdisabled = { 
+    false, 
     szGpPath_MicrosoftAccess2016ApplicationSettingsSecurityTrustCenterTrustedLocations,
     szGpName_Disablealltrustedlocations,
     szRegKey_softwarepoliciesmicrosoftoffice160accesssecuritytrustedlocations,
     szRegVal_alllocationsdisabled };
-const GpoDefn_t DisableAllTrustedLocations_2_alllocationsdisabled = {
-    false,
+const GpoDefn_t DisableAllTrustedLocations_2_alllocationsdisabled = { 
+    false, 
     szGpPath_MicrosoftExcel2016ExcelOptionsSecurityTrustCenterTrustedLocations,
     szGpName_Disablealltrustedlocations,
     szRegKey_softwarepoliciesmicrosoftoffice160excelsecuritytrustedlocations,
     szRegVal_alllocationsdisabled };
-const GpoDefn_t DisableAllTrustedLocations_3_alllocationsdisabled = {
-    false,
+const GpoDefn_t DisableAllTrustedLocations_3_alllocationsdisabled = { 
+    false, 
     szGpPath_MicrosoftPowerPoint2016PowerPointOptionsSecurityTrustCenterTrustedLocations,
     szGpName_Disablealltrustedlocations,
     szRegKey_softwarepoliciesmicrosoftoffice160powerpointsecuritytrustedlocations,
     szRegVal_alllocationsdisabled };
-const GpoDefn_t DisableAllTrustedLocations_4_alllocationsdisabled = {
-    false,
+const GpoDefn_t DisableAllTrustedLocations_4_alllocationsdisabled = { 
+    false, 
     szGpPath_MicrosoftProject2016ProjectOptionsSecurityTrustCenter,
     szGpName_Disablealltrustedlocations,
     szRegKey_softwarepoliciesmicrosoftoffice160msprojectsecuritytrustedlocations,
     szRegVal_alllocationsdisabled };
-const GpoDefn_t DisableAllTrustedLocations_5_alllocationsdisabled = {
-    false,
+const GpoDefn_t DisableAllTrustedLocations_5_alllocationsdisabled = { 
+    false, 
     szGpPath_MicrosoftVisio2016VisioOptionsSecurityTrustCenter,
     szGpName_Disablealltrustedlocations,
     szRegKey_softwarepoliciesmicrosoftoffice160visiosecuritytrustedlocations,
     szRegVal_alllocationsdisabled };
-const GpoDefn_t DisableAllTrustedLocations_6_alllocationsdisabled = {
-    false,
+const GpoDefn_t DisableAllTrustedLocations_6_alllocationsdisabled = { 
+    false, 
     szGpPath_MicrosoftWord2016WordOptionsSecurityTrustCenterTrustedLocations,
     szGpName_Disablealltrustedlocations,
     szRegKey_softwarepoliciesmicrosoftoffice160wordsecuritytrustedlocations,
@@ -464,20 +476,20 @@ const GpoItemChoice_t DisableAllTrustedLocations_choice_Enabled = { L"Enabled", 
 // ------------------------------------------------------------------------------------------
 // ScanEncryptedMacros - setting definitions
 
-const GpoDefn_t ScanEncryptedMacros_1_excelbypassencryptedmacroscan = {
-    false,
+const GpoDefn_t ScanEncryptedMacros_1_excelbypassencryptedmacroscan = { 
+    false, 
     szGpPath_MicrosoftExcel2016ExcelOptionsSecurity,
     szGpName_ScanencryptedmacrosinExcelOpenXMLworkbooks,
     szRegKey_softwarepoliciesmicrosoftoffice160excelsecurity,
     szRegVal_excelbypassencryptedmacroscan };
-const GpoDefn_t ScanEncryptedMacros_2_powerpointbypassencryptedmacroscan = {
-    false,
+const GpoDefn_t ScanEncryptedMacros_2_powerpointbypassencryptedmacroscan = { 
+    false, 
     szGpPath_MicrosoftPowerPoint2016PowerPointOptionsSecurity,
     szGpName_ScanencryptedmacrosinPowerPointOpenXMLpresentations,
     szRegKey_softwarepoliciesmicrosoftoffice160powerpointsecurity,
     szRegVal_powerpointbypassencryptedmacroscan };
-const GpoDefn_t ScanEncryptedMacros_3_wordbypassencryptedmacroscan = {
-    false,
+const GpoDefn_t ScanEncryptedMacros_3_wordbypassencryptedmacroscan = { 
+    false, 
     szGpPath_MicrosoftWord2016WordOptionsSecurityTrustCenter,
     szGpName_ScanencryptedmacrosinWordOpenXMLdocuments,
     szRegKey_softwarepoliciesmicrosoftoffice160wordsecurity,
@@ -490,26 +502,26 @@ const GpoItemChoice_t ScanEncryptedMacros_choice_Scanencryptedmacrosdefault = { 
 // ------------------------------------------------------------------------------------------
 // DisableUnsignedVbaAddins - setting definitions
 
-const GpoDefn_t DisableUnsignedVbaAddins_1_notbpromptunsignedaddin = {
-    false,
+const GpoDefn_t DisableUnsignedVbaAddins_1_notbpromptunsignedaddin = { 
+    false, 
     szGpPath_MicrosoftExcel2016ExcelOptionsSecurityTrustCenter,
     szGpName_DisableTrustBarNotificationforunsignedapplicationadd_insandblockthem,
     szRegKey_softwarepoliciesmicrosoftoffice160excelsecurity,
     szRegVal_notbpromptunsignedaddin };
-const GpoDefn_t DisableUnsignedVbaAddins_2_requireaddinsig = {
-    false,
+const GpoDefn_t DisableUnsignedVbaAddins_2_requireaddinsig = { 
+    false, 
     szGpPath_MicrosoftExcel2016ExcelOptionsSecurityTrustCenter,
     szGpName_Requirethatapplicationadd_insaresignedbyTrustedPublisher,
     szRegKey_softwarepoliciesmicrosoftoffice160excelsecurity,
     szRegVal_requireaddinsig };
-const GpoDefn_t DisableUnsignedVbaAddins_3_notbpromptunsignedaddin = {
-    false,
+const GpoDefn_t DisableUnsignedVbaAddins_3_notbpromptunsignedaddin = { 
+    false, 
     szGpPath_MicrosoftPowerPoint2016PowerPointOptionsSecurityTrustCenter,
     szGpName_DisableTrustBarNotificationforunsignedapplicationadd_insandblockthem,
     szRegKey_softwarepoliciesmicrosoftoffice160powerpointsecurity,
     szRegVal_notbpromptunsignedaddin };
-const GpoDefn_t DisableUnsignedVbaAddins_4_requireaddinsig = {
-    false,
+const GpoDefn_t DisableUnsignedVbaAddins_4_requireaddinsig = { 
+    false, 
     szGpPath_MicrosoftPowerPoint2016PowerPointOptionsSecurityTrustCenter,
     szGpName_Requirethatapplicationadd_insaresignedbyTrustedPublisher,
     szRegKey_softwarepoliciesmicrosoftoffice160powerpointsecurity,
@@ -522,176 +534,176 @@ const GpoItemChoice_t DisableUnsignedVbaAddins_choice_Enabled = { L"Enabled", RE
 // ------------------------------------------------------------------------------------------
 // LegacyFileBlock - setting definitions
 
-const GpoDefn_t LegacyFileBlock_1_dbasefiles = {
-    false,
+const GpoDefn_t LegacyFileBlock_1_dbasefiles = { 
+    false, 
     szGpPath_MicrosoftExcel2016ExcelOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_dBaseIIIIVfiles,
     szRegKey_softwarepoliciesmicrosoftoffice160excelsecurityfileblock,
     szRegVal_dbasefiles };
-const GpoDefn_t LegacyFileBlock_2_difandsylkfiles = {
-    false,
+const GpoDefn_t LegacyFileBlock_2_difandsylkfiles = { 
+    false, 
     szGpPath_MicrosoftExcel2016ExcelOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_DifandSylkfiles,
     szRegKey_softwarepoliciesmicrosoftoffice160excelsecurityfileblock,
     szRegVal_difandsylkfiles };
-const GpoDefn_t LegacyFileBlock_3_xl2macros = {
-    false,
+const GpoDefn_t LegacyFileBlock_3_xl2macros = { 
+    false, 
     szGpPath_MicrosoftExcel2016ExcelOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_Excel2macrosheetsandadd_infiles,
     szRegKey_softwarepoliciesmicrosoftoffice160excelsecurityfileblock,
     szRegVal_xl2macros };
-const GpoDefn_t LegacyFileBlock_4_xl2worksheets = {
-    false,
+const GpoDefn_t LegacyFileBlock_4_xl2worksheets = { 
+    false, 
     szGpPath_MicrosoftExcel2016ExcelOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_Excel2worksheets,
     szRegKey_softwarepoliciesmicrosoftoffice160excelsecurityfileblock,
     szRegVal_xl2worksheets };
-const GpoDefn_t LegacyFileBlock_5_xl3macros = {
-    false,
+const GpoDefn_t LegacyFileBlock_5_xl3macros = { 
+    false, 
     szGpPath_MicrosoftExcel2016ExcelOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_Excel3macrosheetsandadd_infiles,
     szRegKey_softwarepoliciesmicrosoftoffice160excelsecurityfileblock,
     szRegVal_xl3macros };
-const GpoDefn_t LegacyFileBlock_6_xl3worksheets = {
-    false,
+const GpoDefn_t LegacyFileBlock_6_xl3worksheets = { 
+    false, 
     szGpPath_MicrosoftExcel2016ExcelOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_Excel3worksheets,
     szRegKey_softwarepoliciesmicrosoftoffice160excelsecurityfileblock,
     szRegVal_xl3worksheets };
-const GpoDefn_t LegacyFileBlock_7_xl4macros = {
-    false,
+const GpoDefn_t LegacyFileBlock_7_xl4macros = { 
+    false, 
     szGpPath_MicrosoftExcel2016ExcelOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_Excel4macrosheetsandadd_infiles,
     szRegKey_softwarepoliciesmicrosoftoffice160excelsecurityfileblock,
     szRegVal_xl4macros };
-const GpoDefn_t LegacyFileBlock_8_xl4workbooks = {
-    false,
+const GpoDefn_t LegacyFileBlock_8_xl4workbooks = { 
+    false, 
     szGpPath_MicrosoftExcel2016ExcelOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_Excel4workbooks,
     szRegKey_softwarepoliciesmicrosoftoffice160excelsecurityfileblock,
     szRegVal_xl4workbooks };
-const GpoDefn_t LegacyFileBlock_9_xl4worksheets = {
-    false,
+const GpoDefn_t LegacyFileBlock_9_xl4worksheets = { 
+    false, 
     szGpPath_MicrosoftExcel2016ExcelOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_Excel4worksheets,
     szRegKey_softwarepoliciesmicrosoftoffice160excelsecurityfileblock,
     szRegVal_xl4worksheets };
-const GpoDefn_t LegacyFileBlock_10_xl95workbooks = {
-    false,
+const GpoDefn_t LegacyFileBlock_10_xl95workbooks = { 
+    false, 
     szGpPath_MicrosoftExcel2016ExcelOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_Excel95workbooks,
     szRegKey_softwarepoliciesmicrosoftoffice160excelsecurityfileblock,
     szRegVal_xl95workbooks };
-const GpoDefn_t LegacyFileBlock_11_xl9597workbooksandtemplates = {
-    false,
+const GpoDefn_t LegacyFileBlock_11_xl9597workbooksandtemplates = { 
+    false, 
     szGpPath_MicrosoftExcel2016ExcelOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_Excel95_97workbooksandtemplates,
     szRegKey_softwarepoliciesmicrosoftoffice160excelsecurityfileblock,
     szRegVal_xl9597workbooksandtemplates };
-const GpoDefn_t LegacyFileBlock_12_xl97workbooksandtemplates = {
-    false,
+const GpoDefn_t LegacyFileBlock_12_xl97workbooksandtemplates = { 
+    false, 
     szGpPath_MicrosoftExcel2016ExcelOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_Excel97_2003workbooksandtemplates,
     szRegKey_softwarepoliciesmicrosoftoffice160excelsecurityfileblock,
     szRegVal_xl97workbooksandtemplates };
-const GpoDefn_t LegacyFileBlock_13_openinprotectedview = {
-    false,
+const GpoDefn_t LegacyFileBlock_13_openinprotectedview = { 
+    false, 
     szGpPath_MicrosoftExcel2016ExcelOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_Setdefaultfileblockbehavior,
     szRegKey_softwarepoliciesmicrosoftoffice160excelsecurityfileblock,
     szRegVal_openinprotectedview };
-const GpoDefn_t LegacyFileBlock_14_htmlandxmlssfiles = {
-    false,
+const GpoDefn_t LegacyFileBlock_14_htmlandxmlssfiles = { 
+    false, 
     szGpPath_MicrosoftExcel2016ExcelOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_WebpagesandExcel2003XMLspreadsheets,
     szRegKey_softwarepoliciesmicrosoftoffice160excelsecurityfileblock,
     szRegVal_htmlandxmlssfiles };
-const GpoDefn_t LegacyFileBlock_15_binaryfiles = {
-    false,
+const GpoDefn_t LegacyFileBlock_15_binaryfiles = { 
+    false, 
     szGpPath_MicrosoftPowerPoint2016PowerPointOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_PowerPoint97_2003presentationsshowstemplatesandadd_infiles,
     szRegKey_softwarepoliciesmicrosoftoffice160powerpointsecurityfileblock,
     szRegVal_binaryfiles };
-const GpoDefn_t LegacyFileBlock_16_openinprotectedview = {
-    false,
+const GpoDefn_t LegacyFileBlock_16_openinprotectedview = { 
+    false, 
     szGpPath_MicrosoftPowerPoint2016PowerPointOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_Setdefaultfileblockbehavior,
     szRegKey_softwarepoliciesmicrosoftoffice160powerpointsecurityfileblock,
     szRegVal_openinprotectedview };
-const GpoDefn_t LegacyFileBlock_17_legacyfiles = {
-    false,
+const GpoDefn_t LegacyFileBlock_17_legacyfiles = { 
+    false, 
     szGpPath_MicrosoftProject2016ProjectOptionsSecurity,
     szGpName_Previous_versionfileformats,
     szRegKey_softwarepoliciesmicrosoftoffice160msprojectsecurity,
     szRegVal_legacyfiles };
-const GpoDefn_t LegacyFileBlock_18_visio2000files = {
-    false,
+const GpoDefn_t LegacyFileBlock_18_visio2000files = { 
+    false, 
     szGpPath_MicrosoftVisio2016VisioOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_Visio2000_2002BinaryDrawingsTemplatesandStencils,
     szRegKey_softwarepoliciesmicrosoftoffice160visiosecurityfileblock,
     szRegVal_visio2000files };
-const GpoDefn_t LegacyFileBlock_19_visio2003files = {
-    false,
+const GpoDefn_t LegacyFileBlock_19_visio2003files = { 
+    false, 
     szGpPath_MicrosoftVisio2016VisioOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_Visio2003_2010BinaryDrawingsTemplatesandStencils,
     szRegKey_softwarepoliciesmicrosoftoffice160visiosecurityfileblock,
     szRegVal_visio2003files };
-const GpoDefn_t LegacyFileBlock_20_visio50andearlierfiles = {
-    false,
+const GpoDefn_t LegacyFileBlock_20_visio50andearlierfiles = { 
+    false, 
     szGpPath_MicrosoftVisio2016VisioOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_Visio50orearlierBinaryDrawingsTemplatesandStencils,
     szRegKey_softwarepoliciesmicrosoftoffice160visiosecurityfileblock,
     szRegVal_visio50andearlierfiles };
-const GpoDefn_t LegacyFileBlock_21_openinprotectedview = {
-    false,
+const GpoDefn_t LegacyFileBlock_21_openinprotectedview = { 
+    false, 
     szGpPath_MicrosoftWord2016WordOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_Setdefaultfileblockbehavior,
     szRegKey_softwarepoliciesmicrosoftoffice160wordsecurityfileblock,
     szRegVal_openinprotectedview };
-const GpoDefn_t LegacyFileBlock_22_word2files = {
-    false,
+const GpoDefn_t LegacyFileBlock_22_word2files = { 
+    false, 
     szGpPath_MicrosoftWord2016WordOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_Word2andearlierbinarydocumentsandtemplates,
     szRegKey_softwarepoliciesmicrosoftoffice160wordsecurityfileblock,
     szRegVal_word2files };
-const GpoDefn_t LegacyFileBlock_23_word2000files = {
-    false,
+const GpoDefn_t LegacyFileBlock_23_word2000files = { 
+    false, 
     szGpPath_MicrosoftWord2016WordOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_Word2000binarydocumentsandtemplates,
     szRegKey_softwarepoliciesmicrosoftoffice160wordsecurityfileblock,
     szRegVal_word2000files };
-const GpoDefn_t LegacyFileBlock_24_word2003files = {
-    false,
+const GpoDefn_t LegacyFileBlock_24_word2003files = { 
+    false, 
     szGpPath_MicrosoftWord2016WordOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_Word2003binarydocumentsandtemplates,
     szRegKey_softwarepoliciesmicrosoftoffice160wordsecurityfileblock,
     szRegVal_word2003files };
-const GpoDefn_t LegacyFileBlock_25_word2007files = {
-    false,
+const GpoDefn_t LegacyFileBlock_25_word2007files = { 
+    false, 
     szGpPath_MicrosoftWord2016WordOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_Word2007andlaterbinarydocumentsandtemplates,
     szRegKey_softwarepoliciesmicrosoftoffice160wordsecurityfileblock,
     szRegVal_word2007files };
-const GpoDefn_t LegacyFileBlock_26_word60files = {
-    false,
+const GpoDefn_t LegacyFileBlock_26_word60files = { 
+    false, 
     szGpPath_MicrosoftWord2016WordOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_Word60binarydocumentsandtemplates,
     szRegKey_softwarepoliciesmicrosoftoffice160wordsecurityfileblock,
     szRegVal_word60files };
-const GpoDefn_t LegacyFileBlock_27_word95files = {
-    false,
+const GpoDefn_t LegacyFileBlock_27_word95files = { 
+    false, 
     szGpPath_MicrosoftWord2016WordOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_Word95binarydocumentsandtemplates,
     szRegKey_softwarepoliciesmicrosoftoffice160wordsecurityfileblock,
     szRegVal_word95files };
-const GpoDefn_t LegacyFileBlock_28_word97files = {
-    false,
+const GpoDefn_t LegacyFileBlock_28_word97files = { 
+    false, 
     szGpPath_MicrosoftWord2016WordOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_Word97binarydocumentsandtemplates,
     szRegKey_softwarepoliciesmicrosoftoffice160wordsecurityfileblock,
     szRegVal_word97files };
-const GpoDefn_t LegacyFileBlock_29_wordxpfiles = {
-    false,
+const GpoDefn_t LegacyFileBlock_29_wordxpfiles = { 
+    false, 
     szGpPath_MicrosoftWord2016WordOptionsSecurityTrustCenterFileBlockSettings,
     szGpName_WordXPbinarydocumentsandtemplates,
     szRegKey_softwarepoliciesmicrosoftoffice160wordsecurityfileblock,
@@ -779,6 +791,8 @@ const GpoItem_t BlockMacrosFromRunningInOfficeFilesFromTheInternet[] = {
     { BlockMacrosFromRunningInOfficeFilesFromTheInternet_3_blockcontentexecutionfrominternet, BlockMacrosFromRunningInOfficeFilesFromTheInternet_choice_Enabled },
     { BlockMacrosFromRunningInOfficeFilesFromTheInternet_4_blockcontentexecutionfrominternet, BlockMacrosFromRunningInOfficeFilesFromTheInternet_choice_Enabled },
     { BlockMacrosFromRunningInOfficeFilesFromTheInternet_5_blockcontentexecutionfrominternet, BlockMacrosFromRunningInOfficeFilesFromTheInternet_choice_Enabled },
+    { BlockMacrosFromRunningInOfficeFilesFromTheInternet_6_blockcontentexecutionfrominternet, BlockMacrosFromRunningInOfficeFilesFromTheInternet_choice_Enabled },
+    { BlockMacrosFromRunningInOfficeFilesFromTheInternet_7_blockcontentexecutionfrominternet, BlockMacrosFromRunningInOfficeFilesFromTheInternet_choice_Enabled },
     { NULL_GpoDefn, NULL_GpoItemChoice } };
 
 // DisableAllUnsignedMacros-basic

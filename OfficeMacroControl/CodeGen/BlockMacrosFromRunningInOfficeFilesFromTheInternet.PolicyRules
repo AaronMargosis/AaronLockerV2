@@ -1,55 +1,9 @@
-<PolicyRules>
-  <UserConfig>
-    <Key>software\policies\microsoft\office\16.0\access\security</Key>
-    <Value>blockcontentexecutionfrominternet</Value>
-    <RegType>REG_DWORD</RegType>
-    <RegData>1</RegData>
-    <SourceFile>
-    </SourceFile>
-    <PolicyName>MSFT M365 Apps for enterprise 2104 - User</PolicyName>
-  </UserConfig>
-  <UserConfig>
-    <Key>software\policies\microsoft\office\16.0\excel\security</Key>
-    <Value>blockcontentexecutionfrominternet</Value>
-    <RegType>REG_DWORD</RegType>
-    <RegData>1</RegData>
-    <SourceFile>
-    </SourceFile>
-    <PolicyName>MSFT M365 Apps for enterprise 2104 - User</PolicyName>
-  </UserConfig>
-  <UserConfig>
-    <Key>software\policies\microsoft\office\16.0\powerpoint\security</Key>
-    <Value>blockcontentexecutionfrominternet</Value>
-    <RegType>REG_DWORD</RegType>
-    <RegData>1</RegData>
-    <SourceFile>
-    </SourceFile>
-    <PolicyName>MSFT M365 Apps for enterprise 2104 - User</PolicyName>
-  </UserConfig>
-  <UserConfig>
-    <Key>software\policies\microsoft\office\16.0\visio\security</Key>
-    <Value>blockcontentexecutionfrominternet</Value>
-    <RegType>REG_DWORD</RegType>
-    <RegData>1</RegData>
-    <SourceFile>
-    </SourceFile>
-    <PolicyName>MSFT M365 Apps for enterprise 2104 - User</PolicyName>
-  </UserConfig>
-  <UserConfig>
-    <Key>software\policies\microsoft\office\16.0\word\security</Key>
-    <Value>blockcontentexecutionfrominternet</Value>
-    <RegType>REG_DWORD</RegType>
-    <RegData>1</RegData>
-    <SourceFile>
-    </SourceFile>
-    <PolicyName>MSFT M365 Apps for enterprise 2104 - User</PolicyName>
-  </UserConfig>
-  <CSE-Machine>
-    <GUID>{35378EAC-683F-11D2-A89A-00C04FBBCFA2}</GUID>
-    <Name>Registry Policy</Name>
-  </CSE-Machine>
-  <CSE-User>
-    <GUID>{35378EAC-683F-11D2-A89A-00C04FBBCFA2}</GUID>
-    <Name>Registry Policy</Name>
-  </CSE-User>
+﻿<PolicyRules>
+<UserConfig><Key>software\policies\microsoft\office\16.0\access\security</Key><Value>blockcontentexecutionfrominternet</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile/><PolicyName>MSFT M365 Apps for enterprise 2412 - User</PolicyName></UserConfig>
+<UserConfig><Key>software\policies\microsoft\office\16.0\excel\security</Key><Value>blockcontentexecutionfrominternet</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile/><PolicyName>MSFT M365 Apps for enterprise 2412 - User</PolicyName></UserConfig>
+<UserConfig><Key>software\policies\microsoft\office\16.0\ms project\security</Key><Value>blockcontentexecutionfrominternet</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile/><PolicyName>MSFT M365 Apps for enterprise 2412 - User</PolicyName></UserConfig>
+<UserConfig><Key>software\policies\microsoft\office\16.0\powerpoint\security</Key><Value>blockcontentexecutionfrominternet</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile/><PolicyName>MSFT M365 Apps for enterprise 2412 - User</PolicyName></UserConfig>
+<UserConfig><Key>software\policies\microsoft\office\16.0\publisher\security</Key><Value>blockcontentexecutionfrominternet</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile/><PolicyName>MSFT M365 Apps for enterprise 2412 - User</PolicyName></UserConfig>
+<UserConfig><Key>software\policies\microsoft\office\16.0\visio\security</Key><Value>blockcontentexecutionfrominternet</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile/><PolicyName>MSFT M365 Apps for enterprise 2412 - User</PolicyName></UserConfig>
+<UserConfig><Key>software\policies\microsoft\office\16.0\word\security</Key><Value>blockcontentexecutionfrominternet</Value><RegType>REG_DWORD</RegType><RegData>1</RegData><SourceFile/><PolicyName>MSFT M365 Apps for enterprise 2412 - User</PolicyName></UserConfig>
 </PolicyRules>
