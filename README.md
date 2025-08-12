@@ -1,8 +1,42 @@
 # AaronLockerV2
+<p align="right"><i>
+by Aaron Margosis<br>
+August 2025
+</i></p>
 
 ## "What it is" overview
 
-[TODO: Explain "AaronLocker," goals, history, ...]
+Application allowlisting is a powerful defense against malware, including ransomware, and is strongly recommended by security experts. 
+Properly configured, allowlisting can prevent users from being tricked into running malicious code and from intentionally downloading 
+and running unauthorized programs, and can severely limit what an exploited vulnerability in a user program can accomplish. Unlike
+with traditional anti-malware, anything not explicitly allowed by an allowlisting rule is not allowed to execute, which dramatically
+reduces attack surface.
+
+AaronLocker makes the creation and maintenance of robust and strict allowlisting rules on Windows as easy and practical as possible. 
+AaronLocker is built primarily on AppLocker along with Microsoft Office macro controls, and some WDAC rules to close identified gaps in AppLocker.
+
+AaronLocker restricts program and script execution only by non-administrative users;
+administrative users are allowed to run anything they need. Two principles behind this approach:
+
+1. If your organization is concerned about security, your users should log on with non-administrative user accounts; 
+administrative accounts should be used only when needed for computer management tasks and only by trained and authorized individuals.
+
+2. A primary reason for the complexity (and failures) of many allowlisting projects is that they try to constrain what administrative users can execute in
+ways that an administrative user cannot bypass, while at the same time not impeding their legitimate tasks.
+
+AaronLocker’s AppLocker strategy can be summed up as: if a non-admin could have put a program or script onto the computer – i.e., 
+it is in a user-writable directory – don't allow it to execute unless it has already been specifically allowed by an administrator. 
+This will stop execution if a user is tricked into downloading malware, if an exploitable vulnerability in a program the user is 
+running tries to put malware on the computer, or if a user intentionally tries to download and run unauthorized programs.
+
+Because Microsoft Office is itself a programming platform that malware authors regularly target, AaronLockerV2 also simplifies the application
+of macro control policies.
+
+The original AaronLocker implementation created only AppLocker rules, and was written as PowerShell scripts. Version 2 offers a major upgrade:
+* Completely rewritten in C++, and published with signed binaries.
+* The automation and detail of the AppLocker rules creation is vastly improved.
+* Tool added to support implementation of Microsoft Office macro control.
+* Tool added to support implementation of WDAC rules to close identified gaps in AppLocker.
 
 ## "How-To" overview
 
