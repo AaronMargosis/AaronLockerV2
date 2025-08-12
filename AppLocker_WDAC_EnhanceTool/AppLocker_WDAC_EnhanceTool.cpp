@@ -7,6 +7,8 @@
 //
 
 #include <Windows.h>
+#include <io.h>
+#include <fcntl.h>
 #include <iostream>
 #include "../AaronLocker_CommonUtils/AaronLocker_CommonUtils.h"
 #include "EmbeddedFiles.h"
@@ -119,6 +121,12 @@ static bool DeleteTargetFile(const wchar_t* szTargetFile)
 
 int wmain(int argc, wchar_t** argv)
 {
+	// Set output mode to UTF8.
+	if (_setmode(_fileno(stdout), _O_U8TEXT) == -1 || _setmode(_fileno(stderr), _O_U8TEXT) == -1)
+	{
+		std::wcerr << L"Unable to set stdout and/or stderr modes to UTF8." << std::endl;
+	}
+
 	// Internal sanity check before trying to use constructed paths:
 	CIPolicyPaths::ValidateConstructedPaths();
 

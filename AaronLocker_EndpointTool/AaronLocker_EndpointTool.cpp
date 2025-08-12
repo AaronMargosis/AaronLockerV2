@@ -159,7 +159,7 @@ int wmain(int argc, wchar_t** argv)
 			std::wcerr << L"Cannot open output file " << sOutFile << std::endl;
 			Usage(NULL, argv[0]);
 		}
-		// Ensure that output is UTF-8.
+		// Ensure that file output is UTF-8.
 		pStream->imbue(Utf8FileUtility::LocaleForWritingUtf8File());
 	}
 
