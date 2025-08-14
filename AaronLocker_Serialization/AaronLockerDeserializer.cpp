@@ -16,6 +16,32 @@ AaronLockerDeserializer::AaronLockerDeserializer()
 {
 }
 
+/// <summary>
+/// Validate the number of tab-delimited columns in row. Report error if invalid.
+/// </summary>
+/// <param name="nExpected">Input: number of expected columns</param>
+/// <param name="vStrings">Input: vector of strings</param>
+/// <param name="szHeader">Input: name of current section</param>
+/// <param name="strProcessingError">Output: here to report anomalies</param>
+/// <param name="retval">Output: set to false on failure; not modified on success</param>
+/// <returns>true if expected number found, false otherwise</returns>
+static bool ValidColumnCount(
+	const size_t nExpected, 
+	const std::vector<std::wstring>& vStrings, 
+	const wchar_t* szHeader, 
+	std::wstringstream& strProcessingError,
+	bool& retval)
+{
+	if (nExpected == vStrings.size())
+		return true;
+	else
+	{
+		strProcessingError << L"Format error in scan file, section " << szHeader << L": expected " << nExpected << L" columns, saw " << vStrings.size() << std::endl;
+		retval = false;
+		return false;
+	}
+}
+
 // The whole thing in one function.
 bool AaronLockerDeserializer::Deserialize(const wchar_t* szFilename, std::wstring& sErrorInfo)
 {
@@ -107,9 +133,10 @@ bool AaronLockerDeserializer::Deserialize(const wchar_t* szFilename, std::wstrin
 			{
 				// Each line is expected to have three delimited fields
 				StdGetlineCRLF(fs, sLine);
+				if (sLine.length() == 0) continue;
 				std::vector<std::wstring> vStrings;
 				SplitStringToVector(sLine, chrDelim, vStrings);
-				if (3 == vStrings.size())
+				if (ValidColumnCount(3, vStrings, szHeader_UnsafeDirectoriesWindows, strProcessingError, retval))
 				{
 					m_unsafeWindowsSubdirs.push_back(
 						UnsafeDirectoryInfo_t(
@@ -129,10 +156,11 @@ bool AaronLockerDeserializer::Deserialize(const wchar_t* szFilename, std::wstrin
 			while (sLine.length() > 0 && fs.good())
 			{
 				StdGetlineCRLF(fs, sLine);
+				if (sLine.length() == 0) continue;
 				std::vector<std::wstring> vStrings;
 				SplitStringToVector(sLine, chrDelim, vStrings);
 				// Each line is expected to have three delimited fields
-				if (3 == vStrings.size())
+				if (ValidColumnCount(3, vStrings, szHeader_UnsafeDirectoriesProgramFiles, strProcessingError, retval))
 				{
 					m_unsafeProgFilesSubdirs.push_back(
 						UnsafeDirectoryInfo_t(
@@ -152,9 +180,10 @@ bool AaronLockerDeserializer::Deserialize(const wchar_t* szFilename, std::wstrin
 			while (sLine.length() > 0 && fs.good())
 			{
 				StdGetlineCRLF(fs, sLine);
+				if (sLine.length() == 0) continue;
 				std::vector<std::wstring> vStrings;
 				SplitStringToVector(sLine, chrDelim, vStrings);
-				if (3 == vStrings.size())
+				if (ValidColumnCount(3, vStrings, szHeader_PubInfoWindowsDirExclusions, strProcessingError, retval))
 				{
 					m_PubInfoForWindowsExclusions.push_back(
 						PubInfoForExclusions_t(
@@ -174,9 +203,10 @@ bool AaronLockerDeserializer::Deserialize(const wchar_t* szFilename, std::wstrin
 			while (sLine.length() > 0 && fs.good())
 			{
 				StdGetlineCRLF(fs, sLine);
+				if (sLine.length() == 0) continue;
 				std::vector<std::wstring> vStrings;
 				SplitStringToVector(sLine, chrDelim, vStrings);
-				if (2 == vStrings.size())
+				if (ValidColumnCount(2, vStrings, szHeader_PlatformSafePathInfo, strProcessingError, retval))
 				{
 					// Two fields: app name/label, and directory path.
 					m_PlatformSafePathInfo.push_back(
@@ -196,9 +226,11 @@ bool AaronLockerDeserializer::Deserialize(const wchar_t* szFilename, std::wstrin
 			while (sLine.length() > 0 && fs.good())
 			{
 				StdGetlineCRLF(fs, sLine);
+				if (sLine.length() == 0) continue;
 				std::vector<std::wstring> vStrings;
 				SplitStringToVector(sLine, chrDelim, vStrings);
-				if (17 == vStrings.size())
+				//NOTE: if fields are added or removed, make sure to change this size check to correspond.
+				if (ValidColumnCount(19, vStrings, szHeader_FileDetails, strProcessingError, retval))
 				{
 					FileDetails_t fileDetails;
 					size_t ix = 0;
@@ -233,9 +265,10 @@ bool AaronLockerDeserializer::Deserialize(const wchar_t* szFilename, std::wstrin
 			while (sLine.length() > 0 && fs.good())
 			{
 				StdGetlineCRLF(fs, sLine);
+				if (sLine.length() == 0) continue;
 				std::vector<std::wstring> vStrings;
 				SplitStringToVector(sLine, chrDelim, vStrings);
-				if (9 == vStrings.size())
+				if (ValidColumnCount(9, vStrings, szHeader_PackagedAppInfo, strProcessingError, retval))
 				{
 					PackagedAppInfo_t data;
 					size_t ix = 0;
@@ -260,9 +293,10 @@ bool AaronLockerDeserializer::Deserialize(const wchar_t* szFilename, std::wstrin
 			while (sLine.length() > 0 && fs.good())
 			{
 				StdGetlineCRLF(fs, sLine);
+				if (sLine.length() == 0) continue;
 				std::vector<std::wstring> vStrings;
 				SplitStringToVector(sLine, chrDelim, vStrings);
-				if (8 == vStrings.size())
+				if (ValidColumnCount(8, vStrings, szHeader_ShellLinks, strProcessingError, retval))
 				{
 					ShellLinkDataContext_t data;
 					size_t ix = 0;

@@ -11,12 +11,10 @@ Sets the maximum log size for each of the AppLocker event logs to 1GB.
 #>
 
 # Configure AppIDSvc for Automatic start
-Set-Service -Name AppIDSvc -StartupType ([System.ServiceProcess.ServiceStartMode]::Automatic)
-#SC.EXE config AppIdSvc start= auto
+Set-Service -Name AppIDSvc -StartupType Automatic
 
 # Start the service if not already running
 Start-Service -Name AppIDSvc
-#SC.exe start appidsvc
 
 # Set the primary AppLocker event log sizes to 1GB
 

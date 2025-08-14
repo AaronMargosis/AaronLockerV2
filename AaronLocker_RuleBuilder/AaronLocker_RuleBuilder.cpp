@@ -529,7 +529,7 @@ int wmain(int argc, wchar_t** argv)
 				<< L"Error deserializing " << *iterFiles << L":" << std::endl
 				<< sErrorInfo << std::endl
 				<< std::endl;
-			Usage(NULL, argv[0]);
+			exit(-2);
 		}
 		else
 		{

@@ -89,7 +89,10 @@ while( $ixCurr -lt $lines.Length )
     {
         $ixBlockStart = $ixCurr
         while ($lines[$ixCurr].Length -gt 0) { $ixCurr++ }
-        $result.ErrorInfo = $lines[$ixBlockStart .. ($ixCurr-1)]
+        if ($ixCurr -gt $ixBlockStart)
+        {
+            $result.ErrorInfo = $lines[$ixBlockStart .. ($ixCurr-1)]
+        }
         $ixCurr++
     }
     elseif ($line -eq $HdrUnsafeUnderWindows)
