@@ -423,7 +423,7 @@ $AutoNGENPattern = "^(%OSDRIVE%|C:)\\Users\\[^\\]*\\AppData\\Local\\Packages\\.*
 # PowerShell script-policy-test file - PS creates files in user temp directory and tests against AppLocker script policy to determine whether to run in ConstrainedLanguage mode.
 # Filter out those test files by default.
 # Current implementation: match partial path of file in temp directory with form "XXXXXXXX.XXX.PS*" or "__PSScriptPolicyTest_XXXXXXXX.XXX.PS*"
-$PsPolicyTestPattern = "\\APPDATA\\LOCAL\\TEMP\\(__PSScriptPolicyTest_)?[A-Z0-9]{8}\.[A-Z0-9]{3}\.PS"
+$PsPolicyTestPattern = "\\APPDATA\\LOCAL\\TEMP(\\[0-9]+)?\\(__PSScriptPolicyTest_)?[A-Z0-9]{8}\.[A-Z0-9]{3}\.PS"
 $PsPolicyTestFileHash1 = "0x6B86B273FF34FCE19D6B804EFF5A3F5747ADA4EAA22F1D49C01E52DDB7875B4B"
 $PsPolicyTestFileHash2 = "0x96AD1146EB96877EAB5942AE0736B82D8B5E2039A80D3D6932665C1A4C87DCF7"
 <# Implementation notes: attempts to match against a fixed hash value instead of a somewhat complex pattern match.
