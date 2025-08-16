@@ -6,6 +6,8 @@ August 2025
 
 ## "What it is" overview
 
+_Full source code, with signed compiled executables/scripts in the Releases secion._
+
 AaronLocker makes the creation and maintenance of robust and strict allowlisting rules on Windows as easy and practical as possible. 
 AaronLocker is built primarily on AppLocker along with Microsoft Office macro controls, and some WDAC rules to close identified gaps in AppLocker.
 
