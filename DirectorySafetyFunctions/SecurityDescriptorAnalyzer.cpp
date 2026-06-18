@@ -30,6 +30,7 @@ bool SecurityDescriptorAnalyzer::IsNonadminWritable(
 	if (ERROR_INSUFFICIENT_BUFFER == dwLastErr && dwLengthNeeded > 0)
 	{
 		pSD = (PSECURITY_DESCRIPTOR)(new byte[dwLengthNeeded]);
+		//TODO: Probably not compatible with long file paths -- need to handle that case.
 		ret = GetFileSecurityW(
 			szFileSystemPath,
 			OWNER_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION,

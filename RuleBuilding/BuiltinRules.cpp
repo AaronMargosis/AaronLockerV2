@@ -301,6 +301,10 @@ void BuiltInRules_SingletonImpl::Initialize()
 		PublisherRuleItem(
 			L"Zoom",
 			L"O=ZOOM VIDEO COMMUNICATIONS, INC., L=SAN JOSE, S=CALIFORNIA, C=US"
+		),
+		PublisherRuleItem(
+			L"Zoom",
+			L"O=ZOOM COMMUNICATIONS, INC., L=SAN JOSE, S=CALIFORNIA, C=US"
 		)
 	};
 
@@ -704,6 +708,10 @@ void BuiltInRules_SingletonImpl::Initialize()
 			L"MICROSOFT.AIP.PDFPROTECTOR.DLL"
 		},
 		{
+			L"MICROSOFT COGNITIVE SERVICES SPEECH SDK",
+			L"MICROSOFT.COGNITIVESERVICES.SPEECH.CORE.DLL"
+		},
+		{
 			L"MICROSOFT EDGE DOMAIN ACTIONS COMPONENT",
 			szStar
 		},
@@ -731,6 +739,18 @@ void BuiltInRules_SingletonImpl::Initialize()
 				MicrosoftPublisher(),
 				OneDriveDlls[ix].szProd,
 				OneDriveDlls[ix].szBinName,
+				RuleItem::Collection_t::Dll
+			)
+		);
+	}
+	// Google DLL observed in OneDrive under user profile.
+	{
+		DefaultPublisherRules.push_back(
+			PublisherRuleItem(
+				sOneDrive,
+				L"O=GOOGLE LLC, L=MOUNTAIN VIEW, S=CALIFORNIA, C=US",
+				L"WIDEVINE CONTENT DECRYPTION MODULE",
+				L"WIDEVINECDM.DLL",
 				RuleItem::Collection_t::Dll
 			)
 		);

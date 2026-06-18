@@ -15,6 +15,7 @@
 #include <sstream>
 #include <locale>
 #include "../AaronLocker_CommonUtils/StringUtils-Windows.h"
+#include "../AaronLocker_CommonUtils/FileSystemUtils-Windows.h"
 #include "AuthenticodeTrustInfo.h"
 
 
@@ -73,7 +74,11 @@ bool GetEmbeddedSignatureInfo(
 	// The file to inspect
 	WINTRUST_FILE_INFO wtfi = { 0 };
 	wtfi.cbStruct = sizeof(wtfi);
-	wtfi.pcwszFilePath = szFilename;
+	// WinVerifyTrust is not compatible with long file paths (> approx MAX_PATH) unless prepended with \\?\
+	// so fix the path proactively.
+	std::wstring sFilePath = IsExtendedPathSpec(szFilename) ? szFilename : PathToExtendedPath(szFilename);
+	std::vector<wchar_t> vExtFilePath(sFilePath.c_str(), sFilePath.c_str() + sFilePath.length() + 1);
+	wtfi.pcwszFilePath = &vExtFilePath[0];
 
 	// Authenticode policy provider
 	GUID guid = WINTRUST_ACTION_GENERIC_VERIFY_V2;

@@ -4,6 +4,29 @@
 
 //TODO: Add an option to remove store app rules
 //TODO: Consider making the command-line switches case sensitive, and then distinguishing -r R -rr -RR.
+//TODO: Offer +r and +rr. Exclusive choice between -r/-rr (which remove rules) and +r/+rr (which add rules). Can use one pattern or the other. +r/+rr means include only the named rule sets; -r/-rr means include all except the named rule sets.
+//TODO: Figure out how to create a rule so that this doesn't get blocked:
+/*
+	Location      : Packaged app
+	GenericPath   : 34791E63.CanonPrintAssistant
+	GenericDir    : 34791E63.CanonPrintAssistant
+	OriginalPath  : 34791E63.CanonPrintAssistant
+	FileName      : 34791E63.CanonPrintAssistant
+	FileExt       :
+	FileType      : APPX
+	PublisherName : CN=41BAE105-1234-432C-A39C-1B7D1C24232B
+	ProductName   : 34791E63.CANONPRINTASSISTANT
+	BinaryName    : APPX
+	FileVersion   : 1.0.45.00
+	Hash          : N/A
+	UserSID       : S-1-5-18
+	UserName      : NT AUTHORITY\SYSTEM
+	MachineName   : DESKTOP-9C7URV8
+	EventTime     : 2026-06-18T01:11:58.6002740
+	EventTimeXL   : 2026-06-18 01:11:58
+	PID           : 25392
+	EventType     : Error
+*/
 
 #include <io.h>
 #include <fcntl.h>
@@ -133,7 +156,7 @@ static void Usage(const wchar_t* szError, const wchar_t* argv0)
 		<< std::endl
 		<< L"Usage:" << std::endl
 		<< std::endl
-		<< L"  " << sExe << L" +s scanFilePath... [+o appRuleOption...] [+w windowsExeOption...] [-r ruleSetToRemove...] [-rr ruleSetsToRemove...] [+x XmlOutputDirectory]" << std::endl
+		<< L"  " << sExe << L" +s scanFilePath... [+o appRuleOption...] [+w windowsExeOption...] [-r ruleSetToRemove...] [-rr ruleSetsToRemove...] [+out filename | +x XmlOutputDirectory]" << std::endl
 		<< std::endl
 		<< L"    +s:  import a serialized endpoint scan file (full scan or one-directory scan)." << std::endl
 		<< L"         You can specify \"+s scanFilePath\" multiple times on the command line." << std::endl
@@ -168,6 +191,8 @@ static void Usage(const wchar_t* szError, const wchar_t* argv0)
 		<< L"         For example, \"-rr Symbol\" will remove all proposed rule sets with names beginning with \"Symbol\"." << std::endl
 		<< L"         You can specify \"-rr ruleSetsToRemove\" multiple times." << std::endl
 		<< std::endl
+		<< L"    +out: Write detailed proposed rule set information to \"filename\" for further analysis." << std::endl
+		<< std::endl
 		<< L"    +x:  Export XML policy files to XmlOutputDirectory." << std::endl
 		<< std::endl
 		<< L"    If you do not specify +x to export XML files, " << sExe << L" lists rule set names and the" << std::endl
@@ -192,7 +217,7 @@ static void Usage(const wchar_t* szError, const wchar_t* argv0)
 
 typedef std::set<std::wstring> sortedStrings;
 
-static void Helper_AddProposedRuleToSet(
+static void Helper_AddProposedRuleSummaryToSet(
 	const std::wstring& sRuleInfo,
 	RuleItem::Collection_t collection,
 	sortedStrings& exeRules,
@@ -224,23 +249,23 @@ static void Helper_AddProposedRuleToSet(
 	}
 }
 
-static void Helper_WriteProposedRuleSet(RuleItem::Collection_t collection, const sortedStrings& rules, std::wostream& oStream)
+static void Helper_WriteProposedRuleSetSummary(RuleItem::Collection_t collection, const sortedStrings& rules, std::wostream& oStream)
 {
 	if (rules.size() > 0)
 	{
-		oStream << L"\t\t" << RuleItem::Collection2Str(collection) << std::endl;
+		oStream << L"    " << RuleItem::Collection2Str(collection) << std::endl;
 		for (
-			std::set<std::wstring>::const_iterator iterRules = rules.begin();
+			sortedStrings::const_iterator iterRules = rules.begin();
 			iterRules != rules.end();
 			++iterRules
 			)
 		{
-			oStream << L"\t\t\t" << *iterRules << std::endl;
+			oStream << L"      " << *iterRules << std::endl;
 		}
 	}
 }
 
-static void Helper_WriteProposedRuleSets(
+static void Helper_WriteProposedRuleSetSummaries(
 	const sortedStrings& exeRules,
 	const sortedStrings& dllRules,
 	const sortedStrings& msiRules,
@@ -248,17 +273,17 @@ static void Helper_WriteProposedRuleSets(
 	std::wostream& oStream
 )
 {
-	Helper_WriteProposedRuleSet(RuleItem::Collection_t::Exe, exeRules, oStream);
-	Helper_WriteProposedRuleSet(RuleItem::Collection_t::Dll, dllRules, oStream);
-	Helper_WriteProposedRuleSet(RuleItem::Collection_t::Msi, msiRules, oStream);
-	Helper_WriteProposedRuleSet(RuleItem::Collection_t::Script, scriptRules, oStream);
+	Helper_WriteProposedRuleSetSummary(RuleItem::Collection_t::Exe, exeRules, oStream);
+	Helper_WriteProposedRuleSetSummary(RuleItem::Collection_t::Dll, dllRules, oStream);
+	Helper_WriteProposedRuleSetSummary(RuleItem::Collection_t::Msi, msiRules, oStream);
+	Helper_WriteProposedRuleSetSummary(RuleItem::Collection_t::Script, scriptRules, oStream);
 }
 
 /// <summary>
 /// Output information about proposed rule sets for review to stdout.
 /// </summary>
 /// <param name="ruleAnalyzer"></param>
-static void WriteProposedRuleSetInfo(const RuleAnalyzer& ruleAnalyzer)
+static void WriteProposedRuleSetSummary(const RuleAnalyzer& ruleAnalyzer)
 {
 
 	// Output information about proposed rule sets for review to stdout.
@@ -292,9 +317,9 @@ static void WriteProposedRuleSetInfo(const RuleAnalyzer& ruleAnalyzer)
 				{
 					bItemsToReport = true;
 
-					strRuleSetInfo << L"\tPath rules: " << pRuleSet->m_PathRules.size() << std::endl;
+					strRuleSetInfo << L"  Path rules: " << pRuleSet->m_PathRules.size() << std::endl;
 
-					std::set<std::wstring> exeRules, dllRules, msiRules, scriptRules;
+					sortedStrings exeRules, dllRules, msiRules, scriptRules;
 
 					PathRuleCollection_t::const_iterator iterRules;
 					for (
@@ -304,15 +329,15 @@ static void WriteProposedRuleSetInfo(const RuleAnalyzer& ruleAnalyzer)
 						)
 					{
 						std::wstring sRuleInfo = iterRules->m_sPath;
-						Helper_AddProposedRuleToSet(sRuleInfo, iterRules->m_collection, exeRules, dllRules, msiRules, scriptRules);
+						Helper_AddProposedRuleSummaryToSet(sRuleInfo, iterRules->m_collection, exeRules, dllRules, msiRules, scriptRules);
 					}
-					Helper_WriteProposedRuleSets(exeRules, dllRules, msiRules, scriptRules, strRuleSetInfo);
+					Helper_WriteProposedRuleSetSummaries(exeRules, dllRules, msiRules, scriptRules, strRuleSetInfo);
 				}
 				if (0 != pRuleSet->m_PublisherRules.size())
 				{
-					strRuleSetInfo << L"\tPublisher rules: " << pRuleSet->m_PublisherRules.size() << std::endl;
+					strRuleSetInfo << L"  Publisher rules: " << pRuleSet->m_PublisherRules.size() << std::endl;
 
-					std::set<std::wstring> exeRules, dllRules, msiRules, scriptRules;
+					sortedStrings exeRules, dllRules, msiRules, scriptRules;
 
 					PublisherRuleCollection_t::const_iterator iterRules;
 					for (
@@ -325,22 +350,22 @@ static void WriteProposedRuleSetInfo(const RuleAnalyzer& ruleAnalyzer)
 						{
 							bItemsToReport = true;
 							std::wstring sRuleInfo = iterRules->m_sPublisher + L" \\ " + iterRules->m_sProduct + L" \\ " + iterRules->m_sBinaryName;
-							Helper_AddProposedRuleToSet(sRuleInfo, iterRules->m_collection, exeRules, dllRules, msiRules, scriptRules);
+							Helper_AddProposedRuleSummaryToSet(sRuleInfo, iterRules->m_collection, exeRules, dllRules, msiRules, scriptRules);
 						}
 						else
 						{
-							strAppxRules << L"\t" << iterRules->m_sName << std::endl;
+							strAppxRules << L"  " << iterRules->m_sName << std::endl;
 						}
 					}
-					Helper_WriteProposedRuleSets(exeRules, dllRules, msiRules, scriptRules, strRuleSetInfo);
+					Helper_WriteProposedRuleSetSummaries(exeRules, dllRules, msiRules, scriptRules, strRuleSetInfo);
 				}
 				if (0 != pRuleSet->m_HashRules.size())
 				{
 					bItemsToReport = true;
 
-					strRuleSetInfo << L"\tHash rules: " << pRuleSet->m_HashRules.size() << std::endl;
+					strRuleSetInfo << L"  Hash rules: " << pRuleSet->m_HashRules.size() << std::endl;
 
-					std::set<std::wstring> exeRules, dllRules, msiRules, scriptRules;
+					sortedStrings exeRules, dllRules, msiRules, scriptRules;
 
 					HashRuleCollection_t::const_iterator iterRules;
 					size_t longestFnameLength = 0;
@@ -361,9 +386,9 @@ static void WriteProposedRuleSetInfo(const RuleAnalyzer& ruleAnalyzer)
 					{
 						std::wstringstream strRuleInfo;
 						strRuleInfo << std::left << std::setw(longestFnameLength + 2) << iterRules->m_sFilename << replaceStringAll(iterRules->m_sDescription, L"\r\n", L"");
-						Helper_AddProposedRuleToSet(strRuleInfo.str(), iterRules->m_collection, exeRules, dllRules, msiRules, scriptRules);
+						Helper_AddProposedRuleSummaryToSet(strRuleInfo.str(), iterRules->m_collection, exeRules, dllRules, msiRules, scriptRules);
 					}
-					Helper_WriteProposedRuleSets(exeRules, dllRules, msiRules, scriptRules, strRuleSetInfo);
+					Helper_WriteProposedRuleSetSummaries(exeRules, dllRules, msiRules, scriptRules, strRuleSetInfo);
 				}
 
 				if (bItemsToReport)
@@ -383,6 +408,100 @@ static void WriteProposedRuleSetInfo(const RuleAnalyzer& ruleAnalyzer)
 	}
 }
 
+static void WriteProposedRuleSetsForAnalysis(const RuleAnalyzer& ruleAnalyzer, const std::wstring& sCommentSelectedOptions, std::wostream& strOut)
+{
+	// Output detailed information about proposed rule sets for analysis to input stream.
+
+	std::vector<std::wstring> proposedRuleSetNames;
+	std::wstringstream strRuleBuilderOptions, strProposedPathRules, strProposedPublisherRules, strProposedHashRules;
+	const wchar_t* szTab = L"\t";
+	strRuleBuilderOptions
+		<< L":::: RULE BUILDER OPTIONS" << std::endl
+		<< sCommentSelectedOptions << std::endl;
+	strProposedPathRules
+		<< L":::: PROPOSED PATH RULES" << std::endl
+		<< L"RuleSetName\tCollection\tName\tDescription\tPath" << std::endl;
+	strProposedPublisherRules
+		<< L":::: PROPOSED PUBLISHER RULES" << std::endl
+		<< L"RuleSetName\tCollection\tName\tDescription\tPublisher\tProduct\tBinaryName" << std::endl;
+	strProposedHashRules
+		<< L":::: PROPOSED HASH RULES" << std::endl
+		<< L"RuleSetName\tCollection\tName\tDescription\tFilename\tFileLength\tHash" << std::endl;
+	size_t nRuleSets = ruleAnalyzer.GetProposedRuleSetNames(proposedRuleSetNames);
+	if (nRuleSets > 0)
+	{
+		for (
+			std::vector<std::wstring>::const_iterator iterNames = proposedRuleSetNames.begin();
+			iterNames != proposedRuleSetNames.end();
+			++iterNames
+			)
+		{
+			const std::wstring& sRuleSetName = *iterNames;
+
+			const RuleSet_t* pRuleSet = NULL;
+			if (ruleAnalyzer.GetProposedRuleSet(*iterNames, &pRuleSet))
+			{
+				for (
+					PathRuleCollection_t::const_iterator iterRules = pRuleSet->m_PathRules.begin();
+					iterRules != pRuleSet->m_PathRules.end();
+					++iterRules
+					)
+				{
+					strProposedPathRules
+						<< sRuleSetName << szTab
+						<< RuleItem::Collection2Str(iterRules->m_collection) << szTab
+						<< iterRules->m_sName << szTab
+						<< replaceStringAll(iterRules->m_sDescription, L"\r\n", L"") << szTab
+						<< iterRules->m_sPath << std::endl;
+				}
+					
+				for (
+					PublisherRuleCollection_t::const_iterator iterRules = pRuleSet->m_PublisherRules.begin();
+					iterRules != pRuleSet->m_PublisherRules.end();
+					++iterRules
+					)
+				{
+					strProposedPublisherRules
+						<< sRuleSetName << szTab
+						<< RuleItem::Collection2Str(iterRules->m_collection) << szTab
+						<< iterRules->m_sName << szTab
+						<< replaceStringAll(iterRules->m_sDescription, L"\r\n", L"") << szTab
+						<< iterRules->m_sPublisher << szTab
+						<< iterRules->m_sProduct << szTab
+						<< iterRules->m_sBinaryName << std::endl;
+				}
+					
+				for (
+					HashRuleCollection_t::const_iterator iterRules = pRuleSet->m_HashRules.begin();
+					iterRules != pRuleSet->m_HashRules.end();
+					++iterRules
+					)
+				{
+					strProposedHashRules
+						<< sRuleSetName << szTab
+						<< RuleItem::Collection2Str(iterRules->m_collection) << szTab
+						<< iterRules->m_sName << szTab
+						<< replaceStringAll(iterRules->m_sDescription, L"\r\n", L"") << szTab
+						<< iterRules->m_sFilename << szTab
+						<< iterRules->m_sFileLength << szTab
+						<< iterRules->m_sHashData << std::endl;
+				}
+			}
+		}
+	}
+
+	strOut
+		<< strRuleBuilderOptions.str()
+		<< std::endl
+		<< strProposedPathRules.str()
+		<< std::endl
+		<< strProposedPublisherRules.str()
+		<< std::endl
+		<< strProposedHashRules.str()
+		;
+}
+
+
 int wmain(int argc, wchar_t** argv)
 {
 	// Set output mode to UTF8.
@@ -396,8 +515,8 @@ int wmain(int argc, wchar_t** argv)
 	CaseInsensitiveStringLookup windowsExesNotToExclude;
 	bool bIncludeWindowsTempFiles = false;
 	std::vector<AaronLockerDeserializer> scans;
-	std::wstring sPolicyFileDirectory;
-	std::wstringstream strCommentDescription;
+	std::wstring sAnalysisFile, sPolicyFileDirectory;
+	std::wstringstream strCommentSelectedOptions;
 
 	// Parse command line options
 	int ixArg = 1;
@@ -415,7 +534,7 @@ int wmain(int argc, wchar_t** argv)
 				{
 					bMatched = true;
 					ruleAnalyzer.AddToBaseRules(PredefAppRules[ixOpt].ruleCollection);
-					strCommentDescription << L" +o " << szOption;
+					strCommentSelectedOptions << L" +o " << szOption;
 					break;
 				}
 			}
@@ -437,7 +556,7 @@ int wmain(int argc, wchar_t** argv)
 					std::wstring sArgU = szOption;
 					std::wstring sExeName = sArgU + L".exe";
 					windowsExesNotToExclude.Add(sExeName);
-					strCommentDescription << L" +w " << sArgU;
+					strCommentSelectedOptions << L" +w " << sArgU;
 					break;
 				}
 			}
@@ -451,7 +570,7 @@ int wmain(int argc, wchar_t** argv)
 				Usage(L"Missing arg for +s", argv[0]);
 			std::wstring sArgU = argv[ixArg];
 			scanfiles.push_back(sArgU);
-			strCommentDescription << L" +s " << sArgU;
+			strCommentSelectedOptions << L" +s " << sArgU;
 		}
 		// Proposed rule set to remove
 		else if (0 == wcscmp(L"-r", argv[ixArg]))
@@ -460,7 +579,7 @@ int wmain(int argc, wchar_t** argv)
 				Usage(L"Missing arg for -r", argv[0]);
 			std::wstring sArgU = argv[ixArg];
 			rulesetsToRemove.push_back(sArgU);
-			strCommentDescription << L" -r " << sArgU;
+			strCommentSelectedOptions << L" -r " << sArgU;
 		}
 		// Proposed rule set to remove
 		else if (0 == wcscmp(L"-rr", argv[ixArg]))
@@ -469,13 +588,19 @@ int wmain(int argc, wchar_t** argv)
 				Usage(L"Missing arg for -rr", argv[0]);
 			std::wstring sArgU = argv[ixArg];
 			rulesetNamePrefixesToRemove.push_back(sArgU);
-			strCommentDescription << L" -rr " << sArgU;
+			strCommentSelectedOptions << L" -rr " << sArgU;
 		}
 		// Whether to include files in the Windows Temp directory (make this check case-insensitive)
 		else if (0 == _wcsicmp(L"+winTemp", argv[ixArg]))
 		{
 			bIncludeWindowsTempFiles = true;
-			strCommentDescription << L" +winTemp ";
+			strCommentSelectedOptions << L" +winTemp ";
+		}
+		else if (0 == wcscmp(L"+out", argv[ixArg]))
+		{
+			if (++ixArg >= argc)
+				Usage(L"Missing arg for +out", argv[0]);
+			sAnalysisFile = argv[ixArg];
 		}
 		else if (0 == wcscmp(L"+x", argv[ixArg]))
 		{
@@ -497,6 +622,11 @@ int wmain(int argc, wchar_t** argv)
 	if (0 == scanfiles.size())
 	{
 		Usage(L"No scan files specified", argv[0]);
+	}
+
+	if (sAnalysisFile.length() > 0 && sPolicyFileDirectory.length() > 0)
+	{
+		Usage(L"Can't specify +out and +x", argv[0]);
 	}
 
 	if (sPolicyFileDirectory.length() > 0)
@@ -578,16 +708,33 @@ int wmain(int argc, wchar_t** argv)
 		}
 	}
 
-	// If +x not specified, show the proposed rule sets
-	if (sPolicyFileDirectory.length() == 0)
+	if (sAnalysisFile.length() > 0)
 	{
-		WriteProposedRuleSetInfo(ruleAnalyzer);
+		std::wofstream fs;
+		fs.open(sAnalysisFile, std::ios_base::out);
+		if (fs.fail())
+		{
+			// If opening the file for output fails, quit now.
+			std::wcerr << L"Cannot open output file " << sAnalysisFile << std::endl;
+			Usage(NULL, argv[0]);
+		}
+		// Ensure that file output is UTF-8.
+		fs.imbue(Utf8FileUtility::LocaleForWritingUtf8File());
+
+		WriteProposedRuleSetsForAnalysis(ruleAnalyzer, strCommentSelectedOptions.str(), fs);
+
+		fs.close();
+	}
+	// If +x not specified, show the proposed rule sets
+	else if (sPolicyFileDirectory.length() == 0)
+	{
+		WriteProposedRuleSetSummary(ruleAnalyzer);
 	}
 	else // +x specified. Build the XML policies and write them to disk.
 	{
 		CommentRuleCollection_t comments;
 		CommentRule comment;
-		comment.SetComment(L"RuleBuilder options", strCommentDescription.str());
+		comment.SetComment(L"RuleBuilder options", strCommentSelectedOptions.str());
 		comments.push_back(comment);
 		if (!ruleAnalyzer.CreatePolicies(comments, sErrorInfo))
 		{

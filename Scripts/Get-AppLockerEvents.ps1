@@ -126,9 +126,14 @@ This switch is ignored if -GridView is also specified.
 Retrieves warning and error events from the AppLocker EXE and DLL log (MSI/Script and PackagedApp omitted).
 
 .EXAMPLE
-.\Get-AppLockerEvents.ps1 -Computer CONTOSO\RECEPTION1 -AllEvents -FromDateTime "6/1/2025 8:00" -ToDateTime "6/1/2025 9:00" -GridView
+.\Get-AppLockerEvents.ps1 -Computer CONTOSO\RECEPTION1 -AllEvents -FromDateTime "6/1/2026 8:00" -ToDateTime "6/1/2026 9:00" -GridView
 
 Retrieves all AppLocker events for a specified one-hour period on CONTOSO\RECEPTION1, and report in a PowerShell GridView.
+
+.EXAMPLE
+.\Get-AppLockerEvents.ps1 -FromDateTime ([datetime]::Now).AddHours(-12)
+
+Retrieves all AppLocker events from the past twelve hours.
 
 .EXAMPLE
 .\Get-AppLockerEvents.ps1 -EvtxLogFilePaths .\ForwardedEvents1.evtx, .\ForwardedEvents2.evtx
