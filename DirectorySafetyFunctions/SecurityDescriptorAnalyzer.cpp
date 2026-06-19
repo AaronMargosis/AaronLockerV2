@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "../AaronLocker_CommonUtils/SidStrings.h"
 #include "../AaronLocker_CommonUtils/SysErrorMessage.h"
+#include "../AaronLocker_CommonUtils/FileSystemUtils-Windows.h"
 #include "SecurityDescriptorAnalyzer.h"
 
 bool SecurityDescriptorAnalyzer::IsNonadminWritable(
@@ -18,10 +19,14 @@ bool SecurityDescriptorAnalyzer::IsNonadminWritable(
 	nonadminSids.clear();
 	sErrorInfo.clear();
 
+	// GetFileSecurityW is not compatible with long file paths (> approx MAX_PATH) unless prepended with \\?\
+	// so fix the path proactively.
+	std::wstring sFileSystemPath = IsExtendedPathSpec(szFileSystemPath) ? szFileSystemPath : PathToExtendedPath(szFileSystemPath);
+
 	PSECURITY_DESCRIPTOR pSD = NULL;
 	DWORD dwLengthNeeded = 0;
 	BOOL ret = GetFileSecurityW(
-		szFileSystemPath,
+		sFileSystemPath.c_str(),
 		OWNER_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION,
 		NULL,
 		0,
@@ -30,9 +35,8 @@ bool SecurityDescriptorAnalyzer::IsNonadminWritable(
 	if (ERROR_INSUFFICIENT_BUFFER == dwLastErr && dwLengthNeeded > 0)
 	{
 		pSD = (PSECURITY_DESCRIPTOR)(new byte[dwLengthNeeded]);
-		//TODO: Probably not compatible with long file paths -- need to handle that case.
 		ret = GetFileSecurityW(
-			szFileSystemPath,
+			sFileSystemPath.c_str(),
 			OWNER_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION,
 			pSD,
 			dwLengthNeeded,

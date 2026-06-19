@@ -154,7 +154,11 @@ void EndpointScan_Base::ScanOneFile(const std::wstring& sFilePath, const wchar_t
 		case AppLockerFileDetails_ftype_t::ft_Unknown:
 			if (0 != dwFileApiError)
 			{
-				strErrorInfo << L"Couldn't inspect " << szFilePath << L": " << SysErrorMessage(dwFileApiError) << std::endl;
+				strErrorInfo 
+					<< SysErrorMessage(dwFileApiError) 
+					<< L" File: " 
+					<< szFilePath 
+					<< std::endl;
 			}
 			break;
 

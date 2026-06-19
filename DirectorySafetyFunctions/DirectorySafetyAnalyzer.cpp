@@ -167,7 +167,7 @@ bool DirectorySafetyAnalyzer::InspectDirectoryHierarchySafety(
 			// If any error text returned, add a line to the wstringstream.
 			if (sErrorInfo.size() > 0)
 			{
-				strErrorInfo << sCurrDir << L": " << sErrorInfo << std::endl;
+				strErrorInfo << sErrorInfo << L" Directory: " << sCurrDir << std::endl;
 			}
 
 			// Continue recursing if this is a "safe" directory or if bRecurseIntoUnsafeDirectories says to continue anyway.
@@ -176,7 +176,7 @@ bool DirectorySafetyAnalyzer::InspectDirectoryHierarchySafety(
 		}
 		else
 		{
-			strErrorInfo << sCurrDir << L": " << sErrorInfo << std::endl;
+			strErrorInfo << sErrorInfo << L" Directory: " << sCurrDir << std::endl;
 		}
 
 		dirWalker.DoneWithCurrent(bInspectCurrDirSubdirectories);

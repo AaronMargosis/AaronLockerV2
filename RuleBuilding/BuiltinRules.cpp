@@ -294,6 +294,30 @@ void BuiltInRules_SingletonImpl::Initialize()
 			szCiscoSystemsPublisher,
 			L"WEBEX MEETING",
 			RuleItem::Collection_t::Exe
+		),
+		PublisherRuleItem(
+			szWebExLabel,
+			szCiscoSystemsPublisher,
+			L"WEBEX LAUNCHER",
+			RuleItem::Collection_t::Exe
+		),
+		PublisherRuleItem(
+			szWebExLabel,
+			szCiscoSystemsPublisher,
+			L"WEBEXUNINSTALLER",
+			RuleItem::Collection_t::Exe
+		),
+		PublisherRuleItem(
+			szWebExLabel,
+			szCiscoSystemsPublisher,
+			L"WEBEX MEDIA ENGINE WASHOST",
+			RuleItem::Collection_t::Exe
+		),
+		PublisherRuleItem(
+			szWebExLabel,
+			szCiscoSystemsPublisher,
+			L"WEBEX MEDIA ENGINE WMLHOST",
+			RuleItem::Collection_t::Exe
 		)
 	};
 

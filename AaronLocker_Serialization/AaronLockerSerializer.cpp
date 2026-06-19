@@ -363,12 +363,15 @@ bool SerializeShellLinks(const ShellLinkDataContextCollection_t& shellLinks, std
 		++iterLinkData
 		)
 	{
+		// Observed a case where a description contains CR and LF characters - can't put those in a tab-delimited CSV.
+		std::wstring sDescription = replaceStringAll(iterLinkData->sDescription, L"\r", L"");
+		sDescription = replaceStringAll(sDescription, L"\n", L"");
 		os
 			<< iterLinkData->sLinkName << szDelim
 			<< iterLinkData->sLocalizedName << szDelim
 			<< iterLinkData->sFileSystemPath << szDelim
 			<< iterLinkData->sArguments << szDelim
-			<< iterLinkData->sDescription << szDelim
+			<< sDescription << szDelim
 			<< iterLinkData->sFullLinkPath << szDelim
 			<< LinkLocation2Str(iterLinkData->linkLocation) << szDelim
 			<< iterLinkData->sLinkRelativeSubdir
