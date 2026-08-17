@@ -109,3 +109,12 @@ HANDLE FindFirstFileEx_ExtendedPath(
 	_In_ FINDEX_SEARCH_OPS fSearchOp,
 	_In_ DWORD dwAdditionalFlags
 );
+
+/// <summary>
+/// Converts the input file name into an full path (might not work if current directory + relative path is > MAX_PATH)
+/// </summary>
+/// <param name="lpFileName">Input: relative or absolute path</param>
+/// <param name="sFullPath">Output if successful: full path</param>
+/// <param name="dwLastErr">Output: result of GetLastError</param>
+/// <returns>true if successful; false otherwise</returns>
+bool GetFullPathNameAsWStr(LPCWSTR lpFileName, std::wstring& sFullPath, DWORD& dwLastErr);

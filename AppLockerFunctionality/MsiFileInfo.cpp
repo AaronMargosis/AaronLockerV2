@@ -4,10 +4,12 @@
 #include <Windows.h>
 #include <Msi.h>
 #pragma comment(lib, "msi.lib")
+#include <vector>
 #include "MsiFileInfo.h"
 #include "../AaronLocker_CommonUtils/Wow64FsRedirection.h"
 #include "../AaronLocker_CommonUtils/CoInit.h"
 #include "../AaronLocker_CommonUtils/StringUtils.h"
+#include "../AaronLocker_CommonUtils/FileSystemUtils-Windows.h"
 
 bool MsiFileInfo::IsMSI(const wchar_t* szFilename)
 {
@@ -34,28 +36,31 @@ bool MsiFileInfo::Get(const wchar_t* szFilename, MsiFileInfo_t& msiFileInfo)
 	// Disable WOW64 file system redirection
 	Wow64FsRedirection wow64FSRedir(true);
 
-	// Should be plenty for the properties we're retrieving and the full path we're building here
-	const int cchTempBufferSize = 1024;
-	wchar_t* pszTempBuffer = new wchar_t[cchTempBufferSize];
+	// Note that MsiOpenPackageExW does NOT correctly handle relative paths, so need to try to get the full path.
+	// If the API call succeeds, point szFilename to that full path. If it fails, continue using the supplied
+	// szFilename value.
+	std::wstring sFullPath;
+	DWORD dwLastErr = 0;
+	if (GetFullPathNameAsWStr(szFilename, sFullPath, dwLastErr))
+	{
+		szFilename = sFullPath.c_str();
+	}
 
 	// Set MSI UI to "none". MsiOpenPackageExW will otherwise pop a "preparing to install" dialog.
 	// More info here: 
 	// https://microsoft.public.platformsdk.msi.narkive.com/RDFpRMiT/can-you-call-msiopenpackage-silently
 	INSTALLUILEVEL origUiLevel = MsiSetInternalUI(INSTALLUILEVEL_NONE, NULL);
 
-	// Note that MsiOpenPackageExW does NOT correctly handle relative paths, so need to try to get the full path.
-	// If the API call succeeds, point szFilename to that full path. If it fails, continue using the supplied
-	// szFilename value.
-	// Note also that after the call to MsiOpenPackageExW, that temp buffer will be used for other operations.
-	if (0 != GetFullPathNameW(szFilename, cchTempBufferSize, pszTempBuffer, NULL))
-	{
-		szFilename = pszTempBuffer;
-	}
-
 	MSIHANDLE hProduct = NULL;
 	UINT msiRet = MsiOpenPackageExW(szFilename, MSIOPENPACKAGEFLAGS_IGNOREMACHINESTATE, &hProduct);
 	if (ERROR_SUCCESS == msiRet)
 	{
+		// Should be plenty for the properties we're retrieving
+		// TODO: to do it properly, call the APIs and find out how much space is actually needed.
+		const int cchTempBufferSize = 1024;
+		std::vector<wchar_t> vTempBuffer(cchTempBufferSize);
+		wchar_t* pszTempBuffer = &vTempBuffer[0];
+
 		// See documentation about the translation to AppLocker formatting above the declaration
 		// of the MsiFileInfo_t structure.
 		retval = true;
@@ -104,7 +109,6 @@ bool MsiFileInfo::Get(const wchar_t* szFilename, MsiFileInfo_t& msiFileInfo)
 
 	// Restore the original UI level.
 	MsiSetInternalUI(origUiLevel, NULL);
-	delete[] pszTempBuffer;
 	CoUninitialize();
 	return retval;
 }

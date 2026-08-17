@@ -1,6 +1,7 @@
 #include "FileSystemUtils-Windows.h"
 #include "../AaronLocker_CommonUtils/StringUtils.h"
 #include <sstream>
+#include <vector>
 
 // --------------------------------------------------------------------------------------------------------------
 // Automated handling of extended-support paths for APIs that are otherwise limited to MAX_PATH.
@@ -173,4 +174,26 @@ HANDLE FindFirstFileEx_ExtendedPath(
 	}
 
 	return hFileSearch;
+}
+
+/// <summary>
+/// Converts the input file name into an full path (might not work if current directory + relative path is > MAX_PATH)
+/// </summary>
+/// <param name="lpFileName">Input: relative or absolute path</param>
+/// <param name="sFullPath">Output if successful: full path</param>
+/// <param name="dwLastErr">Output: result of GetLastError</param>
+/// <returns>true if successful; false otherwise</returns>
+bool GetFullPathNameAsWStr(LPCWSTR lpFileName, std::wstring& sFullPath, DWORD& dwLastErr)
+{
+	sFullPath.clear();
+	DWORD nChars = GetFullPathNameW(lpFileName, 0, NULL, NULL);
+	dwLastErr = GetLastError();
+	if (nChars > 0)
+	{
+		std::vector<wchar_t> vBuffer(nChars);
+		nChars = GetFullPathNameW(lpFileName, nChars, &vBuffer[0], NULL);
+		dwLastErr = GetLastError();
+		sFullPath = &vBuffer[0];
+	}
+	return sFullPath.length() > 0;
 }

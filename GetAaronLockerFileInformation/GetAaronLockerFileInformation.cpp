@@ -240,6 +240,12 @@ int wmain(int argc, wchar_t** argv)
 		{
 			// Determine whether the file is AppLocker-relevant
 			const wchar_t* szFilename = iterFiles->c_str();
+			std::wstring sFullName;
+			DWORD dwLastErr;
+			if (GetFullPathNameAsWStr(szFilename, sFullName, dwLastErr))
+			{
+				szFilename = sFullName.c_str();
+			}
 			AppLockerFileDetails alfd(szFilename);
 			if (!alfd.FileExistsFullyPresent())
 			{

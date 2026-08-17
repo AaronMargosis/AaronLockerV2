@@ -76,6 +76,7 @@ bool GetEmbeddedSignatureInfo(
 	wtfi.cbStruct = sizeof(wtfi);
 	// WinVerifyTrust is not compatible with long file paths (> approx MAX_PATH) unless prepended with \\?\
 	// so fix the path proactively.
+	// It's assumed that the input path is an absolute file spec; can't mix extended-path syntax with relative paths.
 	std::wstring sFilePath = IsExtendedPathSpec(szFilename) ? szFilename : PathToExtendedPath(szFilename);
 	std::vector<wchar_t> vExtFilePath(sFilePath.c_str(), sFilePath.c_str() + sFilePath.length() + 1);
 	wtfi.pcwszFilePath = &vExtFilePath[0];
