@@ -241,7 +241,8 @@ bool SerializeSafePathInfo(const SafePathInfoCollection_t& platSafePathInfo, std
 
 bool SerializeFileDetails(const FileDetailsCollection_t& fileDetails, std::wostream& os)
 {
-	os 
+	//TODO: incorporate the additional fileDetails fields that are now available
+	os
 		// Header for this section
 		<< szHeader_FileDetails << std::endl;
 	os

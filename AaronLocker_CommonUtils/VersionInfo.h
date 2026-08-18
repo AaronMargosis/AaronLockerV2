@@ -81,6 +81,14 @@ public:
 	/// </summary>
 	std::wstring ProductName();
 	/// <summary>
+	/// Returns InternalName from the version resource, if present.
+	/// </summary>
+	std::wstring InternalName();
+	/// <summary>
+	/// Returns OriginalFilename from the version resource, if present.
+	/// </summary>
+	std::wstring OriginalFilename();
+	/// <summary>
 	/// Returns the value, if present, for the input version resource string.
 	/// The following names are documented/recommended, but version resources
 	/// can have arbitrary names in them.

@@ -66,6 +66,11 @@ bool MsiFileInfo::Get(const wchar_t* szFilename, MsiFileInfo_t& msiFileInfo)
 		retval = true;
 		DWORD dwCchBuffer;
 		dwCchBuffer = cchTempBufferSize;
+		if (ERROR_SUCCESS == MsiGetProductPropertyW(hProduct, L"Manufacturer", pszTempBuffer, &dwCchBuffer))
+		{
+			msiFileInfo.sManufacturer = pszTempBuffer;
+		}
+		dwCchBuffer = cchTempBufferSize;
 		if (ERROR_SUCCESS == MsiGetProductPropertyW(hProduct, L"ProductName", pszTempBuffer, &dwCchBuffer))
 		{
 			msiFileInfo.sProductName = pszTempBuffer;

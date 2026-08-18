@@ -210,8 +210,11 @@ void EndpointScan_Base::ScanOneFile(const std::wstring& sFilePath, const wchar_t
 				{
 					// Using this instead of szFilePath gets the extended-path name if needed.
 					VersionInfo vi(alfi.FileDetails().FilePath().c_str());
+					fileDetails.m_sVerCompanyName = vi.CompanyName();
 					fileDetails.m_sVerProductName = vi.ProductName();
 					fileDetails.m_sVerFileDescription = vi.FileDescription();
+					fileDetails.m_sVerInternalName = vi.InternalName();
+					fileDetails.m_sVerOriginalFilename = vi.OriginalFilename();
 					alfi.GetPublisherInfo(fileDetails.m_ALPublisherName, fileDetails.m_ALProductName, fileDetails.m_ALBinaryName, fileDetails.m_ALBinaryVersion, fileDetails.m_sX500CertSigner, fileDetails.m_sSigningTimestamp, dwApiError);
 					peFileInfo.LinkTimestamp(fileDetails.m_sPEFileLinkDate);
 				}
@@ -219,6 +222,7 @@ void EndpointScan_Base::ScanOneFile(const std::wstring& sFilePath, const wchar_t
 				{
 					MsiFileInfo_t msiFileInfo;
 					bool gpiRet = alfi.GetPublisherInfo(fileDetails.m_ALPublisherName, fileDetails.m_sX500CertSigner, fileDetails.m_sSigningTimestamp, msiFileInfo, dwApiError);
+					fileDetails.m_sVerCompanyName = msiFileInfo.sManufacturer;
 					fileDetails.m_sVerProductName = msiFileInfo.sProductName;
 					if (gpiRet)
 					{

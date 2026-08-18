@@ -60,6 +60,8 @@ typedef std::vector<SafePathInfo_t> SafePathInfoCollection_t;
 /// good -- but also to simplify serialization/deserialization.
 /// Original implementation also captured last-access-time, but since it gets updated every time our
 /// scan runs, it has no value at all.
+/// Added OriginalFilename and InternalName, which along with ProductName and FileDescription, can be
+/// used with App Control for Business (ACfB), previously known as Windows Defender App Control (WDAC).
 /// </summary>
 struct FileDetails_t {
 	// Determined from outside the file
@@ -68,8 +70,11 @@ struct FileDetails_t {
 	// Determined from the file itself
 	AppLockerFileDetails_ftype_t m_fileType;     // determines which rule collection to use
 	std::wstring m_sFilePath;                    // full path to the file
+	std::wstring m_sVerCompanyName;              // Company name from version resource (for information only, not for rule definitions)
 	std::wstring m_sVerProductName;              // Product name from version resource (for information only, not for AppLocker publisher rule)
 	std::wstring m_sVerFileDescription;          // File description from version resource
+	std::wstring m_sVerOriginalFilename;         // Original file name from version resource
+	std::wstring m_sVerInternalName;             // Internal name from version resource
 	std::wstring m_sX500CertSigner;              // For a signed file, the full subject name in X.500 form
 	std::wstring m_ALPublisherName;              // For a signed file, publisher name for AppLocker rule
 	std::wstring m_ALProductName;                // For a signed file, product name for AppLocker rule

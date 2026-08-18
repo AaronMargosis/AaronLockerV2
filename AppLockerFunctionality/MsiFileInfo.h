@@ -22,6 +22,7 @@ struct MsiFileInfo_t
 {
 	std::wstring
 		// Raw data as retrieved from MSI properties:
+		sManufacturer,     // Manufacturer property - informational only
 		sProductName,      // ProductName property - raw data that maps to AppLocker product name
 		sProductCode,      // ProductCode property - raw data that maps to AppLocker "binary" name
 		sProductVersion,   // ProductVersion property - raw data that maps to AppLocker binary version

@@ -73,6 +73,7 @@ static const wchar_t* const szCompanyName = L"CompanyName";
 static const wchar_t* const szFileDescription = L"FileDescription";
 static const wchar_t* const szOriginalFilename = L"OriginalFilename";
 static const wchar_t* const szProductName = L"ProductName";
+static const wchar_t* const szInternalName = L"InternalName";
 /* The full set of version resource string names documented by Microsoft:
 	Comments
 	CompanyName
@@ -243,6 +244,16 @@ std::wstring VersionInfo::FileDescription()
 std::wstring VersionInfo::ProductName()
 {
 	return StringName(szProductName);
+}
+
+std::wstring VersionInfo::InternalName()
+{
+	return StringName(szInternalName);
+}
+
+std::wstring VersionInfo::OriginalFilename()
+{
+	return StringName(szOriginalFilename);
 }
 
 std::wstring VersionInfo::StringName(const wchar_t* szStringName)

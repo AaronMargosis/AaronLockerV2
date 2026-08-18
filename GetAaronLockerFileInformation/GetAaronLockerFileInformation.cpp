@@ -313,8 +313,11 @@ int wmain(int argc, wchar_t** argv)
 				{
 					// Using alfi instead of szFilename returns the extended-path name if needed.
 					VersionInfo vi(alfi.FileDetails().FilePath().c_str());
+					fileDetails.m_sVerCompanyName = vi.CompanyName();
 					fileDetails.m_sVerProductName = vi.ProductName();
 					fileDetails.m_sVerFileDescription = vi.FileDescription();
+					fileDetails.m_sVerInternalName = vi.InternalName();
+					fileDetails.m_sVerOriginalFilename = vi.OriginalFilename();
 					alfi.GetPublisherInfo(fileDetails.m_ALPublisherName, fileDetails.m_ALProductName, fileDetails.m_ALBinaryName, fileDetails.m_ALBinaryVersion, fileDetails.m_sX500CertSigner, fileDetails.m_sSigningTimestamp, dwApiError);
 					peFileInfo.LinkTimestamp(fileDetails.m_sPEFileLinkDate);
 				}
@@ -322,6 +325,7 @@ int wmain(int argc, wchar_t** argv)
 				{
 					MsiFileInfo_t msiFileInfo;
 					bool gpiRet = alfi.GetPublisherInfo(fileDetails.m_ALPublisherName, fileDetails.m_sX500CertSigner, fileDetails.m_sSigningTimestamp, msiFileInfo, dwApiError);
+					fileDetails.m_sVerCompanyName = msiFileInfo.sManufacturer;
 					fileDetails.m_sVerProductName = msiFileInfo.sProductName;
 					if (gpiRet)
 					{
@@ -449,8 +453,11 @@ bool SerializeFileDetailsTable(const FileDetailsCollection_t& fileDetails, std::
 		//<< L"IsSafeDir" << szDelim
 		<< L"FilePath" << szDelim
 		<< L"FileType" << szDelim
-		<< L"VerProductName" << szDelim
-		<< L"VerFileDescription" << szDelim
+		<< L"CompanyName" << szDelim
+		<< L"ProductName" << szDelim
+		<< L"FileDescription" << szDelim
+		<< L"InternalName" << szDelim
+		<< L"OriginalFilename" << szDelim
 		<< L"X500CertSigner" << szDelim
 		<< L"ALPublisherName" << szDelim
 		<< L"ALProductName" << szDelim
@@ -477,8 +484,11 @@ bool SerializeFileDetailsTable(const FileDetailsCollection_t& fileDetails, std::
 			//<< Bool2Str(iterFileDetails->m_bIsSafeDir) << szDelim
 			<< iterFileDetails->m_sFilePath << szDelim
 			<< FType2Str(iterFileDetails->m_fileType) << szDelim
+			<< iterFileDetails->m_sVerCompanyName << szDelim
 			<< iterFileDetails->m_sVerProductName << szDelim
 			<< iterFileDetails->m_sVerFileDescription << szDelim
+			<< iterFileDetails->m_sVerInternalName << szDelim
+			<< iterFileDetails->m_sVerOriginalFilename << szDelim
 			<< iterFileDetails->m_sX500CertSigner << szDelim
 			<< iterFileDetails->m_ALPublisherName << szDelim
 			<< iterFileDetails->m_ALProductName << szDelim
@@ -515,8 +525,11 @@ bool SerializeFileDetailsList(const FileDetailsCollection_t& fileDetails, std::w
 			//<< L"IsSafeDir" << 	//<< Bool2Str(iterFileDetails->m_bIsSafeDir) << std::endl
 			<< std::setw(nLabelWidth) << L"FilePath" << iterFileDetails->m_sFilePath << std::endl
 			<< std::setw(nLabelWidth) << L"FileType" << FType2Str(iterFileDetails->m_fileType) << std::endl
-			<< std::setw(nLabelWidth) << L"VerProductName" << iterFileDetails->m_sVerProductName << std::endl
-			<< std::setw(nLabelWidth) << L"VerFileDescription" << iterFileDetails->m_sVerFileDescription << std::endl
+			<< std::setw(nLabelWidth) << L"CompanyName" << iterFileDetails->m_sVerCompanyName << std::endl
+			<< std::setw(nLabelWidth) << L"ProductName" << iterFileDetails->m_sVerProductName << std::endl
+			<< std::setw(nLabelWidth) << L"FileDescription" << iterFileDetails->m_sVerFileDescription << std::endl
+			<< std::setw(nLabelWidth) << L"InternalName" << iterFileDetails->m_sVerInternalName << std::endl
+			<< std::setw(nLabelWidth) << L"OriginalFilename" << iterFileDetails->m_sVerOriginalFilename << std::endl
 			<< std::setw(nLabelWidth) << L"X500CertSigner" << iterFileDetails->m_sX500CertSigner << std::endl
 			<< std::setw(nLabelWidth) << L"ALPublisherName" << iterFileDetails->m_ALPublisherName << std::endl
 			<< std::setw(nLabelWidth) << L"ALProductName" << iterFileDetails->m_ALProductName << std::endl

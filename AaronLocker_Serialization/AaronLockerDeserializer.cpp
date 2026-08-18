@@ -230,6 +230,7 @@ bool AaronLockerDeserializer::Deserialize(const wchar_t* szFilename, std::wstrin
 				std::vector<std::wstring> vStrings;
 				SplitStringToVector(sLine, chrDelim, vStrings);
 				//NOTE: if fields are added or removed, make sure to change this size check to correspond.
+				//TODO: incorporate the additional fileDetails fields that are now available
 				if (ValidColumnCount(19, vStrings, szHeader_FileDetails, strProcessingError, retval))
 				{
 					FileDetails_t fileDetails;

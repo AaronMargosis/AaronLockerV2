@@ -196,7 +196,7 @@ To test whether policy is in effect, run the following command:
 
 ### GetAaronLockerFileInformation.exe
 
-Command-line utility for diagnostic and testing purposes. Gathers information about one or more files on a Windows endpoint and reports it in list (default) or tabular form. Can write to console or to a UTF-8-encoded file. Accepts wildcard characters.
+Command-line utility for diagnostic and testing purposes. Gathers AppLocker- and some WDAC-relevant information about one or more files on a Windows endpoint and reports it in list (default) or tabular form. Can write to console or to a UTF-8-encoded file. Accepts wildcard characters.
 
 Command-line syntax:
 
@@ -207,29 +207,34 @@ Command-line syntax:
 
 You can specify multiple filepaths; each must be preceded by "-file" or "-link".
 "filepath" can include wildcard characters.
+"-table" outputs tab-delimited CSV.
+"-out" outputs to a UTF8-encoded file.
 ```
 
 Example output:
 
 ```
-> GetAaronLockerFileInformation.exe -file C:\Temp\Newtonsoft.Json.Bson.dll
-FilePath           C:\Temp\Newtonsoft.Json.Bson.dll
-FileType           DLL
-VerProductName     Json.NET BSON
-VerFileDescription Json.NET BSON .NET Standard 2.0
-X500CertSigner     CN=Json.NET (.NET Foundation), O=Json.NET (.NET Foundation), L=Redmond, S=wa, C=US, SERIALNUMBER=603 389 068
-ALPublisherName    O=JSON.NET (.NET FOUNDATION), L=REDMOND, S=WA, C=US
-ALProductName      JSON.NET BSON
-ALBinaryName       NEWTONSOFT.JSON.BSON.DLL
-ALBinaryVersion    1.0.2.22727
-ALHash             0xADD5C49A220AD27F6C97B5D9D55B42E62D151C512CE074F28CD73D0C829E58C9
-SHA256             0xF3C56166D7F90296BBE6B03F64335623C3165ED25948288F1F316FA74DD8327F
-FileSize           97720
+> GetAaronLockerFileInformation.exe -file .\ZoomInstaller.exe
+FilePath           .\ZoomInstaller.exe
+FileType           EXE
+CompanyName        Zoom Communications, Inc.
+ProductName        Zoom Meetings Installer
+FileDescription    Zoom Meetings Installer
+InternalName       Zoom Meetings Installer
+OriginalFilename   Zoom Meetings Installer
+X500CertSigner     CN="Zoom Video Communications, Inc.", O="Zoom Video Communications, Inc.", L=San Jose, S=California, C=US, SERIALNUMBER=4969967, OID.2.5.4.15=Private Organization, OID.1.3.6.1.4.1.311.60.2.1.2=Delaware, OID.1.3.6.1.4.1.311.60.2.1.3=US
+ALPublisherName    O=ZOOM VIDEO COMMUNICATIONS, INC., L=SAN JOSE, S=CALIFORNIA, C=US
+ALProductName      ZOOM MEETINGS INSTALLER
+ALBinaryName       ZOOM MEETINGS INSTALLER
+ALBinaryVersion    6.6.0.0
+ALHash             0x89F9BDD919F7293865A59FADB8D5E747B81080B311790846F66D375914895FFF
+SHA256             0x7EB91FC484AB27A8BC96FAE11E176D34EAC39DC619D485AF96346F390EE338BE
+FileSize           37189560
 PEMachineType      I386
-SigningTimestamp   2018-11-27 23:10:19
-PEFileLinkDate
-CreateTime         2024-08-31 04:00:06
-LastWriteTime      2018-11-28 04:10:18
+SigningTimestamp   2025-11-28 06:48:55
+PEFileLinkDate     2025-08-12 07:41:14
+CreateTime         2025-12-12 18:43:52
+LastWriteTime      2025-12-12 18:43:54
 ```
 
 ### OfficeMacroControlTool.exe
