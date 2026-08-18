@@ -32,6 +32,8 @@ static void Usage(const wchar_t* szError, const wchar_t* argv0)
 		<< std::endl
 		<< L"You can specify multiple filepaths; each must be preceded by \"-file\" or \"-link\"." << std::endl
 		<< L"\"filepath\" can include wildcard characters." << std::endl
+		<< L"\"-table\" outputs tab-delimited CSV." << std::endl
+		<< L"\"-out\" outputs to a UTF8-encoded file." << std::endl
 		<< std::endl;
 	exit(-1);
 }
