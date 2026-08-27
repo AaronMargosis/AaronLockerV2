@@ -6,7 +6,7 @@
 // --------------------------------------------------------------------------------------------------------------
 // Automated handling of extended-support paths for APIs that are otherwise limited to MAX_PATH.
 
-// Extended path specifier - path starts with \\?\ 
+// Extended path specifier - path starts with "\\?\" 
 static const std::wstring sExtPathSpecifier = L"\\\\?\\";
 
 /// <summary>
