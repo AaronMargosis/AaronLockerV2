@@ -12,6 +12,7 @@ SidsToFilter::SidsToFilter()
 {
 	// Add default set of SIDs to ignore in file system security descriptors
 	AddSidToFilter(SidString::CreatorOwner);               // L"S-1-3-0");             // CREATOR OWNER
+	AddSidToFilter(SidString::OwnerRights);                // L"S-1-3-4");             // OWNER RIGHTS
 	AddSidToFilter(SidString::NtAuthBatch);                // L"S-1-5-3");             // NT AUTHORITY\BATCH
 	AddSidToFilter(SidString::NtAuthService);              // L"S-1-5-6");             // NT AUTHORITY\SERVICE
 	AddSidToFilter(SidString::NtAuthSystem);               // L"S-1-5-18");            // NT AUTHORITY\SYSTEM

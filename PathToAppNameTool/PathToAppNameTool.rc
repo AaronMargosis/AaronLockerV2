@@ -74,7 +74,7 @@ BEGIN
             VALUE "FileDescription", "Tool for mapping file paths to product names"
             VALUE "FileVersion", AARONLOCKER_VERSION_STRIPPED
             VALUE "InternalName", "PathToAppNameTool.exe"
-            VALUE "LegalCopyright", "Copyright (C) 2025 Aaron Margosis"
+            VALUE "LegalCopyright", "Copyright (C) 2025-2026 Aaron Margosis"
             VALUE "OriginalFilename", "PathToAppNameTool.exe"
             VALUE "ProductName", "SysNocturnals AaronLocker"
             VALUE "ProductVersion", AARONLOCKER_VERSION_STRIPPED

@@ -74,7 +74,7 @@ BEGIN
             VALUE "FileDescription", "AppLocker rule builder for AaronLocker"
             VALUE "FileVersion", AARONLOCKER_VERSION_STRIPPED
             VALUE "InternalName", "AaronLocker_RuleBuilder.exe"
-            VALUE "LegalCopyright", "Copyright (C) 2025 Aaron Margosis"
+            VALUE "LegalCopyright", "Copyright (C) 2025-2026 Aaron Margosis"
             VALUE "OriginalFilename", "AaronLocker_RuleBuilder.exe"
             VALUE "ProductName", "SysNocturnals AaronLocker"
             VALUE "ProductVersion", AARONLOCKER_VERSION_STRIPPED

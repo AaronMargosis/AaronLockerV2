@@ -1093,7 +1093,7 @@ void BuiltInRules_SingletonImpl::Initialize()
 	{
 		// Built-in Windows executables that non-admins usually don't need to run and that can be used for
 		// AppLocker bypass or for nefarious activities (e.g., Cipher.exe used by ransomware to encrypt
-		// files).
+		// files, finger.exe to download content from attacker-controlled servers).
 		// This array specifies files to be excluded by product name and binary name:
 		const prodbinname_t BuiltInExesToExcludeByPubBinary[] =
 		{
@@ -1114,6 +1114,11 @@ void BuiltInRules_SingletonImpl::Initialize()
 			{ szProdNameMSWindowsOS, L"PRESENTATIONHOST.EXE" },
 			{ szProdNameMSWindowsOS, L"RUNAS.EXE" },
 			{ szProdNameMSWindowsOS, L"WMIC.EXE" },
+			{ L"THE CURL EXECUTABLE", L"CURL.EXE" }, // in System32 and SysWOW64; MS-signed but not with the Windows code-signing cert.
+			{ L"OPENSSH FOR WINDOWS", L"" }, // intended just to block ssh.exe in %SYSTEM32%\OpenSSH, but OriginalFileName is blank/empty for all the EXE files there, so all will get blocked.
+			{ szProdNameMSWindowsOS, L"FINGER.EXE" },
+
+			//TODO: also add these to sDefaultProgramsToExclude in EndpointFullScan.cpp -- or remove that code since it's no longer used.
 		};
 		for (size_t ix = 0; ix < sizeof(BuiltInExesToExcludeByPubBinary) / sizeof(BuiltInExesToExcludeByPubBinary[0]); ++ix)
 		{

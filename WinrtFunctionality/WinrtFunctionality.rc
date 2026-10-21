@@ -74,7 +74,7 @@ BEGIN
             VALUE "FileDescription", "Wrapper for WinRT functionality for Win8.1 and newer"
             VALUE "FileVersion", AARONLOCKER_VERSION_STRIPPED
             VALUE "InternalName", "WinrtFunctionality.dll"
-            VALUE "LegalCopyright", "Copyright (C) 2025 Aaron Margosis"
+            VALUE "LegalCopyright", "Copyright (C) 2025-2026 Aaron Margosis"
             VALUE "OriginalFilename", "WinRtFunctionality.dll"
             VALUE "ProductName", "SysNocturnals AaronLocker"
             VALUE "ProductVersion", AARONLOCKER_VERSION_STRIPPED

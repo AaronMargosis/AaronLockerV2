@@ -74,7 +74,7 @@ BEGIN
             VALUE "FileDescription", "Tool for inspecting file attributes"
             VALUE "FileVersion", AARONLOCKER_VERSION_STRIPPED
             VALUE "InternalName", "GetAppLockerFileInformation.exe"
-            VALUE "LegalCopyright", "Copyright (C) 2025 Aaron Margosis"
+            VALUE "LegalCopyright", "Copyright (C) 2025-2026 Aaron Margosis"
             VALUE "OriginalFilename", "GetAppLockerFileInformation.exe"
             VALUE "ProductName", "SysNocturnals AaronLocker"
             VALUE "ProductVersion", AARONLOCKER_VERSION_STRIPPED

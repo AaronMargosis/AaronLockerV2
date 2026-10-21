@@ -74,7 +74,7 @@ BEGIN
             VALUE "FileDescription", "Tool for configuring MS Office macro controls"
             VALUE "FileVersion", AARONLOCKER_VERSION_STRIPPED
             VALUE "InternalName", "OfficeMacroControlTool.exe"
-            VALUE "LegalCopyright", "Copyright (C) 2025 Aaron Margosis"
+            VALUE "LegalCopyright", "Copyright (C) 2025-2026 Aaron Margosis"
             VALUE "OriginalFilename", "OfficeMacroControlTool.exe"
             VALUE "ProductName", "SysNocturnals AaronLocker"
             VALUE "ProductVersion", AARONLOCKER_VERSION_STRIPPED
